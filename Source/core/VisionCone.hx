@@ -10,11 +10,9 @@ import openfl.events.Event;
  * ...
  * @author Chambers
  */
-class Guard extends Element {
+class VisionCone extends Element {
 	
-	public var attention:Float = 0;
-		
-	private var image:Bitmap;
+	public var angle:Float = 0;
 	
 	public function new() {
 		super ();
@@ -23,10 +21,5 @@ class Guard extends Element {
 	public function update(dt:Float):Void 
     {
         super.update(dt);
-    }
-	
-	public function draw():Void 
-    {
-        super.draw();
     }
 }
