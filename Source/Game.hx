@@ -18,8 +18,11 @@ class Game extends Sprite
     public function new() 
     {
         super();
-
+        
+        _usedKeys = new IntMap<Int>();
         _state = new StageState();
+        _state.setInputActions(_usedKeys);
+
         addChild(_state);
 
         _keyboardRaw = 0;
