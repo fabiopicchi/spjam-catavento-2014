@@ -12,12 +12,15 @@ class StageState extends State
     private var DOWN:Int = 1 << 3;
 
     private var _player:Player;
+    private var _map:Tilemap;
 
     public function new()
     {
         super();
 
         _player = new Player();
+        _map = new Tilemap("assets/stage.json");
+        addElement(_map);
         addElement(_player);
     }
 
