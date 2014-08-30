@@ -123,4 +123,10 @@ class Tilemap extends Element
             return true;
         }
     }
+
+	function canSee ():Bool {
+		var c:Bool;
+		c = true;
+		return c;
+	}
 }

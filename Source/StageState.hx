@@ -11,6 +11,7 @@ class StageState extends State
     private var DOWN:Int = 1 << 3;
 
     private var _player:Player;
+	private var _guard:Guard;
     private var _map:Tilemap;
 
     public function new()
@@ -18,9 +19,11 @@ class StageState extends State
         super();
 
         _player = new Player();
+		_guard = new Guard(0);
         _map = new Tilemap("assets/stage.json");
         addElement(_map);
         addElement(_player);
+		addElement(_guard);
     }
 
     override public function setInputActions(inputMap:IntMap<Int>)

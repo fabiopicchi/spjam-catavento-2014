@@ -4,7 +4,7 @@
 	<meta title="Coelhinho regador" package="com.example.coelhinhoregador" version="1.0.0" company="Company Name" />
 	<app main="Game" path="Export" file="StupidGame" />
 
-	<window width="1920" height="1080" background="#666666" fps="30"/>
+	<window width="800" height="600" background="#666666" fps="30"/>
 	<window fullscreen="false" resizable="false"/>
 
 	<source path="Source" />
