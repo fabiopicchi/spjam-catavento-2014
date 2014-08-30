@@ -12,15 +12,23 @@ import openfl.events.Event;
  */
 class Guard extends Element {
 	
+	public var route:Array<String>;
+	public var currentStep:Int = 0;
+	public var targetX, targetY:Int;
+	public var speed:Float;
+
 	public var attention:Float = 0;
 	public var direction:Int = 0;
 	public var visionAngle:Float = 0;
-	public var visionWidth:Float = Math.PI/3;
-		
+	public var visionWidth:Float = Math.PI / 3;
+	
 	private var image:Bitmap;
 	
-	public function new() {
+	public function new(routeId:String) {
 		super ();
+		route = [ "UP", "UP", "RIGHT", "RIGHT" ] ;
+		targetX = x;
+		targetY = y;
 	}
 	
 	public function update(dt:Float):Void 
@@ -32,4 +40,8 @@ class Guard extends Element {
     {
         super.draw();
     }
+	
+	public function loadNextStep():Void {
+
+	}
 }
