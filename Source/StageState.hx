@@ -1,7 +1,6 @@
 import haxe.ds.IntMap;
 
 import openfl.ui.Keyboard;
-
 import core.State;
 
 class StageState extends State
@@ -59,7 +58,7 @@ class StageState extends State
         }
 
         _player.move(hor, ver);
-
         super.update(dt);
+        _map.collideTilemap(_player.getBody());
     }
 }
