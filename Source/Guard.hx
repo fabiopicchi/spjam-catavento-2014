@@ -148,7 +148,7 @@ class Guard extends Element {
 
 	public function alert():Void 
     {
-		
+
 	}
 
     public function getBody():Body
@@ -167,8 +167,6 @@ class Guard extends Element {
 			walk(dt);
 		}
 		
-		eye.x = _body.position.x + 42;
-		eye.y = _body.position.y + 42;
 		visionAngle = faceDirection * Math.PI / 2;
 
         switch(faceDirection)
@@ -186,6 +184,8 @@ class Guard extends Element {
                 _eyeRef.x = 27;
                 _eyeRef.y = -6;
         }
+		eye.x = _body.position.x + _eyeRef.x;
+		eye.y = _body.position.y + _eyeRef.y;
     }
 
 	override public function draw():Void 

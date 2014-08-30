@@ -15,6 +15,8 @@ class StageState extends State
     private var UP:Int = 1 << 2;
     private var DOWN:Int = 1 << 3;
 
+    private var PLAYER_DETECTION_RADUIS:Float;
+
     private var _player:Player;
     private var _map:Tilemap;
 	private var _guards = new List <Guard> ();
@@ -27,6 +29,7 @@ class StageState extends State
 
         _player = new Player();
 		
+        PLAYER_DETECTION_RADUIS = Math.sqrt(800 * 800 + 600 * 600);
 
         var obj:Dynamic = Json.parse(Assets.getText("assets/stage.json"));
         var tileset:BitmapData = Assets.getBitmapData("assets/tileset.jpg");    
@@ -40,8 +43,8 @@ class StageState extends State
             }
         }
 
-		var g = new Guard (2, [new Point(40,40), new Point(40,120),
-                                new Point(120,120)]);
+		var g = new Guard (2, [new Point(300,300), new Point(300,380),
+                                new Point(380,380)]);
 		_guards.add (g);
         
         addElement(_map);
@@ -84,28 +87,37 @@ class StageState extends State
         }
 
         _player.move(hor, ver);
+
+        super.update(dt);
 		
-		var playerPoint = new Point (_player.x, _player.y);
+		var playerPoint = new Point (_player.getBody().position.x +
+                _player.getBody().width / 2, _player.getBody().position.y +
+                _player.getBody().height / 2);
 		
 		for (g in _guards)
 		{
-			if (Point.distance(g.eye, playerPoint) < 500) 
+            g.graphics.clear();
+			if (Point.distance(g.eye, playerPoint) < PLAYER_DETECTION_RADUIS) 
             {
-				if (_map.isPointVisible(g.eye, playerPoint)) 
-                {
-					if (true) //checar se está dentro do cone
-					{
-						g.alert();
-						var v:Float;
-						if (Point.distance(g.eye, playerPoint) > 500) v = 1;
-						else v = 5;
-						//hud.increase(v);						
-					}
-				}
-			}	
-		}
+                var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
+                        playerPoint.x - g.eye.x);
+                if (angle < 0) angle += 2 * Math.PI;
 
-        super.update(dt);
+                if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
+                        angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
+                {
+                    if (_map.isPointVisible(g.eye, playerPoint)) 
+                    {
+                        g.alert();
+                        g.graphics.lineStyle(2, 0xFF0000);
+                        g.graphics.moveTo(g.eye.x - g.x, g.eye.y - g.y);
+                        g.graphics.lineTo(playerPoint.x - g.x, playerPoint.y -
+                                g.y);
+                    }
+                }
+            }
+        }
+
         _map.collideTilemap(_player.getBody());
     }
 }

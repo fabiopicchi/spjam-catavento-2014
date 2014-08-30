@@ -75,9 +75,75 @@ class Tilemap extends Element
 
 	public function isPointVisible (a:Point, b:Point):Bool
 	{
-		var c:Bool;
-		c = true;
-		return c;
+        var relVector:Point = b.subtract(a);
+        var len:Float = relVector.length;
+
+        var tMaxX:Float = 0;
+        var tMaxY:Float = 0;
+
+        if (relVector.x > 0)
+            tMaxX = (_tileWidth - a.x % _tileWidth) / Math.abs(relVector.x);
+        else
+            tMaxX = a.x % _tileWidth / Math.abs(relVector.x);
+
+        if (relVector.y > 0)
+            tMaxY = (_tileHeight - a.y % _tileHeight) / Math.abs(relVector.y);
+        else
+            tMaxY = a.y % _tileHeight / Math.abs(relVector.y);
+
+        var tDeltaX:Float = _tileWidth / Math.abs(relVector.x);
+        var tDeltaY:Float = _tileHeight / Math.abs(relVector.y);
+
+        var _x:Int = Math.floor(a.x / _tileWidth);
+        var _y:Int = Math.floor(a.y / _tileHeight);
+
+        var stepX:Int = Std.int(relVector.x / Math.abs(relVector.x));
+        var stepY:Int = Std.int(relVector.y / Math.abs(relVector.y));
+
+        while (tMaxY < 1 || tMaxX < 1)
+        {
+            if (tMaxX < tMaxY)
+            {
+                tMaxX = tMaxX + tDeltaX;
+                _x = _x + stepX;
+
+                if(_x + _y * _widthInTiles >= _tiles.length)
+                {
+                    //return (tMaxX - tDeltaX) * len;
+                    return false;
+                }
+                else
+                {
+                    var nextTile:Int = _tiles[_x + _y * _widthInTiles];
+                    if (nextTile > 1)
+                    {
+                        //return (tMaxX - tDeltaX) * len;
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                tMaxY = tMaxY + tDeltaY;
+                _y = _y + stepY;
+
+                if(_x + _y * _widthInTiles >= _tiles.length)
+                {
+                    //return (tMaxY - tDeltaY) * len;
+                    return false;
+                }
+                else
+                {
+                    var nextTile:Int = _tiles[_x + _y * _widthInTiles];
+                    if (nextTile > 1)
+                    {
+                        //return (tMaxY - tDeltaY) * len;
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
 	}
 
     public function collideTilemap(body : Body):Bool
@@ -86,8 +152,7 @@ class Tilemap extends Element
         for (b in _bodies)
         {
             if (b.inRange(body.position.x + body.width/2,
-                        body.position.y + body.height/2,
-                        2 * body.width))
+                    body.position.y + body.height/2, 2 * body.width))
             {
                 if (b.overlapBody(body))
                 {

@@ -4,7 +4,7 @@ import core.Element;
 
 class Player extends Element
 {
-    private var SPEED:Float = 600;
+    private var SPEED:Float = 200;
     private var _body:Body;
 
     private var H_SQRT2:Float;
