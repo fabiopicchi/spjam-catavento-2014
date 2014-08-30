@@ -69,10 +69,22 @@ class StageState extends State
 
         _player.move(hor, ver);
 		
-		for (g in _guards) {
+		var playerPoint = new Point (_player.x, _player.y);
 		
-			//se estiver a tal distância do herói, checar se está vendo herói e incrementar a barra da HUD
-		
+		for (g in _guards)
+		{
+			if (Point.distance(g.eye, playerPoint) < 500) {
+				if (_map.isPointVisible(g.eye, playerPoint)) {
+					if (true) //checar se está dentro do cone
+					{
+						g.alert();
+						var v:Float;
+						if (Point.distance(g.eye, playerPoint) > 500) v = 1;
+						else v = 5;
+						//hud.increase(v);						
+					}
+				}
+			}	
 		}
 
         super.update(dt);

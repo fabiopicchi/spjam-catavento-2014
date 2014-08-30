@@ -31,6 +31,8 @@ class Guard extends Element {
 	public var visionAngle:Float = 0;				//direção da visão do guarda
 	public var visionWidth:Float = Math.PI / 6;		//delta máximo para enxergar o herói
 	
+	//public var exclamation:Exclamation;
+	
 	public function new(b:Int, r:Array<Point>) {
 		super ();
 		
@@ -38,6 +40,9 @@ class Guard extends Element {
         s.graphics.beginFill(0xFF0000);
         s.graphics.drawRect(0, 0, 60, 60);
         addChild(s);
+		
+		//exclamation = new Exclamation ();
+		//addChild (exclamation);
 		
 		behaviorType = b;
 		route = r ;
@@ -146,5 +151,9 @@ class Guard extends Element {
 			}
 		}
 		startWalkingTo(route[currentTargetId]);
+	}
+	
+	public function alert():Void {
+		
 	}
 }
