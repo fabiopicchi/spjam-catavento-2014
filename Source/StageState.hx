@@ -27,9 +27,6 @@ class StageState extends State
 
         _player = new Player();
 		
-		var g = new Guard (0, [new Point(40,40), new Point(40,120)]);
-		_guards.add (g);
-		addElement (g);
 
         var obj:Dynamic = Json.parse(Assets.getText("assets/stage.json"));
         var tileset:BitmapData = Assets.getBitmapData("assets/tileset.jpg");    
@@ -42,8 +39,13 @@ class StageState extends State
                 _map = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
         }
+
+		var g = new Guard (2, [new Point(40,40), new Point(40,120),
+                                new Point(120,120)]);
+		_guards.add (g);
         
         addElement(_map);
+		addElement (g);
         addElement(_player);
     }
 
@@ -87,8 +89,10 @@ class StageState extends State
 		
 		for (g in _guards)
 		{
-			if (Point.distance(g.eye, playerPoint) < 500) {
-				if (_map.isPointVisible(g.eye, playerPoint)) {
+			if (Point.distance(g.eye, playerPoint) < 500) 
+            {
+				if (_map.isPointVisible(g.eye, playerPoint)) 
+                {
 					if (true) //checar se está dentro do cone
 					{
 						g.alert();
