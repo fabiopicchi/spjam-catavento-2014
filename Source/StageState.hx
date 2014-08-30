@@ -1,6 +1,10 @@
+import haxe.Json;
 import haxe.ds.IntMap;
 
+import openfl.Assets;
 import openfl.ui.Keyboard;
+import openfl.display.BitmapData;
+
 import core.State;
 
 class StageState extends State
@@ -20,7 +24,19 @@ class StageState extends State
 
         _player = new Player();
 		_guard = new Guard(0);
-        _map = new Tilemap("assets/stage.json");
+
+        var obj:Dynamic = Json.parse(Assets.getText("assets/stage.json"));
+        var tileset:BitmapData = Assets.getBitmapData("assets/tileset.jpg");    
+        var layers:Array<Dynamic> = obj.layers;
+
+        for (layer in layers)
+        {
+            if (layer.name == "map")
+            {
+                _map = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+        }
+        
         addElement(_map);
         addElement(_player);
 		addElement(_guard);

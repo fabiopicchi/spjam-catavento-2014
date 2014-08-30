@@ -1,5 +1,3 @@
-import haxe.Json;
-
 import openfl.Assets;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
@@ -20,28 +18,26 @@ class Tilemap extends Element
     private var _bodies:Array<Body>;
     private var _collisionArray:Array<Body>;
 
-    public function new(tmxPath:String)
+    public function new(mapLayer:Dynamic, tileset:BitmapData, 
+            tileWidth:Int, tileHeight:Int)
     {
         super();
 
         _collisionArray = new Array<Body>();
 
-        var tilemapData:Dynamic = Json.parse(Assets.getText(tmxPath));
-
-        _tileset = Assets.getBitmapData("assets/" +
-                tilemapData.tilesets[0].image);
-
-        _tileWidth = tilemapData.tilewidth;
-        _tileHeight = tilemapData.tileheight;
-        _widthInTiles = tilemapData.width;
-        _heightInTiles = tilemapData.height;
-        _tiles = tilemapData.layers[0].data;
+        _tileset = tileset;
+        _tileWidth = tileWidth;
+        _tileHeight = tileHeight;
+        _widthInTiles = mapLayer.width;
+        _heightInTiles = mapLayer.height;
+        _tiles = mapLayer.data;
 
         _tileQuads = new Array<BitmapData>();
         _bodies = new Array<Body>();
 
-        var tilesetWidthInTiles:Int = Math.floor(_tileset.width / _tileWidth);
-        var tilesetHeightInTiles:Int = Math.floor(_tileset.height /
+        var tilesetWidthInTiles:Int = Math.floor(_tileset.width / 
+                _tileWidth);
+        var tilesetHeightInTiles:Int = Math.floor(_tileset.height / 
                 _tileHeight);
         var point:Point = new Point();
         for (j in 0...tilesetHeightInTiles)
