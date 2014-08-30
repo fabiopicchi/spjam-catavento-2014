@@ -20,7 +20,7 @@ class StageState extends State
         super();
 
         _player = new Player();
-		_guard = new Guard(1);
+		_guard = new Guard(0);
         _map = new Tilemap("assets/stage.json");
         addElement(_map);
         addElement(_player);

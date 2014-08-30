@@ -15,7 +15,7 @@ import openfl.geom.Point;
  */
 class Guard extends Element {
 	
-	public var behaviorType:Int; // 0 = noWait, 1 = wait
+	public var behaviorType:Int; // 0 = noWait, 1 = wait, 2 = lookaround
 	public var route:Array<Point>;
 	public var currentTargetId:Int = 0;
 	public var target:Point;
@@ -24,7 +24,9 @@ class Guard extends Element {
 	public var state:Int; // 0 = waiting, 1 = walking
 	public var speed:Float = 100;
 	public var angle:Float = 0;
+	
 	public var waitingTimer:Float;
+	public var rotateTimer:Float;
 	
 	public var attention:Float = 0;
 	public var faceDirection:Int = 0;
@@ -93,14 +95,30 @@ class Guard extends Element {
 	{
 		state = 0;
 		waitingTimer  = time;
+		rotateTimer = 1;
 	}
 	
 	public function wait(dt:Float):Void 
 	{
 		waitingTimer -= dt;
+		rotateTimer -= dt;
+		
+		if (behaviorType == 2) {
+			if (rotateTimer <= 0) {
+				rotate();
+				rotateTimer = 1;
+			}
+		}
+		
 		if (waitingTimer <= 0) {
 			loadNextStep();
 		}
+	}
+	
+	public function rotate():Void 
+	{
+		faceDirection += (Math.random() > 0.5) ? -1 : 1;
+		faceDirection = faceDirection % 4;
 	}
 	
 	override public function draw():Void 

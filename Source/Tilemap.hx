@@ -61,4 +61,9 @@ class Tilemap extends Element
             addChild(bitmap);
         }
     }
+	function canSee ():Bool {
+		var c:Bool;
+		c = true;
+		return c;
+	}
 }
