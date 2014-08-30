@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+    <android target-sdk-version="8" />
+	<meta title="Coelhinho regador" package="com.example.coelhinhoregador" version="1.0.0" company="Company Name" />
+	<app main="Game" path="Export" file="StupidGame" />
+
+	<window width="320" height="240" background="#666666" fps="30"/>
+	<window fullscreen="false" resizable="false"/>
+
+	<source path="Source" />
+	
+	<haxelib name="openfl" />
+	
+	<assets path="Assets" rename="assets" exclude="openfl.svg" />
+	<icon path="Assets/openfl.svg" />
+	
+</project>
