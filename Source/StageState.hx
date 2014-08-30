@@ -1,7 +1,10 @@
+import haxe.Json;
 import haxe.ds.IntMap;
 import openfl.geom.Point;
 
+import openfl.Assets;
 import openfl.ui.Keyboard;
+import openfl.display.BitmapData;
 
 import core.State;
 
@@ -23,12 +26,23 @@ class StageState extends State
         super();
 
         _player = new Player();
-        _map = new Tilemap("assets/pathtest.json");
 		
 		var g = new Guard (0, [new Point(40,40), new Point(40,120)]);
 		_guards.add (g);
 		addElement (g);
-		
+
+        var obj:Dynamic = Json.parse(Assets.getText("assets/stage.json"));
+        var tileset:BitmapData = Assets.getBitmapData("assets/tileset.jpg");    
+        var layers:Array<Dynamic> = obj.layers;
+
+        for (layer in layers)
+        {
+            if (layer.name == "map")
+            {
+                _map = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+        }
+        
         addElement(_map);
         addElement(_player);
     }
@@ -88,5 +102,6 @@ class StageState extends State
 		}
 
         super.update(dt);
+        _map.collideTilemap(_player.getBody());
     }
 }
