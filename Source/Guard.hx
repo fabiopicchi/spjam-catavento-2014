@@ -1,11 +1,7 @@
 package  ;
 
 import core.Element;
-import flash.display.BitmapData;
-import openfl.display.Bitmap;
 import openfl.display.Shape;
-import openfl.display.Sprite;
-import openfl.Assets;
 import openfl.events.Event;
 import openfl.geom.Point;
 
@@ -15,7 +11,7 @@ import openfl.geom.Point;
  */
 class Guard extends Element {
 	
-	public var behaviorType:Int; // 0 = noWait, 1 = wait, 2 = lookaround
+	public var behaviorType:Int; // 0 = noWait, 1 = Wait, 2 = LookAround
 	public var route:Array<Point>;
 	public var currentTargetId:Int = 0;
 	public var target:Point;
@@ -30,12 +26,12 @@ class Guard extends Element {
 	
 	public var attention:Float = 0;
 	public var faceDirection:Int = 0;
-	public var visionAngle:Float = 0;
-	public var visionWidth:Float = Math.PI / 3;
 	
-	private var image:Bitmap;
+	public var eye:Point;							//coordenadas do olho do guarda
+	public var visionAngle:Float = 0;				//direção da visão do guarda
+	public var visionWidth:Float = Math.PI / 6;		//delta máximo para enxergar o herói
 	
-	public function new(behaviorType:Int) {
+	public function new(b:Int, r:Array<Point>) {
 		super ();
 		
 		var s : Shape = new Shape();
@@ -43,8 +39,13 @@ class Guard extends Element {
         s.graphics.drawRect(0, 0, 60, 60);
         addChild(s);
 		
-		this.behaviorType = behaviorType;
-		route = [ new Point (40, 40), new Point (120, 40), new Point (120, 120) ] ;
+		behaviorType = b;
+		route = r ;
+		
+		x = route[0].x;
+		y = route[0].y;
+		
+		eye = new Point();
 		
 		goingBack = false;
 		loadNextStep();
@@ -60,6 +61,10 @@ class Guard extends Element {
 		else if (state == 1) {
 			walk(dt);
 		}
+		
+		eye.x = x + 42;
+		eye.y = y + 42;
+		visionAngle = faceDirection * Math.PI / 2;
     }
 	
 	public function startWalkingTo(t:Point):Void 

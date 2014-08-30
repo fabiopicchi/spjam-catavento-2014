@@ -1,4 +1,5 @@
 import haxe.ds.IntMap;
+import openfl.geom.Point;
 
 import openfl.ui.Keyboard;
 
@@ -12,19 +13,24 @@ class StageState extends State
     private var DOWN:Int = 1 << 3;
 
     private var _player:Player;
-	private var _guard:Guard;
     private var _map:Tilemap;
+	private var _guards = new List <Guard> ();
+	//private var _lasers = new List <Laser> ();
+	//private var _cameras = new List <Camera> ();
 
     public function new()
     {
         super();
 
         _player = new Player();
-		_guard = new Guard(0);
-        _map = new Tilemap("assets/stage.json");
+        _map = new Tilemap("assets/pathtest.json");
+		
+		var g = new Guard (0, [new Point(40,40), new Point(40,120)]);
+		_guards.add (g);
+		addElement (g);
+		
         addElement(_map);
         addElement(_player);
-		addElement(_guard);
     }
 
     override public function setInputActions(inputMap:IntMap<Int>)
@@ -62,6 +68,12 @@ class StageState extends State
         }
 
         _player.move(hor, ver);
+		
+		for (g in _guards) {
+		
+			//se estiver a tal distância do herói, checar se está vendo herói e incrementar a barra da HUD
+		
+		}
 
         super.update(dt);
     }
