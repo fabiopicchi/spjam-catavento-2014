@@ -12,9 +12,9 @@ class Laser extends Element
     private var _arSegments:Array<SpriteSheet>;
     private var _length:Int;
 
-    public var BLUE:String = "blue";
-    public var GREEN:String = "green";
-    public var RED:String = "red";
+    public static var BLUE:String = "blue";
+    public static var GREEN:String = "green";
+    public static var RED:String = "red";
     
     private var FRAME_WIDTH:Int = 30;
     private var FRAME_HEIGHT:Int = 21;
