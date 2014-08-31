@@ -35,9 +35,12 @@ class Guard extends Element {
 	//public var exclamation:Exclamation;
 
     private var _eyeRef:Shape;
+    private var interrupted:Bool;
 	
 	public function new(b:Int, r:Array<Point>) {
 		super ();
+
+        interrupted = false;
 		
         behaviorType = b;
 		route = r;
@@ -125,49 +128,73 @@ class Guard extends Element {
 	public function wait(dt:Float):Void 
 	{
 		waitingTimer -= dt;
-		rotateTimer -= dt;
-		
-		if (behaviorType == 2) {
-			if (rotateTimer <= 0) {
-				rotate();
-				rotateTimer = 1;
-			}
-		}
-		
-		if (waitingTimer <= 0) {
-			loadNextStep();
-		}
-	}
-	
-	public function rotate():Void 
-	{
-		faceDirection += (Math.random() > 0.5) ? -1 : 1;
-        if (faceDirection < 0) faceDirection += 4;
-		faceDirection = faceDirection % 4;
-	}
 
-	public function alert():Void 
+        if (!interrupted)
+        {
+            rotateTimer -= dt;
+
+            if (behaviorType == 2) {
+                if (rotateTimer <= 0) {
+                    rotate();
+                    rotateTimer = 1;
+                }
+            }
+
+            if (waitingTimer <= 0) {
+                loadNextStep();
+            }
+        }
+        else
+        {
+            if (waitingTimer <= 0)
+            {
+                interrupted = false;
+                loadNextStep();
+            }
+        }
+    }
+
+    public function interrupt():Void
+    {
+        waitingTimer = 10;
+        interrupted = true;
+        state = 0;
+    }
+
+    public function isInterrupted():Bool
+    {
+        return interrupted;
+    }
+
+    public function rotate():Void 
+    {
+        faceDirection += (Math.random() > 0.5) ? -1 : 1;
+        if (faceDirection < 0) faceDirection += 4;
+        faceDirection = faceDirection % 4;
+    }
+
+    public function alert():Void 
     {
 
-	}
+    }
 
     public function getBody():Body
     {
         return _body;
     }
 
-	override public function update(dt:Float):Void 
+    override public function update(dt:Float):Void 
     {
         super.update(dt);
-		
-		if (state == 0) {
-			wait(dt);
-		}
-		else if (state == 1) {
-			walk(dt);
-		}
-		
-		visionAngle = faceDirection * Math.PI / 2;
+
+        if (state == 0) {
+            wait(dt);
+        }
+        else if (state == 1) {
+            walk(dt);
+        }
+
+        visionAngle = faceDirection * Math.PI / 2;
 
         switch(faceDirection)
         {
@@ -184,15 +211,15 @@ class Guard extends Element {
                 _eyeRef.x = 27;
                 _eyeRef.y = -6;
         }
-		eye.x = _body.position.x + _eyeRef.x;
-		eye.y = _body.position.y + _eyeRef.y;
+        eye.x = _body.position.x + _eyeRef.x;
+        eye.y = _body.position.y + _eyeRef.y;
     }
 
-	override public function draw():Void 
+    override public function draw():Void 
     {
         x = _body.position.x;
         y = _body.position.y;
         super.draw();
     }
-	
+
 }

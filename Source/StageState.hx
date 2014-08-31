@@ -255,21 +255,32 @@ class StageState extends State
 
         for (g in _guards)
         {
-            var playerDistance = Point.distance(g.eye, playerPoint);
-
-            if (playerDistance < PLAYER_DETECTION_RADUIS) 
+            for (p in _puddles)
             {
-                var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
-                        playerPoint.x - g.eye.x);
-                if (angle < 0) angle += 2 * Math.PI;
-
-                if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
-                        angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
+                if (p.getBody().overlapBody(g.getBody()))
                 {
-                    if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
+                    g.interrupt();
+                }
+            }
+
+            if (!g.isInterrupted())
+            {
+                var playerDistance = Point.distance(g.eye, playerPoint);
+
+                if (playerDistance < PLAYER_DETECTION_RADUIS) 
+                {
+                    var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
+                            playerPoint.x - g.eye.x);
+                    if (angle < 0) angle += 2 * Math.PI;
+
+                    if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
+                            angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
                     {
-                        g.alert();
-                        _hud.increase(2);
+                        if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
+                        {
+                            g.alert();
+                            _hud.increase(2);
+                        }
                     }
                 }
             }
