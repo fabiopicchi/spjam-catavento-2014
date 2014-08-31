@@ -14,6 +14,7 @@ class StageState extends State
     private var RIGHT:Int = 1 << 1;
     private var UP:Int = 1 << 2;
     private var DOWN:Int = 1 << 3;
+    private var WATER:Int = 1 << 4;
 
     private var PLAYER_DETECTION_RADUIS:Float;
 
@@ -91,6 +92,11 @@ class StageState extends State
 					{
 						_player = new Player(object.x,object.y);
 					}
+
+                    if (object.name == "terminal")
+                    {
+                        //var terminal:Terminal = new Terminal
+                    }
 				}
 			}
         }
@@ -99,11 +105,11 @@ class StageState extends State
 		addElement(_collideLayer);
 		for (g in _guards) addElement(g);
         addElement(_player);
+
+        addElement(new Terminal(200, 400, 1, 0, "blue"));
+
 		addElement(_upperLayer);
 		addElement(_shadeLayer);
-
-        var l:Laser = new Laser(200, 400, 2, 2, Laser.BLUE);
-        addElement(l);
 
         _hud = new HUD();
         addElement(_hud);
@@ -119,22 +125,23 @@ class StageState extends State
         inputMap.set(Keyboard.RIGHT, RIGHT);
         inputMap.set(Keyboard.W, UP);
         inputMap.set(Keyboard.UP, UP);
+        inputMap.set(Keyboard.SPACE, WATER);
     }
 
     override public function update (dt:Float)
     {
         var hor:Int = 0;
         var ver:Int = 0;
-        if (pressed(UP) && !pressed(DOWN))
+        if(pressed(UP) && !pressed(DOWN))
         {
             ver = -1;
         }
-        else if (pressed(DOWN) && !pressed(UP))
+        else if(pressed(DOWN) && !pressed(UP))
         {
             ver = 1;
         }
 
-        if (pressed(LEFT) && !pressed(RIGHT))
+        if(pressed(LEFT) && !pressed(RIGHT))
         {
             hor = -1;
         }
@@ -142,8 +149,12 @@ class StageState extends State
         {
             hor = 1;
         }
-
         _player.move(hor, ver);
+
+        if(justPressed(WATER))
+        {
+            _player.water();
+        }
 
         super.update(dt);
 

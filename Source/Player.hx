@@ -6,6 +6,7 @@ class Player extends Element
 {
     private var SPEED:Float = 180;
     private var _body:Body;
+    private var _facing:Int;
 
     private var H_SQRT2:Float;
 
@@ -23,6 +24,7 @@ class Player extends Element
         addChild(s);
 
         H_SQRT2 = Math.sqrt(2)/2;
+        _facing = 0;
     }
 
     public function move (hor:Int, ver:Int)
@@ -35,6 +37,21 @@ class Player extends Element
             _body.speed.x *= H_SQRT2;
             _body.speed.y *= H_SQRT2;
         }
+
+        if(_body.speed.x > 0)
+            _facing = 0;
+        else
+            _facing = 1;
+    }
+
+    public function water()
+    {
+        
+    }
+
+    public function getFacing():Int
+    {
+        return _facing;
     }
 
     public function getBody():Body
