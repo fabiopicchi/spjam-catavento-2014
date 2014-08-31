@@ -21,8 +21,16 @@ class StageState extends State
     private var _map:Tilemap;
     private var _hud:HUD;
 	private var _guards = new List <Guard> ();
+
+    private var _lowerLayer:Tilemap;
+	private var _collideLayer:Tilemap;
+	private var _upperLayer:Tilemap;
+	private var _shadeLayer:Tilemap;
+	
 	//private var _lasers = new List <Laser> ();
 	//private var _cameras = new List <Camera> ();
+	//private var _circuits = new List <Circuit> ();
+	//private var _terminals = new List <Terminal> ();
 
     public function new()
     {
@@ -32,15 +40,27 @@ class StageState extends State
 		
         PLAYER_DETECTION_RADUIS = Math.sqrt(800 * 800 + 600 * 600);
 
-        var obj:Dynamic = Json.parse(Assets.getText("assets/stage.json"));
-        var tileset:BitmapData = Assets.getBitmapData("assets/tileset.jpg");    
+        var obj:Dynamic = Json.parse(Assets.getText("assets/level1.json"));
+        var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
         var layers:Array<Dynamic> = obj.layers;
 
         for (layer in layers)
         {
-            if (layer.name == "map")
+            if (layer.name == "lower")
             {
-                _map = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+				_lowerLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+			if (layer.name == "collide")
+            {
+				_collideLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+			if (layer.name == "upper")
+            {
+				_upperLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+			if (layer.name == "shade")
+            {
+				_shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
         }
 
@@ -48,11 +68,16 @@ class StageState extends State
                                 new Point(380,380)]);
 		_guards.add (g);
 
-        _hud = new HUD();
-        
-        addElement(_map);
+        addElement(_lowerLayer);
+		addElement(_collideLayer);
+		var g = new Guard (2, [new Point(40,40), new Point(40,120), new Point(120,120)]);
+		_guards.add (g);
 		addElement (g);
         addElement(_player);
+		addElement(_upperLayer);
+		addElement(_shadeLayer);
+
+        _hud = new HUD();
         addElement(_hud);
     }
 
@@ -125,6 +150,7 @@ class StageState extends State
             }
         }
 
-        _map.collideTilemap(_player.getBody());
+        super.update(dt);
+        _collideLayer.collideTilemap(_player.getBody());
     }
 }
