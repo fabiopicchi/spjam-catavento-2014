@@ -13,9 +13,16 @@ class Camera extends Element {
 	
 	public var circuitId:Int;
 	
+	public static var BLUE:String = "blue";
+    public static var GREEN:String = "green";
+    public static var RED:String = "red";
+	
+	private var FRAME_WIDTH:Int = 30;
+    private var FRAME_HEIGHT:Int = 21;
+	
 	public var initialAngle:Float;
 	public var deltaMax:Float = Math.PI / 6;
-	public var angularSpeed:Float;
+	public var ANGULAR_SPEED:Float = 8;
 	public var goingBack:Bool;
 	public var waitTimer:Float;
 	
@@ -27,7 +34,7 @@ class Camera extends Element {
 	
 	//public var exclamation:Exclamation;
 	
-	public function new(x:Float, y:Float, initialAngle:Float, id:Int) {
+	public function new(x:Float, y:Float, initialAngle:Float, color:String, id:Int) {
 		super ();
 		
 		var s : Shape = new Shape();
@@ -39,9 +46,14 @@ class Camera extends Element {
 		this.y = y;
 		
 		eye = new Point();
-		initialAngle = initialAngle;
-		visionAngle = initialAngle;
+		this.initialAngle = initialAngle;
+		angle = initialAngle;
 		goingBack = false;
+		
+		var s : Shape = new Shape();
+        s.graphics.beginFill(0xFF0000);
+        s.graphics.drawRect(0, 0, 60, 60);
+        addChild(s);
 	}
 	
 	override public function update(dt:Float):Void 
@@ -51,17 +63,17 @@ class Camera extends Element {
 		eye.x = x;
 		eye.y = y;
 		
-		if (deactivationTimer > 0) {
-			deactivationTimer -= dt;
+		if (waitTimer > 0) {
+			waitTimer -= dt;
 		}
 		else {
-			if (timer > 0) {
-				timer -= dt;
+			if (deactivationTimer > 0) {
+				deactivationTimer -= dt;
 			}
 			else{
 				
 				if (!goingBack) {
-					angle += dt * angularSpeed;
+					angle += dt * ANGULAR_SPEED;
 					if (angle > initialAngle + deltaMax) {
 						angle = initialAngle + deltaMax;
 						goingBack = true;
@@ -69,7 +81,7 @@ class Camera extends Element {
 					}
 				}
 				else {
-					angle -= dt * angularSpeed;
+					angle -= dt * ANGULAR_SPEED;
 					if (angle < initialAngle - deltaMax) {
 						angle = initialAngle - deltaMax;
 						goingBack = true;

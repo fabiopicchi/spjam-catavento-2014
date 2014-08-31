@@ -27,7 +27,7 @@ class StageState extends State
 	private var _shadeLayer:Tilemap;
 	
 	private var _lasers = new List <Laser> ();
-	//private var _cameras = new List <Camera> ();
+	private var _cameras = new List <Camera> ();
 	//private var _circuits = new List <Circuit> ();
 	//private var _terminals = new List <Terminal> ();
 
@@ -98,7 +98,8 @@ class StageState extends State
 					}
 					if (object.name == "camera")
 					{
-						//_cameras.add (new Camera (object.x, object.y, Std.parseInt(object.properties.direction), Std.parseInt(object.properties.id)));
+						_cameras.add (new Camera (object.x, object.y, Std.parseFloat(object.properties.direction),
+							object.properties.color, Std.parseInt(object.properties.id)));
 					}
 					if (object.name == "terminal")
 					{
@@ -118,12 +119,12 @@ class StageState extends State
 
         addElement(_lowerLayer);
 		addElement(_collideLayer);
+		addElement(_shadeLayer);
 		addElement(_player);
 		for (i in _guards) addElement(i);
 		for (i in _lasers) addElement(i);
+		for (i in _cameras) addElement(i);
 		addElement(_upperLayer);
-		addElement(_shadeLayer);
-		
         _hud = new HUD();
         addElement(_hud);
     }

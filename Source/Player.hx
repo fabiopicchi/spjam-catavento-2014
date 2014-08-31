@@ -19,21 +19,16 @@ class Player extends Element
     {
         super();
 
-        _body = new Body(50, 50);
+        _body = new Body(40, 10);
 		_body.position.x = x;
 		_body.position.y = y;
-		
-        var s : Shape = new Shape();
-        s.graphics.beginFill(0x000000);
-        s.graphics.drawRect(0, 0, 50, 50);
-        addChild(s);
-        
+		     
 		_spriteSheet = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
 		_spriteSheet.loadAnimationsFromJSON("assets/ss_bunny.json");
 		_spriteSheet.setAnimation("idle");
 		
-		_spriteSheet.x = -5;
-		_spriteSheet.y = -10;
+		_spriteSheet.x = -10;
+		_spriteSheet.y = -50;
 		
 		addElement(_spriteSheet);
 
