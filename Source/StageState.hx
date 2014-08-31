@@ -35,10 +35,6 @@ class StageState extends State
     {
         super();
 
-        _player = new Player();
-        _player.getBody().position.x = 200;
-        _player.getBody().position.y = 400;
-		
         PLAYER_DETECTION_RADUIS = Math.sqrt(800 * 800 + 600 * 600);
 
         var obj:Dynamic = Json.parse(Assets.getText("assets/level1.json"));
@@ -63,15 +59,45 @@ class StageState extends State
             {
 				_shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
+			if (layer.name == "guards")
+            {
+				var objects:Array<Dynamic> = layer.objects;
+				var behavior:Int;
+				var route:Array<Point>;
+				
+				for (object in objects)
+				{
+					if (object.name == "guard")
+					{
+						behavior = object.properties.behavior;
+						route = new Array<Point> ();
+						var polylines:Array<Dynamic> = object.polyline;
+						
+						for (coordinate in polylines)
+						{
+							route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
+						}
+						_guards.add (new Guard (behavior, route));	
+					}
+				}
+            }
+			if (layer.name == "objects")
+            {
+				var objects:Array<Dynamic> = layer.objects;
+				
+				for (object in objects)
+				{
+					if (object.name == "player")
+					{
+						_player = new Player(object.x,object.y);
+					}
+				}
+			}
         }
 
         addElement(_lowerLayer);
 		addElement(_collideLayer);
-
-		var g = new Guard (2, [new Point(40,40), new Point(40,120), new Point(120,120)]);
-		_guards.add (g);
-		addElement (g);
-
+		for (g in _guards) addElement(g);
         addElement(_player);
 		addElement(_upperLayer);
 		addElement(_shadeLayer);

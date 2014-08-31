@@ -71,6 +71,7 @@ class Guard extends Element {
 			currentTargetId++;
 			if (currentTargetId == route.length - 1) {
 				goingBack = true;
+				//trace ("going back!" + route);
 			}
 		}
 		else {

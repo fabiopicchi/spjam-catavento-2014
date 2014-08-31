@@ -172,7 +172,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":24,
          "x":0,
          "y":0
@@ -186,46 +186,6 @@
                  "name":"terminal",
                  "properties":
                     {
-                     "id":"1"
-                    },
-                 "type":"terminal",
-                 "visible":true,
-                 "width":60,
-                 "x":1020,
-                 "y":300
-                }, 
-                {
-                 "height":60,
-                 "name":"camera",
-                 "properties":
-                    {
-                     "id":"1",
-                     "initialAngle":"0"
-                    },
-                 "type":"camera",
-                 "visible":true,
-                 "width":60,
-                 "x":540,
-                 "y":360
-                }, 
-                {
-                 "height":60,
-                 "name":"laser",
-                 "properties":
-                    {
-                     "id":"2"
-                    },
-                 "type":"laser",
-                 "visible":true,
-                 "width":60,
-                 "x":420,
-                 "y":360
-                }, 
-                {
-                 "height":60,
-                 "name":"terminal",
-                 "properties":
-                    {
                      "id":"2"
                     },
                  "type":"terminal",
@@ -233,32 +193,6 @@
                  "width":60,
                  "x":180,
                  "y":600
-                }, 
-                {
-                 "height":0,
-                 "name":"circuit",
-                 "polyline":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
-                         "x":-480,
-                         "y":0
-                        }, 
-                        {
-                         "x":-480,
-                         "y":60
-                        }],
-                 "properties":
-                    {
-                     "id":"1"
-                    },
-                 "type":"circuit",
-                 "visible":true,
-                 "width":0,
-                 "x":1020,
-                 "y":300
                 }, 
                 {
                  "height":0,
@@ -327,28 +261,6 @@
                          "y":0
                         }, 
                         {
-                         "x":0,
-                         "y":67
-                        }],
-                 "properties":
-                    {
-                     "behavior":"2"
-                    },
-                 "type":"guard",
-                 "visible":true,
-                 "width":0,
-                 "x":616,
-                 "y":640
-                }, 
-                {
-                 "height":0,
-                 "name":"guard",
-                 "polyline":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
                          "x":183,
                          "y":0
                         }],
@@ -391,6 +303,28 @@
                  "width":0,
                  "x":787,
                  "y":651
+                }, 
+                {
+                 "height":0,
+                 "name":"guard",
+                 "polyline":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":0,
+                         "y":67
+                        }],
+                 "properties":
+                    {
+                     "behavior":"2"
+                    },
+                 "type":"guard",
+                 "visible":true,
+                 "width":0,
+                 "x":328,
+                 "y":443
                 }],
          "opacity":1,
          "type":"objectgroup",
