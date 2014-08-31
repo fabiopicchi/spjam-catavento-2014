@@ -53,6 +53,8 @@
                  "name":"terminal",
                  "properties":
                     {
+                     "color":"red",
+                     "direction":"1",
                      "id":"1"
                     },
                  "type":"terminal",
@@ -66,20 +68,23 @@
                  "name":"camera",
                  "properties":
                     {
+                     "color":"red",
                      "id":"1",
                      "initialAngle":"0"
                     },
                  "type":"camera",
                  "visible":true,
                  "width":60,
-                 "x":540,
-                 "y":360
+                 "x":720,
+                 "y":180
                 }, 
                 {
                  "height":60,
                  "name":"terminal",
                  "properties":
                     {
+                     "color":"green",
+                     "direction":"0",
                      "id":"2"
                     },
                  "type":"terminal",
