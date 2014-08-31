@@ -102,6 +102,9 @@ class StageState extends State
 		addElement(_upperLayer);
 		addElement(_shadeLayer);
 
+        var l:Laser = new Laser(200, 400, 2, 2, Laser.BLUE);
+        addElement(l);
+
         _hud = new HUD();
         addElement(_hud);
     }
