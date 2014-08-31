@@ -69,7 +69,7 @@ class StageState extends State
 				{
 					if (object.name == "guard")
 					{
-						behavior = object.properties.behavior;
+						behavior = Std.parseInt(object.properties.behavior);
 						route = new Array<Point> ();
 						var polylines:Array<Dynamic> = object.polyline;
 						
@@ -154,7 +154,6 @@ class StageState extends State
 		{
             var playerDistance = Point.distance(g.eye, playerPoint);
 
-            g.graphics.clear();
 			if (playerDistance < PLAYER_DETECTION_RADUIS) 
             {
                 var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
@@ -167,10 +166,6 @@ class StageState extends State
                     if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
                     {
                         g.alert();
-                        g.graphics.lineStyle(2, 0xFF0000);
-                        g.graphics.moveTo(g.eye.x - g.x, g.eye.y - g.y);
-                        g.graphics.lineTo(playerPoint.x - g.x, playerPoint.y -
-                                g.y);
                         _hud.increase(2);
                     }
                 }
