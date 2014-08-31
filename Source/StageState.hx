@@ -19,6 +19,7 @@ class StageState extends State
 
     private var _player:Player;
     private var _map:Tilemap;
+    private var _hud:HUD;
 	private var _guards = new List <Guard> ();
 	//private var _lasers = new List <Laser> ();
 	//private var _cameras = new List <Camera> ();
@@ -46,10 +47,13 @@ class StageState extends State
 		var g = new Guard (2, [new Point(300,300), new Point(300,380),
                                 new Point(380,380)]);
 		_guards.add (g);
+
+        _hud = new HUD();
         
         addElement(_map);
 		addElement (g);
         addElement(_player);
+        addElement(_hud);
     }
 
     override public function setInputActions(inputMap:IntMap<Int>)
@@ -96,8 +100,10 @@ class StageState extends State
 		
 		for (g in _guards)
 		{
+            var playerDistance = Point.distance(g.eye, playerPoint);
+
             g.graphics.clear();
-			if (Point.distance(g.eye, playerPoint) < PLAYER_DETECTION_RADUIS) 
+			if (playerDistance < PLAYER_DETECTION_RADUIS) 
             {
                 var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
                         playerPoint.x - g.eye.x);
@@ -113,6 +119,7 @@ class StageState extends State
                         g.graphics.moveTo(g.eye.x - g.x, g.eye.y - g.y);
                         g.graphics.lineTo(playerPoint.x - g.x, playerPoint.y -
                                 g.y);
+                        _hud.increase(2);
                     }
                 }
             }
