@@ -18,7 +18,7 @@ class StageState extends State
     private var DOWN:Int = 1 << 3;
     private var WATER:Int = 1 << 4;
 
-    private var PLAYER_DETECTION_RADUIS:Float;
+    private var PLAYER_DETECTION_RADIUS:Float = 400;
 
     private var _player:Player;
 	private var _levelEnd:LevelEnd;
@@ -26,7 +26,8 @@ class StageState extends State
 	private var _guards = new List <Guard> ();
 
     private var _puddleLayer:Element;
-    private var _lowerLayer:Tilemap;
+    private var _lowerLayer1:Tilemap;
+	private var _lowerLayer2:Tilemap;
 	private var _shadeLayer:Tilemap;
 	private var _collideLayer:Tilemap;
 	private var _upperLayer:Tilemap;
@@ -40,17 +41,23 @@ class StageState extends State
     {
         super();
 
-        PLAYER_DETECTION_RADUIS = Math.sqrt(800 * 800 + 600 * 600);
-
         var obj:Dynamic = Json.parse(Assets.getText("assets/level" + levelNumber + ".json"));
         var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
         var layers:Array<Dynamic> = obj.layers;
 
         for (layer in layers)
         {
-            if (layer.name == "lower")
+            if (layer.name == "lower1")
             {
-				_lowerLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+				_lowerLayer1 = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+			if (layer.name == "lower2")
+            {
+				_lowerLayer2 = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+			if (layer.name == "shade")
+            {
+				_shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
 			if (layer.name == "collide")
             {
@@ -60,10 +67,6 @@ class StageState extends State
             {
 				_upperLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "shade")
-            {
-				_shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
-            }
 			if (layer.name == "guards")
             {
 				var objects:Array<Dynamic> = layer.objects;
@@ -72,18 +75,15 @@ class StageState extends State
 				
 				for (object in objects)
 				{
-					if (object.name == "guard")
+					behavior = Std.parseInt(object.properties.bhv);
+					route = new Array<Point> ();
+					var polylines:Array<Dynamic> = object.polyline;
+					
+					for (coordinate in polylines)
 					{
-						behavior = Std.parseInt(object.properties.behavior);
-						route = new Array<Point> ();
-						var polylines:Array<Dynamic> = object.polyline;
-						
-						for (coordinate in polylines)
-						{
-							route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
-						}
-						_guards.add (new Guard (behavior, route));	
+						route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
 					}
+					_guards.add (new Guard (behavior, route));
 				}
             }
 			if (layer.name == "objects")
@@ -128,7 +128,8 @@ class StageState extends State
 			}
         }
 
-        addElement(_lowerLayer);
+        addElement(_lowerLayer1);
+		addElement(_lowerLayer2);
 		addElement(_collideLayer);
 		addElement(_shadeLayer);
         _puddleLayer = new Element();
@@ -247,7 +248,7 @@ class StageState extends State
 		{
             var playerDistance = Point.distance(g.eye, playerPoint);
 
-			if (playerDistance < PLAYER_DETECTION_RADUIS) 
+			if (playerDistance < PLAYER_DETECTION_RADIUS) 
             {
                 var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
                         playerPoint.x - g.eye.x);
@@ -260,9 +261,18 @@ class StageState extends State
                     {
                         g.alert();
                         _hud.increase(2);
+						if (playerDistance < 150)
+						{
+							_hud.increase(5);
+						}
                     }
                 }
             }
+			if (playerDistance < 50)
+			{
+				g.alert();
+				_hud.increase(4);
+			}
         }
 		
 		for (l in _lasers)

@@ -148,7 +148,7 @@ class Guard extends Element {
 
 	public function alert():Void 
     {
-
+		attention = 1;
 	}
 
     public function getBody():Body
@@ -160,11 +160,16 @@ class Guard extends Element {
     {
         super.update(dt);
 		
-		if (state == 0) {
-			wait(dt);
+		if (attention > 0) {
+			attention -=(dt);
 		}
-		else if (state == 1) {
-			walk(dt);
+		else {			
+			if (state == 0) {
+				wait(dt);
+			}
+			else if (state == 1) {
+				walk(dt);
+			}
 		}
 		
 		visionAngle = faceDirection * Math.PI / 2;
