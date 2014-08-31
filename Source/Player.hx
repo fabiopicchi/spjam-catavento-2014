@@ -1,4 +1,6 @@
+import core.SpriteSheet;
 import openfl.display.Shape;
+import openfl.geom.Rectangle;
 
 import core.Element;
 
@@ -6,6 +8,10 @@ class Player extends Element
 {
     private var SPEED:Float = 180;
     private var _body:Body;
+	
+	private var _spriteSheet:SpriteSheet;
+	private var FRAME_WIDTH:Int = 72;
+    private var FRAME_HEIGHT:Int = 60;
 
     private var H_SQRT2:Float;
 
@@ -16,11 +22,20 @@ class Player extends Element
         _body = new Body(50, 50);
 		_body.position.x = x;
 		_body.position.y = y;
-
+		
         var s : Shape = new Shape();
         s.graphics.beginFill(0x000000);
         s.graphics.drawRect(0, 0, 50, 50);
         addChild(s);
+        
+		_spriteSheet = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
+		_spriteSheet.loadAnimationsFromJSON("assets/ss_bunny.json");
+		_spriteSheet.setAnimation("idle");
+		
+		_spriteSheet.x = -5;
+		_spriteSheet.y = -10;
+		
+		addElement(_spriteSheet);
 
         H_SQRT2 = Math.sqrt(2)/2;
     }

@@ -8,7 +8,7 @@ class Terminal extends Element
 	private var _body:Body;
 	private var deactivationTimer:Float;
 
-    public function new(x:Float, y:Float, id:Int)
+    public function new(x:Float, y:Float, direction:Int, id:Int)
     {
         super();
 

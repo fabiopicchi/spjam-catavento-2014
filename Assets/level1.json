@@ -169,10 +169,25 @@
                  "width":47,
                  "x":1147,
                  "y":300
+                }, 
+                {
+                 "height":18,
+                 "name":"laser",
+                 "properties":
+                    {
+                     "color":"red",
+                     "direction":"0",
+                     "id":"2"
+                    },
+                 "type":"laser",
+                 "visible":true,
+                 "width":300,
+                 "x":180,
+                 "y":360
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":24,
          "x":0,
          "y":0
@@ -181,19 +196,6 @@
          "height":19,
          "name":"guards",
          "objects":[
-                {
-                 "height":60,
-                 "name":"terminal",
-                 "properties":
-                    {
-                     "id":"2"
-                    },
-                 "type":"terminal",
-                 "visible":true,
-                 "width":60,
-                 "x":180,
-                 "y":600
-                }, 
                 {
                  "height":0,
                  "name":"guard",

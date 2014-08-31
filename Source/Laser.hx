@@ -9,20 +9,25 @@ import core.SpriteSheet;
  */
 class Laser extends Element
 {
-    private var _arSegments:Array<SpriteSheet>;
+    private var id:Int;
+	private var _arSegments:Array<SpriteSheet>;
     private var _length:Int;
 
-    public var BLUE:String = "blue";
-    public var GREEN:String = "green";
-    public var RED:String = "red";
+    public static var BLUE:String = "blue";
+    public static var GREEN:String = "green";
+    public static var RED:String = "red";
     
     private var FRAME_WIDTH:Int = 30;
     private var FRAME_HEIGHT:Int = 21;
+	
+	public var deactivationTimer:Float = 0;
 
     public function new (x:Float, y:Float, length:Int, direction:Int,
-            colour:String) 
+            colour:String, id:Int) 
     {
         super();
+		
+		this.id = id;
 
         this.x = x;
         this.y = y;
@@ -80,5 +85,10 @@ class Laser extends Element
                 this.y += height;
                 scaleY = -1;
         }
+		
     }
+	
+	public function deactivate():Void {
+		deactivationTimer = 8;
+	}
 }
