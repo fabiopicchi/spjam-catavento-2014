@@ -12,7 +12,7 @@ import openfl.Assets;
 
 
 class Bgm extends Sprite {
-		
+	
 	private var channel:SoundChannel;
 	private var playing:Bool;
 	private var position:Float;

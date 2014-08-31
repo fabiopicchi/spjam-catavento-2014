@@ -28,6 +28,7 @@ class Game extends Sprite
         addChild(_state);
 		
 		//_bgm = new Bgm ("Assets/amigo_coelho.mp3");
+		//addChild(_bgm);
 
         _keyboardRaw = 0;
         stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);

@@ -140,11 +140,11 @@ class StageState extends State
         }
 
         addElement(_lowerLayer1);
-        addElement(_lowerLayer2);
-        addElement(_collideLayer);
-        addElement(_shadeLayer);
-        _puddleLayer = new Element();
+		_puddleLayer = new Element();
         addElement(_puddleLayer);
+        addElement(_collideLayer);
+        addElement(_lowerLayer2);
+        addElement(_shadeLayer);
         for (i in _lasers) addElement(i);
         addElement(_player);
         for (i in _guards) addElement(i);
@@ -202,11 +202,11 @@ class StageState extends State
             if (_player.getFacing() == 0)
             {
                 b.position.x = _player.getBody().position.x +
-                    _player.getBody().width; 
+                    _player.getBody().width + 25; 
             }
             else
             {
-                b.position.x = _player.getBody().position.x - b.width;
+                b.position.x = _player.getBody().position.x - b.width  + 25;
             }
 
             for(t in _terminals)
