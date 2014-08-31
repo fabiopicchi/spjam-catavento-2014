@@ -16,10 +16,17 @@ class StageState extends State
     private var DOWN:Int = 1 << 3;
 
     private var _player:Player;
-    private var _map:Tilemap;
 	private var _guards = new List <Guard> ();
+
+    private var _lowerLayer:Tilemap;
+	private var _collideLayer:Tilemap;
+	private var _upperLayer:Tilemap;
+	private var _shadeLayer:Tilemap;
+	
 	//private var _lasers = new List <Laser> ();
 	//private var _cameras = new List <Camera> ();
+	//private var _circuits = new List <Circuit> ();
+	//private var _terminals = new List <Terminal> ();
 
     public function new()
     {
@@ -27,26 +34,39 @@ class StageState extends State
 
         _player = new Player();
 		
-
-        var obj:Dynamic = Json.parse(Assets.getText("assets/stage.json"));
-        var tileset:BitmapData = Assets.getBitmapData("assets/tileset.jpg");    
+        var obj:Dynamic = Json.parse(Assets.getText("assets/level1.json"));
+        var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
         var layers:Array<Dynamic> = obj.layers;
 
         for (layer in layers)
         {
-            if (layer.name == "map")
+            if (layer.name == "lower")
             {
-                _map = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+				_lowerLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+			if (layer.name == "collide")
+            {
+				_collideLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+			if (layer.name == "upper")
+            {
+				_upperLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+            }
+			if (layer.name == "shade")
+            {
+				_shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
         }
 
-		var g = new Guard (2, [new Point(40,40), new Point(40,120),
-                                new Point(120,120)]);
+     
+        addElement(_lowerLayer);
+		addElement(_collideLayer);
+		var g = new Guard (2, [new Point(40,40), new Point(40,120), new Point(120,120)]);
 		_guards.add (g);
-        
-        addElement(_map);
 		addElement (g);
         addElement(_player);
+		addElement(_upperLayer);
+		addElement(_shadeLayer);
     }
 
     override public function setInputActions(inputMap:IntMap<Int>)
@@ -91,7 +111,7 @@ class StageState extends State
 		{
 			if (Point.distance(g.eye, playerPoint) < 500) 
             {
-				if (_map.isPointVisible(g.eye, playerPoint)) 
+				if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
                 {
 					if (true) //checar se está dentro do cone
 					{
@@ -106,6 +126,6 @@ class StageState extends State
 		}
 
         super.update(dt);
-        _map.collideTilemap(_player.getBody());
+        _collideLayer.collideTilemap(_player.getBody());
     }
 }
