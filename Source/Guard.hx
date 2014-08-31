@@ -1,9 +1,9 @@
-package  ;
-
 import core.Element;
 import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.geom.Point;
+
+import core.SpriteSheet;
 
 /**
  * ...
@@ -36,6 +36,10 @@ class Guard extends Element {
 
     private var _eyeRef:Shape;
     private var interrupted:Bool;
+
+    private var FRAME_WIDTH:Int = 112;
+    private var FRAME_HEIGHT:Int = 120;
+    private var _ss:SpriteSheet;
 	
 	public function new(b:Int, r:Array<Point>) {
 		super ();
@@ -51,12 +55,11 @@ class Guard extends Element {
 		
 		//exclamation = new Exclamation ();
 		//addChild (exclamation);
-		
-		var s : Shape = new Shape();
-        s.graphics.beginFill(0xFF0000);
-        s.graphics.drawRect(0, 0, 60, 60);
-        addChild(s);
 
+        _ss = new SpriteSheet("assets/guard.png", FRAME_WIDTH, FRAME_HEIGHT);
+        _ss.loadAnimationsFromJSON("assets/ss_guard.json");
+        addElement(_ss);
+		
         _eyeRef = new Shape();
         _eyeRef.graphics.beginFill(0x00FF00);
         _eyeRef.graphics.drawRect(0, 0, 6, 6);
@@ -66,6 +69,26 @@ class Guard extends Element {
 		
 		goingBack = false;
 		loadNextStep();
+
+        switch(faceDirection)
+        {
+            case 0:
+                _ss.setAnimation("idle-side");
+                _ss.scaleX = -1;
+                _ss.x = _ss.width;
+            case 1:
+                _ss.setAnimation("idle-front");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+            case 2:
+                _ss.setAnimation("idle-side");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+            case 3:
+                _ss.setAnimation("idle-back");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+        }
 	}
 
 	public function loadNextStep():Void
@@ -106,6 +129,26 @@ class Guard extends Element {
 			_body.position.y = target.y;
 			arrive();
 		}
+
+        switch(faceDirection)
+        {
+            case 0:
+                _ss.setAnimation("walk-side");
+                _ss.scaleX = -1;
+                _ss.x = _ss.width;
+            case 1:
+                _ss.setAnimation("walk-front");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+            case 2:
+                _ss.setAnimation("walk-side");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+            case 3:
+                _ss.setAnimation("walk-back");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+        }
     }
 	
 	public function arrive():Void 
@@ -152,6 +195,27 @@ class Guard extends Element {
                 loadNextStep();
             }
         }
+
+        switch(faceDirection)
+        {
+            case 0:
+                _ss.setAnimation("idle-side");
+                _ss.scaleX = -1;
+                _ss.x = _ss.width;
+            case 1:
+                _ss.setAnimation("idle-front");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+            case 2:
+                _ss.setAnimation("idle-side");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+            case 3:
+                _ss.setAnimation("idle-back");
+                _ss.scaleX = 1;
+                _ss.x = 0;
+        }
+
     }
 
     public function interrupt():Void
