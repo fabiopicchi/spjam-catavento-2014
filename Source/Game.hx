@@ -10,6 +10,7 @@ class Game extends Sprite
 {
     private var _lastFrame:Int;
     private var _state:StageState;
+	//private var _bgm:Bgm;
 	private var _currentLevel:Int = 1;
 
     private var _usedKeys:IntMap<Int>;
@@ -25,6 +26,8 @@ class Game extends Sprite
         _state.setInputActions(_usedKeys);
 
         addChild(_state);
+		
+		//_bgm = new Bgm ("Assets/amigo_coelho.mp3");
 
         _keyboardRaw = 0;
         stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
