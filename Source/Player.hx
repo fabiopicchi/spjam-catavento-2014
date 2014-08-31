@@ -12,7 +12,7 @@ class Player extends Element
 	private var _ss:SpriteSheet;
 	private var FRAME_WIDTH:Int = 72;
     private var FRAME_HEIGHT:Int = 60;
-    private var H_SQRT2:Float;
+    private var H_SQRT2:Float
 
     public function new(x:Float, y:Float)
     {
@@ -24,11 +24,10 @@ class Player extends Element
 		     
 		_ss = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
 		_ss.loadAnimationsFromJSON("assets/ss_bunny.json");
-		_ss.setAnimation("idle");
+		_ss.setAnimation("idle-right");
 		
 		_ss.x = -10;
 		_ss.y = -50;
-		
 		addElement(_ss);
 
         H_SQRT2 = Math.sqrt(2)/2;
@@ -37,24 +36,36 @@ class Player extends Element
 
     public function move (hor:Int, ver:Int)
     {
-        _body.speed.x = hor * SPEED;
-        _body.speed.y = ver * SPEED;
-
-        if (hor != 0 && ver != 0)
+        if (_ss.isOver())
         {
-            _body.speed.x *= H_SQRT2;
-            _body.speed.y *= H_SQRT2;
-        }
+            _body.speed.x = hor * SPEED;
+            _body.speed.y = ver * SPEED;
 
-        if(_body.speed.x > 0)
-            _facing = 0;
-        else
-            _facing = 1;
+            if (hor != 0 && ver != 0)
+            {
+                _body.speed.x *= H_SQRT2;
+                _body.speed.y *= H_SQRT2;
+            }
+
+            if(_body.speed.x > 0)
+                _facing = 0;
+            else if(_body.speed.x < 0)
+                _facing = 1;
+
+            if (hor != 0 || ver != 0)
+               _ss.setAnimation("walk-" + (_facing == 0 ? "right" :
+                           "left"));
+            else
+               _ss.setAnimation("idle-" + (_facing == 0 ? "right" :
+                           "left")); 
+        }
     }
 
     public function water()
     {
-        
+        _body.speed.x = 0;
+        _body.speed.y = 0;
+       _ss.setAnimation("water-" + (_facing == 0 ? "right" : "left"));
     }
 
     public function getFacing():Int

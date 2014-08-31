@@ -1,25 +1,49 @@
-import openfl.display.Shape;
+import openfl.geom.Rectangle;
 
 import core.Element;
+import core.SpriteSheet;
 
 class Puddle extends Element
 {
     private var _body:Body;
-	private var timer:Float;
-	private var disappearAnimation:Float;
+    private var DURATION:Int = 5;
+    private var _timer:Float = 0;
+    private var _disappearing:Bool = false;
 
-    public function new()
+    private var FRAME_WIDTH:Int = 60;
+    private var FRAME_HEIGHT:Int = 60;
+    private var _ss:SpriteSheet;
+
+    public function new(x : Float, y : Float)
     {
         super();
+        
+        _ss = new SpriteSheet("assets/agua.png", FRAME_WIDTH, FRAME_HEIGHT);
+        
+        var arFrames = new Array<Rectangle>();
+        for (i in 0...4)
+        {
+            arFrames.push(new Rectangle((3 - i) * FRAME_WIDTH, 0, 
+                        FRAME_WIDTH, FRAME_HEIGHT));
+        }
+        _ss.addAnimation("idle", [new Rectangle(3 * FRAME_WIDTH, 0, FRAME_WIDTH,
+                    FRAME_HEIGHT)], false, 1);
+        _ss.addAnimation("disappear", arFrames, false, 12);
+        _ss.setAnimation("idle");
+
+        addElement(_ss);
 
         _body = new Body(50, 50);
+        _body.position.x = x;
+        _body.position.y = y;
 
-        var s : Shape = new Shape();
-        s.graphics.beginFill(0x000000);
-        s.graphics.drawRect(0, 0, 50, 50);
-        addChild(s);
-		
-		timer = 5;
+        this.x = x;
+        this.y = y;
+
+        _timer = DURATION;
+
+        trace(x);
+        trace(y);
     }
 
     public function getBody():Body
@@ -29,25 +53,27 @@ class Puddle extends Element
 
     override public function update (dt:Float)
     {
-        _body.update(dt);
+        if (_timer <= 0)
+        {
+            if(!_disappearing)
+            {
+                startDisappearing();
+            }
+            else if(_ss.isOver())
+            {
+                _ss.visible = false;
+            }
+        }
+        else
+        {
+            _timer -= dt;
+        }
         super.update(dt);
-		if (disappearAnimation < 0){
-			timer -= dt;
-			if (timer < 0) startDisappearing();
-		}
-		else {
-			disappearAnimation --;
-		}
     }
 	
-	public function startDisappearing();
+	public function startDisappearing()
     {
-        disappearAnimation = 1;
-		//remove()
-    }
-
-    override public function draw()
-    {
-        super.draw();
+        _disappearing = true;
+        _ss.setAnimation("disappear");
     }
 }
