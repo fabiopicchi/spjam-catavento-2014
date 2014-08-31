@@ -149,7 +149,17 @@ class StageState extends State
 		var playerPoint = new Point (_player.getBody().position.x +
                 _player.getBody().width / 2, _player.getBody().position.y +
                 _player.getBody().height / 2);
-		
+	    
+        x = - (_player.x - stage.stageWidth/2 + _player.width/2);
+        if (x > 0) x = 0;
+        if (x < -_collideLayer.width + stage.stageWidth) x =
+            -_collideLayer.width + stage.stageWidth;
+
+        y = - (_player.y - stage.stageHeight/2 + _player.height/2);
+        if (y > 0) y = 0;
+        if (y < -_collideLayer.height + stage.stageHeight) y =
+            -_collideLayer.height + stage.stageHeight;
+
 		for (g in _guards)
 		{
             var playerDistance = Point.distance(g.eye, playerPoint);

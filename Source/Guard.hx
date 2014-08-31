@@ -27,9 +27,9 @@ class Guard extends Element {
 	public var attention:Float = 0;
 	public var faceDirection:Int = 0;
 	
-	public var eye:Point;							//coordenadas do olho do guarda
-	public var visionAngle:Float = 0;				//direção da visão do guarda
-	public var visionWidth:Float = Math.PI / 6;		//delta máximo para enxergar o herói
+	public var eye:Point; //coordenadas do olho do guarda
+	public var visionAngle:Float = 0; //direção da visão do guarda
+	public var visionWidth:Float = Math.PI / 6;	//delta máximo para enxergar o herói
     private var _body:Body;
 	
 	//public var exclamation:Exclamation;
