@@ -21,15 +21,19 @@ class Puddle extends Element
         _ss = new SpriteSheet("assets/agua.png", FRAME_WIDTH, FRAME_HEIGHT);
         
         var arFrames = new Array<Rectangle>();
+        var rArFrames = new Array<Rectangle>();
         for (i in 0...4)
         {
-            arFrames.push(new Rectangle((3 - i) * FRAME_WIDTH, 0, 
+            arFrames.push(new Rectangle(i * FRAME_WIDTH, 0,
+                        FRAME_WIDTH, FRAME_HEIGHT));
+            rArFrames.push(new Rectangle((3 - i) * FRAME_WIDTH, 0, 
                         FRAME_WIDTH, FRAME_HEIGHT));
         }
         _ss.addAnimation("idle", [new Rectangle(3 * FRAME_WIDTH, 0, FRAME_WIDTH,
                     FRAME_HEIGHT)], false, 1);
-        _ss.addAnimation("disappear", arFrames, false, 12);
-        _ss.setAnimation("idle");
+        _ss.addAnimation("appear", arFrames, false, 12);
+        _ss.addAnimation("disappear", rArFrames, false, 12);
+        _ss.setAnimation("appear");
 
         addElement(_ss);
 
@@ -41,9 +45,6 @@ class Puddle extends Element
         this.y = y;
 
         _timer = DURATION;
-
-        trace(x);
-        trace(y);
     }
 
     public function getBody():Body
@@ -61,12 +62,16 @@ class Puddle extends Element
             }
             else if(_ss.isOver())
             {
-                _ss.visible = false;
+                visible = false;
             }
         }
         else
         {
-            _timer -= dt;
+            if (_ss.isOver())
+            {
+                _ss.setAnimation("idle");
+                _timer -= dt;
+            }
         }
         super.update(dt);
     }
@@ -74,6 +79,7 @@ class Puddle extends Element
 	public function startDisappearing()
     {
         _disappearing = true;
+        _timer = 0;
         _ss.setAnimation("disappear");
     }
 }

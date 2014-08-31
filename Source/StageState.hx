@@ -32,6 +32,7 @@ class StageState extends State
 	private var _upperLayer:Tilemap;
 	
 	private var _lasers = new List <Laser> ();
+	private var _puddles = new List <Puddle> ();
 	private var _cameras = new List <Camera> ();
 	private var _circuits = new List <Circuit> ();
 	private var _terminals = new List <Terminal> ();
@@ -129,11 +130,11 @@ class StageState extends State
         }
 
         addElement(_lowerLayer);
-		addElement(_collideLayer);
 		addElement(_shadeLayer);
         _puddleLayer = new Element();
         addElement(_puddleLayer);
 		for (i in _lasers) addElement(i);
+		addElement(_collideLayer);
 		addElement(_player);
 		for (i in _guards) addElement(i);
 		for (i in _terminals) addElement(i);
@@ -208,17 +209,26 @@ class StageState extends State
                 }
             }
 
-            trace(_collideLayer.collideTilemap(b));
-            if(!_collideLayer.collideTilemap(b))
+            if(!_collideLayer.collidePoint(b.position.x + b.width/2,
+                    b.position.y + b.height/2))
             {
-                _puddleLayer.addElement(new Puddle(
-                    Math.floor((b.position.x + b.width/2) / 
-                    _collideLayer.getTileWidth()) *
-                    _collideLayer.getTileWidth(),
-                    Math.floor((b.position.y + b.height/2) / 
-                    _collideLayer.getTileHeight()) *
-                    _collideLayer.getTileHeight()
-                ));
+                var p:Puddle = new Puddle(b.position.x, b.position.y);
+                _puddles.add(p);
+                _puddleLayer.addElement(p);
+
+                if (_puddleLayer.numChildren >= 4) 
+                {
+                    _puddles.pop().startDisappearing();
+                }
+            }
+        }
+
+        for (p in _puddles)
+        {
+            if(!p.visible)
+            {
+                _puddleLayer.removeElement(p);
+                _puddles.remove(p);
             }
         }
 
@@ -226,10 +236,10 @@ class StageState extends State
 
         _collideLayer.collideTilemap(_player.getBody());
 
-		var playerPoint = new Point (_player.getBody().position.x +
+        var playerPoint = new Point (_player.getBody().position.x +
                 _player.getBody().width / 2, _player.getBody().position.y +
                 _player.getBody().height / 2);
-	    
+
         x = - (_player.x - stage.stageWidth/2 + _player.width/2);
         if (x > 0) x = 0;
         if (x < -_collideLayer.width + stage.stageWidth) 
@@ -243,11 +253,11 @@ class StageState extends State
         _hud.x = -x + 20;
         _hud.y = -y + 20; 
 
-		for (g in _guards)
-		{
+        for (g in _guards)
+        {
             var playerDistance = Point.distance(g.eye, playerPoint);
 
-			if (playerDistance < PLAYER_DETECTION_RADUIS) 
+            if (playerDistance < PLAYER_DETECTION_RADUIS) 
             {
                 var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
                         playerPoint.x - g.eye.x);
@@ -264,10 +274,10 @@ class StageState extends State
                 }
             }
         }
-		
-		if (_player.getBody().overlapBody(_levelEnd.getBody())) {
-			dispatchEvent(new Event("nextLevelEvent", true, false) );
-		}
-		
+
+        if (_player.getBody().overlapBody(_levelEnd.getBody())) {
+            dispatchEvent(new Event("nextLevelEvent", true, false) );
+        }
+
     }
 }

@@ -26,6 +26,12 @@ class Element extends Sprite
         return obj;
     }
 
+    public function removeElement(obj:Element)
+    {
+        this.removeChild(obj);
+        this._objectList.remove(obj);
+    }
+
     public function update(dt:Float):Void 
     {
         for (object in _objectList) 

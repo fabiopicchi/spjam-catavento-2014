@@ -152,6 +152,19 @@ class Tilemap extends Element
                     _widthInTiles] > 0);
     }
 
+    public function overlapTilemap(body:Body):Bool
+    {
+        for (b in _bodies)
+        {
+            if(b.overlapBody(body))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function collideTilemap(body : Body):Bool
     {
         var ret:Bool = false;

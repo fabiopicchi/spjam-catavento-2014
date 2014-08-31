@@ -63,9 +63,12 @@ class Player extends Element
 
     public function water()
     {
-        _body.speed.x = 0;
-        _body.speed.y = 0;
-       _ss.setAnimation("water-" + (_facing == 0 ? "right" : "left"));
+        if (_ss.isOver())
+        {
+            _body.speed.x = 0;
+            _body.speed.y = 0;
+            _ss.setAnimation("water-" + (_facing == 0 ? "right" : "left"));
+        }
     }
 
     public function getFacing():Int
