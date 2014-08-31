@@ -100,7 +100,6 @@ class Camera extends Element {
 		}
 		
 		animPos = Math.floor( 0.5 + (angle / deltaMax) * 3 - 3);
-		trace (animPos);
 
 		_ss.setAnimation("a"+animPos);
     }
