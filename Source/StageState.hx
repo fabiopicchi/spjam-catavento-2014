@@ -221,7 +221,16 @@ class StageState extends State
             }
         }
 		
-		if (_player.getBody().overlapBody(_levelEnd.getBody())) {
+		for (l in _lasers)
+		{
+			if (_player.getBody().overlapBody(l.getBody())) 
+			{
+				_hud.increase(7);
+			}
+		}
+		
+		if (_player.getBody().overlapBody(_levelEnd.getBody())) 
+		{
 			dispatchEvent(new Event("nextLevelEvent", true, false) );
 		}
 		
