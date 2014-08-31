@@ -18,7 +18,6 @@ class StageState extends State
     private var PLAYER_DETECTION_RADUIS:Float;
 
     private var _player:Player;
-    private var _map:Tilemap;
     private var _hud:HUD;
 	private var _guards = new List <Guard> ();
 
@@ -37,6 +36,8 @@ class StageState extends State
         super();
 
         _player = new Player();
+        _player.getBody().position.x = 200;
+        _player.getBody().position.y = 400;
 		
         PLAYER_DETECTION_RADUIS = Math.sqrt(800 * 800 + 600 * 600);
 
@@ -64,15 +65,13 @@ class StageState extends State
             }
         }
 
-		var g = new Guard (2, [new Point(300,300), new Point(300,380),
-                                new Point(380,380)]);
-		_guards.add (g);
-
         addElement(_lowerLayer);
 		addElement(_collideLayer);
+
 		var g = new Guard (2, [new Point(40,40), new Point(40,120), new Point(120,120)]);
 		_guards.add (g);
 		addElement (g);
+
         addElement(_player);
 		addElement(_upperLayer);
 		addElement(_shadeLayer);
@@ -118,7 +117,9 @@ class StageState extends State
         _player.move(hor, ver);
 
         super.update(dt);
-		
+
+        _collideLayer.collideTilemap(_player.getBody());
+
 		var playerPoint = new Point (_player.getBody().position.x +
                 _player.getBody().width / 2, _player.getBody().position.y +
                 _player.getBody().height / 2);
@@ -137,7 +138,7 @@ class StageState extends State
                 if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
                         angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
                 {
-                    if (_map.isPointVisible(g.eye, playerPoint)) 
+                    if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
                     {
                         g.alert();
                         g.graphics.lineStyle(2, 0xFF0000);
@@ -149,8 +150,5 @@ class StageState extends State
                 }
             }
         }
-
-        super.update(dt);
-        _collideLayer.collideTilemap(_player.getBody());
     }
 }

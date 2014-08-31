@@ -59,7 +59,7 @@ class Tilemap extends Element
             bitmap.x = (tileCounter % _widthInTiles) * _tileWidth;
             bitmap.y = Math.floor(tileCounter / _widthInTiles) * _tileHeight;
             
-            if (tile > 1)
+            if (tile != 0)
             {
                 var body:Body = new Body(_tileWidth, _tileHeight);
                 body.position.x = (tileCounter % _widthInTiles) * _tileWidth;
@@ -115,7 +115,7 @@ class Tilemap extends Element
                 else
                 {
                     var nextTile:Int = _tiles[_x + _y * _widthInTiles];
-                    if (nextTile > 1)
+                    if (nextTile != 0)
                     {
                         //return (tMaxX - tDeltaX) * len;
                         return false;
@@ -135,7 +135,7 @@ class Tilemap extends Element
                 else
                 {
                     var nextTile:Int = _tiles[_x + _y * _widthInTiles];
-                    if (nextTile > 1)
+                    if (nextTile != 0)
                     {
                         //return (tMaxY - tDeltaY) * len;
                         return false;
