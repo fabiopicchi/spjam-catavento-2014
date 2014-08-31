@@ -1,5 +1,8 @@
 package;
 
+import haxe.ds.IntMap;
+import openfl.events.Event;
+import openfl.ui.Keyboard;
 import core.Element;
 import core.State;
 import openfl.display.Bitmap;
@@ -13,6 +16,8 @@ import openfl.Assets;
 
 class MainMenuState extends State {
 	
+    private var START:Int = 1 << 0;
+        
 	private var	timer:Int = 0;
 	private var timer2:Int = 0;
 	
@@ -37,6 +42,11 @@ class MainMenuState extends State {
 			addChild (frame);
 		}
 	}
+
+    override public function setInputActions(inputMap:IntMap<Int>)
+    {
+        inputMap.set(Keyboard.SPACE, START); 
+    }
 	
 	override public function update (dt:Float)
 	{
@@ -76,6 +86,11 @@ class MainMenuState extends State {
 			visibleOn (7);
 			timer2 = 0;
 		}
+
+        if (justPressed(START))
+        {
+            dispatchEvent(new Event("nextLevelEvent", true, false));
+        }
 		
 	}
 	

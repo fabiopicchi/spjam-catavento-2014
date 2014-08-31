@@ -6,11 +6,13 @@ import openfl.events.KeyboardEvent;
 import openfl.display.Sprite;
 import openfl.display.StageScaleMode;
 
+import core.State;
+
 class Game extends Sprite 
 {
     private var _lastFrame:Int;
-    private var _state:StageState;
-	private var _currentLevel:Int = 1;
+    private var _state:State;
+	private var _currentLevel:Int = 0;
 
     private var _usedKeys:IntMap<Int>;
 
@@ -21,7 +23,8 @@ class Game extends Sprite
         super();
         
         _usedKeys = new IntMap<Int>();
-        _state = new StageState(_currentLevel);
+        _state = new MainMenuState();
+        //_state = new StageState(_currentLevel);
         _state.setInputActions(_usedKeys);
 
         addChild(_state);
@@ -67,7 +70,10 @@ class Game extends Sprite
 		if (_currentLevel < 3)
 		{
 			removeChild(_state);
+            _usedKeys = new IntMap<Int>();
+            _keyboardRaw = 0;
 			_state = new StageState(++_currentLevel);
+            _state.setInputActions(_usedKeys);
 			addChild(_state);
 		}
 		else {
