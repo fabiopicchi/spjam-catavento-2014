@@ -89,7 +89,7 @@ class Guard extends Element {
 		angle = Math.atan2(target.y - _body.position.y, 
                 target.x - _body.position.x);
         if (angle < 0) angle += 2 * Math.PI;
-		faceDirection = Math.floor(angle / (Math.PI / 2));
+		faceDirection = Math.floor( (angle + Math.PI/4) / (Math.PI / 2));
 	}
 	
 	public function walk(dt:Float):Void 

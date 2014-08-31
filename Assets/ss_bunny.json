@@ -1,0 +1,50 @@
+{
+    "idle" : 
+    {
+        "frames" : [
+            {"x" : 0, "y" : 0}
+        ],
+        "looped" : true,
+        "fps" : 12
+    },
+    "walk" : 
+    {
+        "frames" : [
+            {"x" : 0, "y" : 0},
+            {"x" : 72, "y" : 0},
+            {"x" : 144, "y" : 0},
+			{"x" : 236, "y" : 0},
+			{"x" : 144, "y" : 0},
+			{"x" : 72, "y" : 0}
+        ],
+        "looped" : true,
+        "fps" : 12
+    },
+    "startWater" : 
+    {
+        "frames" : [
+            {"x" : 576, "y" : 0},
+            {"x" : 648, "y" : 0}
+        ],
+        "looped" : false,
+        "fps" : 12
+    },
+	"waterLoop" : 
+    {
+        "frames" : [
+            {"x" : 720, "y" : 0},
+            {"x" : 792, "y" : 0}
+        ],
+        "looped" : true,
+        "fps" : 12
+    },
+	"endWater" : 
+    {
+        "frames" : [
+            {"x" : 864, "y" : 0},
+            {"x" : 936, "y" : 0}
+        ],
+        "looped" : false,
+        "fps" : 12
+    }
+}
