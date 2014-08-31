@@ -44,7 +44,6 @@ class SpriteSheet extends Element {
         _frameHeight = height;
         _sourceImage = Assets.getBitmapData(path);
         _bitmap = new Bitmap();
-        //_bitmap.x = -width/2;
         addChild(_bitmap);
 
         _currentFrame = 0;

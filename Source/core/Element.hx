@@ -6,7 +6,7 @@ class Element extends Sprite
 {
     private var _objectList:List<Element>;
 
-    private function new()
+    public function new()
     {
         super();
         this._objectList = new List<Element>();

@@ -24,10 +24,7 @@ class Player extends Element
 		     
 		_spriteSheet = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
 		_spriteSheet.loadAnimationsFromJSON("assets/ss_bunny.json");
-		_spriteSheet.setAnimation("idle");
-		
-		_spriteSheet.x = -10;
-		_spriteSheet.y = -50;
+		_spriteSheet.setAnimation("idle-right");
 		
 		addElement(_spriteSheet);
 
@@ -37,24 +34,36 @@ class Player extends Element
 
     public function move (hor:Int, ver:Int)
     {
-        _body.speed.x = hor * SPEED;
-        _body.speed.y = ver * SPEED;
-
-        if (hor != 0 && ver != 0)
+        if (_spriteSheet.isOver())
         {
-            _body.speed.x *= H_SQRT2;
-            _body.speed.y *= H_SQRT2;
-        }
+            _body.speed.x = hor * SPEED;
+            _body.speed.y = ver * SPEED;
 
-        if(_body.speed.x > 0)
-            _facing = 0;
-        else
-            _facing = 1;
+            if (hor != 0 && ver != 0)
+            {
+                _body.speed.x *= H_SQRT2;
+                _body.speed.y *= H_SQRT2;
+            }
+
+            if(_body.speed.x > 0)
+                _facing = 0;
+            else if(_body.speed.x < 0)
+                _facing = 1;
+
+            if (hor != 0 || ver != 0)
+               _spriteSheet.setAnimation("walk-" + (_facing == 0 ? "right" :
+                           "left"));
+            else
+               _spriteSheet.setAnimation("idle-" + (_facing == 0 ? "right" :
+                           "left")); 
+        }
     }
 
     public function water()
     {
-        
+        _body.speed.x = 0;
+        _body.speed.y = 0;
+       _spriteSheet.setAnimation("water-" + (_facing == 0 ? "right" : "left"));
     }
 
     public function getFacing():Int

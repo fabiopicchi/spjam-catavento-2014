@@ -146,6 +146,12 @@ class Tilemap extends Element
         return true;
 	}
 
+    public function collidePoint(x:Float, y:Float):Bool
+    {
+        return (_tiles[Math.floor(x / _tileWidth) + Math.floor(y / _tileHeight) * 
+                    _widthInTiles] > 0);
+    }
+
     public function collideTilemap(body : Body):Bool
     {
         var ret:Bool = false;
@@ -190,6 +196,16 @@ class Tilemap extends Element
             while(_collisionArray.length != 0) _collisionArray.pop();
             return true;
         }
+    }
+
+    public function getTileWidth():Int
+    {
+        return _tileWidth;
+    }
+
+    public function getTileHeight():Int
+    {
+        return _tileHeight;
     }
 
 }

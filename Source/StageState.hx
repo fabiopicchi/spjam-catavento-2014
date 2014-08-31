@@ -6,6 +6,7 @@ import openfl.Assets;
 import openfl.ui.Keyboard;
 import openfl.display.BitmapData;
 
+import core.Element;
 import core.State;
 
 class StageState extends State
@@ -22,6 +23,7 @@ class StageState extends State
     private var _hud:HUD;
 	private var _guards = new List <Guard> ();
 
+    private var _puddleLayer:Element;
     private var _lowerLayer:Tilemap;
 	private var _collideLayer:Tilemap;
 	private var _upperLayer:Tilemap;
@@ -30,8 +32,8 @@ class StageState extends State
 	private var _lasers = new List <Laser> ();
 	private var _cameras = new List <Camera> ();
 	//private var _circuits = new List <Circuit> ();
-	//private var _terminals = new List <Terminal> ();
-
+	private var _terminals = new List <Terminal> ();
+    
     public function new()
     {
         super();
@@ -121,6 +123,8 @@ class StageState extends State
         addElement(_lowerLayer);
 		addElement(_collideLayer);
 		addElement(_shadeLayer);
+        _puddleLayer = new Element();
+        addElement(_puddleLayer);
 		addElement(_player);
 		for (i in _guards) addElement(i);
 		for (i in _lasers) addElement(i);
@@ -169,6 +173,43 @@ class StageState extends State
         if(justPressed(WATER))
         {
             _player.water();
+            var b:Body = new Body(_collideLayer.getTileWidth(),
+                    _collideLayer.getTileHeight());
+            b.position.y = _player.getBody().position.y;
+
+            if (_player.getFacing() == 0)
+            {
+                b.position.x = _player.getBody().position.x +
+                    _player.getBody().width; 
+            }
+            else
+            {
+                b.position.x = _player.getBody().position.x - b.width;
+            }
+
+            var bFoundTerminal:Bool = false;
+            for(t in _terminals)
+            {
+                if (t.getBody().overlapBody(b))
+                {
+                    t.deactivate();
+                    bFoundTerminal = true;
+                    break;
+                }
+            }
+
+            trace(_collideLayer.collideTilemap(b));
+            if(!_collideLayer.collideTilemap(b))
+            {
+                _puddleLayer.addElement(new Puddle(
+                    Math.floor((b.position.x + b.width/2) / 
+                    _collideLayer.getTileWidth()) *
+                    _collideLayer.getTileWidth(),
+                    Math.floor((b.position.y + b.height/2) / 
+                    _collideLayer.getTileHeight()) *
+                    _collideLayer.getTileHeight()
+                ));
+            }
         }
 
         super.update(dt);
@@ -181,13 +222,16 @@ class StageState extends State
 	    
         x = - (_player.x - stage.stageWidth/2 + _player.width/2);
         if (x > 0) x = 0;
-        if (x < -_collideLayer.width + stage.stageWidth) x =
-            -_collideLayer.width + stage.stageWidth;
+        if (x < -_collideLayer.width + stage.stageWidth) 
+            x = -_collideLayer.width + stage.stageWidth;
 
         y = - (_player.y - stage.stageHeight/2 + _player.height/2);
         if (y > 0) y = 0;
-        if (y < -_collideLayer.height + stage.stageHeight) y =
-            -_collideLayer.height + stage.stageHeight;
+        if (y < -_collideLayer.height + stage.stageHeight) 
+            y = -_collideLayer.height + stage.stageHeight;
+
+        _hud.x = -x + 20;
+        _hud.y = -y + 20; 
 
 		for (g in _guards)
 		{
