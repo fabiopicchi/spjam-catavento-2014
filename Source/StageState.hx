@@ -21,21 +21,22 @@ class StageState extends State
     private var PLAYER_DETECTION_RADIUS:Float = 400;
 
     private var _player:Player;
-	private var _levelEnd:LevelEnd;
+    private var _levelEnd:LevelEnd;
     private var _hud:HUD;
-	private var _guards = new List <Guard> ();
+    private var _guards = new List <Guard> ();
 
     private var _puddleLayer:Element;
     private var _lowerLayer1:Tilemap;
-	private var _lowerLayer2:Tilemap;
-	private var _shadeLayer:Tilemap;
-	private var _collideLayer:Tilemap;
-	private var _upperLayer:Tilemap;
-	
-	private var _lasers = new List <Laser> ();
-	private var _cameras = new List <Camera> ();
-	private var _circuits = new List <Circuit> ();
-	private var _terminals = new List <Terminal> ();
+    private var _lowerLayer2:Tilemap;
+    private var _shadeLayer:Tilemap;
+    private var _collideLayer:Tilemap;
+    private var _upperLayer:Tilemap;
+
+    private var _lasers = new List <Laser> ();
+    private var _puddles = new List <Puddle> ();
+    private var _cameras = new List <Camera> ();
+    private var _circuits = new List <Circuit> ();
+    private var _terminals = new List <Terminal> ();
 
     public function new(levelNumber:Int)
     {
@@ -49,98 +50,108 @@ class StageState extends State
         {
             if (layer.name == "lower1")
             {
-				_lowerLayer1 = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _lowerLayer1 = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "lower2")
+            if (layer.name == "lower2")
             {
-				_lowerLayer2 = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _lowerLayer2 = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "shade")
+            if (layer.name == "shade")
             {
-				_shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "collide")
+            if (layer.name == "collide")
             {
-				_collideLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _collideLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "upper")
+            if (layer.name == "upper")
             {
-				_upperLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _upperLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "guards")
+            if (layer.name == "guards")
             {
-				var objects:Array<Dynamic> = layer.objects;
-				var behavior:Int;
-				var route:Array<Point>;
-				
-				for (object in objects)
-				{
-					behavior = Std.parseInt(object.properties.bhv);
-					route = new Array<Point> ();
-					var polylines:Array<Dynamic> = object.polyline;
-					
-					for (coordinate in polylines)
-					{
-						route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
-					}
-					_guards.add (new Guard (behavior, route));
-				}
+                var objects:Array<Dynamic> = layer.objects;
+                var behavior:Int;
+                var route:Array<Point>;
+
+                for (object in objects)
+                {
+                    behavior = Std.parseInt(object.properties.bhv);
+                    route = new Array<Point> ();
+                    var polylines:Array<Dynamic> = object.polyline;
+
+                    for (coordinate in polylines)
+                    {
+                        route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
+                    }
+                    _guards.add (new Guard (behavior, route));
+                }
             }
-			if (layer.name == "objects")
+            if (layer.name == "objects")
             {
-				var objects:Array<Dynamic> = layer.objects;
-				
-				for (object in objects)
-				{
-					if (object.name == "player")
-					{
-						_player = new Player(object.x,object.y);
-					}
-					if (object.name == "laser")
-					{
-						_lasers.add (new Laser (object.x, object.y, Math.floor((object.width / 30)), Std.parseInt(object.properties.direction),
-							object.properties.color, Std.parseInt(object.properties.id)));
-					}
-					if (object.name == "camera")
-					{
-						_cameras.add (new Camera (object.x, object.y, object.properties.color, Std.parseInt(object.properties.id)));
-					}
-					if (object.name == "terminal")
-					{
-						_terminals.add (new Terminal (object.x, object.y, Std.parseInt(object.properties.id), Std.parseInt(object.properties.direction), object.properties.color));
-					}
-					if (object.name == "circuit")
-					{
-						var route = new Array<Point> ();
-						var polylines:Array<Dynamic> = object.polyline;
-						
-						for (coordinate in polylines)
-						{
-							route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
-						}
-						_circuits.add (new Circuit (Std.parseInt(object.properties.id), route));
-					}
-					if (object.name == "levelEnd")
-					{
-						_levelEnd = new LevelEnd(object.x,object.y);
-					}
-				}
-			}
+                var objects:Array<Dynamic> = layer.objects;
+
+                for (object in objects)
+                {
+                    if (object.name == "player")
+                    {
+                        _player = new Player(object.x,object.y);
+                    }
+                    if (object.name == "laser")
+                    {
+                        _lasers.add (new Laser (object.x, object.y, Math.floor((object.width / 30)), Std.parseInt(object.properties.direction),
+                                    object.properties.color, Std.parseInt(object.properties.id)));
+                    }
+                    if (object.name == "camera")
+                    {
+                        _cameras.add (new Camera (object.x, object.y, object.properties.color, Std.parseInt(object.properties.id)));
+                    }
+                    if (object.name == "terminal")
+                    {
+                        var t:Terminal = new Terminal (object.x, object.y,
+                                Std.parseInt(object.properties.id),
+                                Std.parseInt(object.properties.direction),
+                                object.properties.color);
+                        t.addEventListener(CircuitEvent.REACTIVATE,
+                                reactivate);
+                        _terminals.add(t);
+                    }
+                    if (object.name == "circuit")
+                    {
+                        var route = new Array<Point> ();
+                        var polylines:Array<Dynamic> = object.polyline;
+
+                        for (coordinate in polylines)
+                        {
+                            route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
+                        }
+                        var c:Circuit = new Circuit
+                            (Std.parseInt(object.properties.id), route);
+                        c.addEventListener(CircuitEvent.DEACTIVATE,
+                                deactivate);
+                        _circuits.add (c);
+                    }
+                    if (object.name == "levelEnd")
+                    {
+                        _levelEnd = new LevelEnd(object.x,object.y);
+                    }
+                }
+            }
         }
 
         addElement(_lowerLayer1);
-		addElement(_lowerLayer2);
-		addElement(_collideLayer);
-		addElement(_shadeLayer);
+        addElement(_lowerLayer2);
+        addElement(_collideLayer);
+        addElement(_shadeLayer);
         _puddleLayer = new Element();
         addElement(_puddleLayer);
-		for (i in _lasers) addElement(i);
-		addElement(_player);
-		for (i in _guards) addElement(i);
-		for (i in _terminals) addElement(i);
-		addElement(_upperLayer);
-		for (i in _circuits) addElement(i);
-		for (i in _cameras) addElement(i);
+        for (i in _lasers) addElement(i);
+        addElement(_player);
+        for (i in _guards) addElement(i);
+        for (i in _terminals) addElement(i);
+        addElement(_upperLayer);
+        for (i in _circuits) addElement(i);
+        for (i in _cameras) addElement(i);
         _hud = new HUD();
         addElement(_hud);
     }
@@ -198,28 +209,43 @@ class StageState extends State
                 b.position.x = _player.getBody().position.x - b.width;
             }
 
-            var bFoundTerminal:Bool = false;
             for(t in _terminals)
             {
                 if (t.getBody().overlapBody(b))
                 {
                     t.deactivate();
-                    bFoundTerminal = true;
+                    for (c in _circuits)
+                    {
+                        if (t.id == c.id)
+                        {
+                            c.activate();
+                            break;
+                        }
+                    }
                     break;
                 }
             }
 
-            trace(_collideLayer.collideTilemap(b));
-            if(!_collideLayer.collideTilemap(b))
+            if(!_collideLayer.collidePoint(b.position.x + b.width/2,
+                        b.position.y + b.height/2))
             {
-                _puddleLayer.addElement(new Puddle(
-                    Math.floor((b.position.x + b.width/2) / 
-                    _collideLayer.getTileWidth()) *
-                    _collideLayer.getTileWidth(),
-                    Math.floor((b.position.y + b.height/2) / 
-                    _collideLayer.getTileHeight()) *
-                    _collideLayer.getTileHeight()
-                ));
+                var p:Puddle = new Puddle(b.position.x, b.position.y);
+                _puddles.add(p);
+                _puddleLayer.addElement(p);
+
+                if (_puddleLayer.numChildren >= 4) 
+                {
+                    _puddles.pop().startDisappearing();
+                }
+            }
+        }
+
+        for (p in _puddles)
+        {
+            if(!p.visible)
+            {
+                _puddleLayer.removeElement(p);
+                _puddles.remove(p);
             }
         }
 
@@ -227,10 +253,10 @@ class StageState extends State
 
         _collideLayer.collideTilemap(_player.getBody());
 
-		var playerPoint = new Point (_player.getBody().position.x +
+        var playerPoint = new Point (_player.getBody().position.x +
                 _player.getBody().width / 2, _player.getBody().position.y +
                 _player.getBody().height / 2);
-	    
+
         x = - (_player.x - stage.stageWidth/2 + _player.width/2);
         if (x > 0) x = 0;
         if (x < -_collideLayer.width + stage.stageWidth) 
@@ -244,49 +270,130 @@ class StageState extends State
         _hud.x = -x + 20;
         _hud.y = -y + 20; 
 
-		for (g in _guards)
-		{
-            var playerDistance = Point.distance(g.eye, playerPoint);
-
-			if (playerDistance < PLAYER_DETECTION_RADIUS) 
+        for (g in _guards)
+        {
+            for (p in _puddles)
             {
-                var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
-                        playerPoint.x - g.eye.x);
-                if (angle < 0) angle += 2 * Math.PI;
-
-                if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
-                        angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
+                if (p.getBody().overlapBody(g.getBody()))
                 {
-                    if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
-                    {
-                        g.alert();
-                        _hud.increase(2);
-						if (playerDistance < 150)
-						{
-							_hud.increase(5);
-						}
-                    }
+                    g.interrupt();
                 }
             }
-			if (playerDistance < 50)
-			{
-				g.alert();
-				_hud.increase(4);
-			}
+
+            if (!g.isInterrupted())
+            {
+                var playerDistance = Point.distance(g.eye, playerPoint);
+
+                if (playerDistance < PLAYER_DETECTION_RADIUS) 
+                {
+                    var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
+                            playerPoint.x - g.eye.x);
+                    if (angle < 0) angle += 2 * Math.PI;
+
+                    if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
+                            angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
+                    {
+                        if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
+                        {
+                            g.alert();
+                            _hud.increase(2);
+                            if (playerDistance < 150)
+                            {
+                                _hud.increase(5);
+                            }
+                        }
+                    }
+                }
+                if (playerDistance < 50)
+                {
+                    g.alert();
+                    _hud.increase(4);
+                }
+            }
         }
-		
-		for (l in _lasers)
-		{
-			if (_player.getBody().overlapBody(l.getBody())) 
-			{
-				_hud.increase(7);
-			}
-		}
-		
-		if (_player.getBody().overlapBody(_levelEnd.getBody())) 
-		{
-			dispatchEvent(new Event("nextLevelEvent", true, false) );
-		}
-		
+
+        for (l in _lasers)
+        {
+            if (_player.getBody().overlapBody(l.getBody())) 
+            {
+                _hud.increase(7);
+            }
+        }
+
+        if (_player.getBody().overlapBody(_levelEnd.getBody())) 
+        {
+            dispatchEvent(new Event("nextLevelEvent", true, false) );
+        }
+
+        if (_hud.isFull() ) {
+            dispatchEvent(new Event("gameOverEvent", true, false) );
+        }
+
+    }
+
+    private function deactivate(e:CircuitEvent)
+    {
+        for(c in _circuits)
+        {
+            if (c.id == e.id)
+            {
+                for (cam in _cameras)
+                {
+                    if (c.id == cam.id)
+                    {
+                        cam.deactivate();
+                        break;
+                    }
+                }
+
+                for (l in _lasers)
+                {
+                    if (c.id == l.id)
+                    {
+                        l.deactivate();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    private function reactivate(e:CircuitEvent)
+    {
+        for(t in _terminals)
+        {
+            if (t.id == e.id)
+            {
+                for (c in _circuits)
+                {
+                    if (t.id == c.id)
+                    {
+                        c.reset();
+                        break;
+                    }
+                }
+
+                for (cam in _cameras)
+                {
+                    if (t.id == cam.id)
+                    {
+                        cam.activate();
+                        break;
+                    }
+                }
+
+                for (l in _lasers)
+                {
+                    if (t.id == l.id)
+                    {
+                        l.activate();
+                        break;
+                    }
+                }
+                break;
+            }
+
+        }
     }
 }

@@ -3,7 +3,6 @@ package;
 
 import flash.display.Sprite;
 import flash.events.Event;
-import flash.events.MouseEvent;
 import flash.media.Sound;
 import flash.media.SoundChannel;
 import flash.media.SoundTransform;
@@ -14,7 +13,6 @@ import openfl.Assets;
 
 class Bgm extends Sprite {
 		
-	private var background:Sprite;
 	private var channel:SoundChannel;
 	private var playing:Bool;
 	private var position:Float;
@@ -26,14 +24,6 @@ class Bgm extends Sprite {
 		super ();
 		
 		Actuate.defaultEase = Quad.easeOut;
-		
-		background = new Sprite ();
-		background.graphics.beginFill (0x3CB878);
-		background.graphics.drawRect (0, 0, stage.stageWidth, stage.stageHeight);
-		background.alpha = 0.1;
-		background.buttonMode = true;
-		background.addEventListener (MouseEvent.MOUSE_DOWN, this_onMouseDown);
-		addChild (background);
 		
 		sound = Assets.getSound (path);
 		
@@ -59,8 +49,6 @@ class Bgm extends Sprite {
 				
 			});
 			
-			Actuate.tween (background, fadeOut, { alpha: 0.1 });
-			
 		}
 		
 	}
@@ -82,7 +70,6 @@ class Bgm extends Sprite {
 		}
 		
 		channel.addEventListener (Event.SOUND_COMPLETE, channel_onSoundComplete);
-		Actuate.tween (background, fadeIn, { alpha: 1 });
 		
 	}
 	
@@ -99,22 +86,6 @@ class Bgm extends Sprite {
 		pause ();
 		position = 0;
 		
-	}
-	
-	
-	private function this_onMouseDown (event:MouseEvent):Void {
-		
-		if (channel == null) {
-			
-			play ();
-			
-		} else {
-			
-			pause ();
-			
-		}
-		
-	}
-	
+	}	
 	
 }

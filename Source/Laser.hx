@@ -9,7 +9,7 @@ import core.SpriteSheet;
  */
 class Laser extends Element
 {
-    private var id:Int;
+    public var id:Int;
 	private var _arSegments:Array<SpriteSheet>;
     private var _length:Int;
 	private var _body:Body;
@@ -21,8 +21,6 @@ class Laser extends Element
     private var FRAME_WIDTH:Int = 30;
     private var FRAME_HEIGHT:Int = 21;
 	
-	public var deactivationTimer:Float = 0;
-
     public function new (x:Float, y:Float, length:Int, direction:Int,
             colour:String, id:Int) 
     {
@@ -92,8 +90,12 @@ class Laser extends Element
     }
 	
 	public function deactivate():Void {
-		deactivationTimer = 8;
+        visible = false;
 	}
+
+    public function activate():Void {
+        visible = true;
+    }
 	
 	public function getBody():Body
     {

@@ -10,7 +10,7 @@ class Game extends Sprite
 {
     private var _lastFrame:Int;
     private var _state:StageState;
-	//private var _bgm:Bgm;
+	private var _bgm:Bgm;
 	private var _currentLevel:Int = 1;
 
     private var _usedKeys:IntMap<Int>;

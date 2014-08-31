@@ -2,4 +2,5 @@
 *.swo
 *.hxml
 *.lua
+Assets/Thumbs.db
 Export/

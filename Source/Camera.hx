@@ -14,9 +14,8 @@ import openfl.geom.Rectangle;
  */
 class Camera extends Element {
 	
-	public var circuitId:Int;
+	public var id:Int;
 	
-	public var deactivationTimer:Float = 0;
 	private var _ss:SpriteSheet;
     private var _light:Bitmap;
 	
@@ -39,6 +38,7 @@ class Camera extends Element {
 	public var visionWidth:Float = 1* Math.PI / 6;
 	
 	public function new(x:Float, y:Float, color:String, id:Int) {
+        this.id = id;
 		super ();
 		
 		this.x = x;
@@ -73,48 +73,44 @@ class Camera extends Element {
 		if (waitTimer > 0) {
 			waitTimer -= dt;
 		}
-		else {
-			if (deactivationTimer > 0) {
-				deactivationTimer -= dt;
-			}
-			else{
-				
-				if (!goingBack) {
-					angle += dt * ANGULAR_SPEED;
-					if (angle > initialAngle + deltaMax) {
-						angle = initialAngle + deltaMax;
-						goingBack = true;
-						waitTimer = 1;
-					}
-				}
-				else {
-					angle -= dt * ANGULAR_SPEED;
-					if (angle < initialAngle - deltaMax) {
-						angle = initialAngle - deltaMax;
-						goingBack = false;
-						waitTimer = 1;
-					}
-				}
-				
-			}
-		}
-		
-		animPos = Math.floor( 0.5 + (angle / deltaMax) * 3 - 3);
-		trace (animPos);
+        else {
+            if (!goingBack) {
+                angle += dt * ANGULAR_SPEED;
+                if (angle > initialAngle + deltaMax) {
+                    angle = initialAngle + deltaMax;
+                    goingBack = true;
+                    waitTimer = 1;
+                }
+            }
+            else {
+                angle -= dt * ANGULAR_SPEED;
+                if (angle < initialAngle - deltaMax) {
+                    angle = initialAngle - deltaMax;
+                    goingBack = false;
+                    waitTimer = 1;
+                }
+            }
+        }
 
-		_ss.setAnimation("a"+animPos);
+        animPos = Math.floor( 0.5 + (angle / deltaMax) * 3 - 3);
+
+        _ss.setAnimation("a"+animPos);
     }
-	
-	override public function draw():Void 
+
+    override public function draw():Void 
     {
         super.draw();
     }
-	
-	public function focusOnHero(p:Point):Void {
-		
-	}
-	
-	public function deactivate():Void {
-		deactivationTimer = 8;
-	}
+
+    public function focusOnHero(p:Point):Void {
+
+    }
+
+    public function activate():Void {
+
+    }
+
+    public function deactivate():Void {
+
+    }
 }

@@ -8,13 +8,14 @@ import openfl.events.Event;
  */
 class CircuitEvent extends Event {
 	
-	var objectId:Int;
+	public var id:Int;
 
-    public static var OFF:String = "off";
+    public static var REACTIVATE:String = "reactivate";
+    public static var DEACTIVATE:String = "deactivate";
 	
-	public function new(name:String, objectId:Int) {
+	public function new(name:String, id:Int) {
 		super (name, true, false);
-		this.objectId = objectId;
+		this.id = id;
 	}
 	
 }
