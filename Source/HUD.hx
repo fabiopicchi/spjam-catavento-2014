@@ -1,7 +1,10 @@
 package ;
 import core.Element;
 import flash.display.Graphics;
+import openfl.Assets;
+import openfl.display.Bitmap;
 import openfl.display.Shape;
+import openfl.display.Sprite;
 
 /**
  * ...
@@ -9,12 +12,14 @@ import openfl.display.Shape;
  */
 class HUD extends Element
 {
-	private var _maxLevel:Float = 120;
+	private var _maxLevel:Float = 100;
 	private var _currentLevel:Float = 0;
 	private var _pastLevel:Float = 0;
 	private var _cooldown:Float = 0.5;
 	private var _timer:Float = 0;
 	private var _state:Int = 0;
+	
+	var barra = new Shape ();
 	
     private var RELOAD_COOLDOWN:Float = 2;
 
@@ -22,10 +27,15 @@ class HUD extends Element
 	{
 		super();
 		
-		var s:Shape = new Shape();
-        s.graphics.beginFill(0x00FF00);
-        s.graphics.drawRect(0, 0, 120, 20);
-        addChild(s);
+        barra.graphics.beginFill(0x00FF00);
+        barra.graphics.drawRect(0, 0, 195, 15);
+        addChild(barra);
+		
+		barra.x = 52;
+		barra.y = 23;
+		
+		var b:Bitmap = new Bitmap(Assets.getBitmapData ("assets/hud.png"));
+		addChild (b);
 		
 		this.x = 5;
 		this.y = 5;
@@ -53,7 +63,7 @@ class HUD extends Element
 		}
 		
 		changeColor();
-		this.scaleX = _currentLevel / _maxLevel;
+		barra.scaleX = _currentLevel / _maxLevel;
 		_pastLevel = _currentLevel;
 	}
 	
@@ -79,27 +89,21 @@ class HUD extends Element
 	{
 		if (_state == 1)
 		{
-			this.graphics.clear();
-			var s:Shape = new Shape();
-			s.graphics.beginFill(0xFFFF00);
-			s.graphics.drawRect(0, 0, 120, 20);
-			addChild(s);
+			barra.graphics.clear();
+			barra.graphics.beginFill(0xFFFF00);
+			barra.graphics.drawRect(0, 0, 195, 15);
 		}
 		else if (_state == 2)
 		{
-			this.graphics.clear();
-			var s:Shape = new Shape();
-			s.graphics.beginFill(0xFF0000);
-			s.graphics.drawRect(0, 0, 120, 20);
-			addChild(s);
+			barra.graphics.clear();
+			barra.graphics.beginFill(0xFF0000);
+			barra.graphics.drawRect(0, 0, 195, 15);
 		}
 		else
 		{
-			this.graphics.clear();
-			var s:Shape = new Shape();
-			s.graphics.beginFill(0x00FF00);
-			s.graphics.drawRect(0, 0, 120, 20);
-			addChild(s);
+			barra.graphics.clear();
+			barra.graphics.beginFill(0x00FF00);
+			barra.graphics.drawRect(0, 0, 195, 15);
 		}
 	}
 	
