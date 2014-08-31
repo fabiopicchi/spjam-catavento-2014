@@ -15,7 +15,10 @@ class StageState extends State
     private var UP:Int = 1 << 2;
     private var DOWN:Int = 1 << 3;
 
+    private var PLAYER_DETECTION_RADUIS:Float;
+
     private var _player:Player;
+    private var _hud:HUD;
 	private var _guards = new List <Guard> ();
 
     private var _lowerLayer:Tilemap;
@@ -31,6 +34,8 @@ class StageState extends State
     public function new()
     {
         super();
+
+        PLAYER_DETECTION_RADUIS = Math.sqrt(800 * 800 + 600 * 600);
 
         var obj:Dynamic = Json.parse(Assets.getText("assets/level1.json"));
         var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
@@ -92,14 +97,15 @@ class StageState extends State
 				}
 			}
         }
-
-     
         addElement(_lowerLayer);
 		addElement(_collideLayer);
 		for (g in _guards) addElement(g);
         addElement(_player);
 		addElement(_upperLayer);
 		addElement(_shadeLayer);
+
+        _hud = new HUD();
+        addElement(_hud);
     }
 
     override public function setInputActions(inputMap:IntMap<Int>)
@@ -137,27 +143,39 @@ class StageState extends State
         }
 
         _player.move(hor, ver);
+
+        super.update(dt);
 		
-		var playerPoint = new Point (_player.x, _player.y);
+		var playerPoint = new Point (_player.getBody().position.x +
+                _player.getBody().width / 2, _player.getBody().position.y +
+                _player.getBody().height / 2);
 		
 		for (g in _guards)
 		{
-			if (Point.distance(g.eye, playerPoint) < 500) 
-            {
-				if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
-                {
-					if (true) //checar se está dentro do cone
-					{
-						g.alert();
-						var v:Float;
-						if (Point.distance(g.eye, playerPoint) > 500) v = 1;
-						else v = 5;
-						//hud.increase(v);
-					}
-				}
-			}
-		}
+            var playerDistance = Point.distance(g.eye, playerPoint);
 
+            g.graphics.clear();
+			if (playerDistance < PLAYER_DETECTION_RADUIS) 
+            {
+                var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
+                        playerPoint.x - g.eye.x);
+                if (angle < 0) angle += 2 * Math.PI;
+
+                if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
+                        angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
+                {
+                    if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
+                    {
+                        g.alert();
+                        g.graphics.lineStyle(2, 0xFF0000);
+                        g.graphics.moveTo(g.eye.x - g.x, g.eye.y - g.y);
+                        g.graphics.lineTo(playerPoint.x - g.x, playerPoint.y -
+                                g.y);
+                        _hud.increase(2);
+                    }
+                }
+            }
+        }
         super.update(dt);
         _collideLayer.collideTilemap(_player.getBody());
     }
