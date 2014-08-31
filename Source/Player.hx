@@ -4,16 +4,18 @@ import core.Element;
 
 class Player extends Element
 {
-    private var SPEED:Float = 600;
+    private var SPEED:Float = 180;
     private var _body:Body;
 
     private var H_SQRT2:Float;
 
-    public function new()
+    public function new(x:Float, y:Float)
     {
         super();
 
         _body = new Body(50, 50);
+		_body.position.x = x;
+		_body.position.y = y;
 
         var s : Shape = new Shape();
         s.graphics.beginFill(0x000000);
