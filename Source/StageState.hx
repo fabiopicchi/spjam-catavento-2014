@@ -18,30 +18,29 @@ class StageState extends State
     private var DOWN:Int = 1 << 3;
     private var WATER:Int = 1 << 4;
 
-    private var PLAYER_DETECTION_RADUIS:Float;
+    private var PLAYER_DETECTION_RADIUS:Float = 400;
 
     private var _player:Player;
-	private var _levelEnd:LevelEnd;
+    private var _levelEnd:LevelEnd;
     private var _hud:HUD;
-	private var _guards = new List <Guard> ();
+    private var _guards = new List <Guard> ();
 
     private var _puddleLayer:Element;
-    private var _lowerLayer:Tilemap;
-	private var _shadeLayer:Tilemap;
-	private var _collideLayer:Tilemap;
-	private var _upperLayer:Tilemap;
-	
-	private var _lasers = new List <Laser> ();
-	private var _puddles = new List <Puddle> ();
-	private var _cameras = new List <Camera> ();
-	private var _circuits = new List <Circuit> ();
-	private var _terminals = new List <Terminal> ();
+    private var _lowerLayer1:Tilemap;
+    private var _lowerLayer2:Tilemap;
+    private var _shadeLayer:Tilemap;
+    private var _collideLayer:Tilemap;
+    private var _upperLayer:Tilemap;
+
+    private var _lasers = new List <Laser> ();
+    private var _puddles = new List <Puddle> ();
+    private var _cameras = new List <Camera> ();
+    private var _circuits = new List <Circuit> ();
+    private var _terminals = new List <Terminal> ();
 
     public function new(levelNumber:Int)
     {
         super();
-
-        PLAYER_DETECTION_RADUIS = Math.sqrt(800 * 800 + 600 * 600);
 
         var obj:Dynamic = Json.parse(Assets.getText("assets/level" + levelNumber + ".json"));
         var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
@@ -49,108 +48,110 @@ class StageState extends State
 
         for (layer in layers)
         {
-            if (layer.name == "lower")
+            if (layer.name == "lower1")
             {
-				_lowerLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _lowerLayer1 = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "collide")
+            if (layer.name == "lower2")
             {
-				_collideLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _lowerLayer2 = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "upper")
+            if (layer.name == "shade")
             {
-				_upperLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "shade")
+            if (layer.name == "collide")
             {
-				_shadeLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
+                _collideLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "guards")
+            if (layer.name == "upper")
             {
-				var objects:Array<Dynamic> = layer.objects;
-				var behavior:Int;
-				var route:Array<Point>;
-				
-				for (object in objects)
-				{
-					if (object.name == "guard")
-					{
-						behavior = Std.parseInt(object.properties.behavior);
-						route = new Array<Point> ();
-						var polylines:Array<Dynamic> = object.polyline;
-						
-						for (coordinate in polylines)
-						{
-							route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
-						}
-						_guards.add (new Guard (behavior, route));	
-					}
-				}
+                _upperLayer = new Tilemap(layer, tileset, obj.tilewidth, obj.tileheight);
             }
-			if (layer.name == "objects")
+            if (layer.name == "guards")
             {
-				var objects:Array<Dynamic> = layer.objects;
-				
-				for (object in objects)
-				{
-					if (object.name == "player")
-					{
-						_player = new Player(object.x,object.y);
-					}
-					if (object.name == "laser")
-					{
-						_lasers.add (new Laser (object.x, object.y, Math.floor((object.width / 30)), Std.parseInt(object.properties.direction),
-							object.properties.color, Std.parseInt(object.properties.id)));
-					}
-					if (object.name == "camera")
-					{
-						_cameras.add (new Camera (object.x, object.y, object.properties.color, Std.parseInt(object.properties.id)));
-					}
-					if (object.name == "terminal")
-					{
+                var objects:Array<Dynamic> = layer.objects;
+                var behavior:Int;
+                var route:Array<Point>;
+
+                for (object in objects)
+                {
+                    behavior = Std.parseInt(object.properties.bhv);
+                    route = new Array<Point> ();
+                    var polylines:Array<Dynamic> = object.polyline;
+
+                    for (coordinate in polylines)
+                    {
+                        route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
+                    }
+                    _guards.add (new Guard (behavior, route));
+                }
+            }
+            if (layer.name == "objects")
+            {
+                var objects:Array<Dynamic> = layer.objects;
+
+                for (object in objects)
+                {
+                    if (object.name == "player")
+                    {
+                        _player = new Player(object.x,object.y);
+                    }
+                    if (object.name == "laser")
+                    {
+                        _lasers.add (new Laser (object.x, object.y, Math.floor((object.width / 30)), Std.parseInt(object.properties.direction),
+                                    object.properties.color, Std.parseInt(object.properties.id)));
+                    }
+                    if (object.name == "camera")
+                    {
+                        _cameras.add (new Camera (object.x, object.y, object.properties.color, Std.parseInt(object.properties.id)));
+                    }
+                    if (object.name == "terminal")
+                    {
                         var t:Terminal = new Terminal (object.x, object.y,
                                 Std.parseInt(object.properties.id),
                                 Std.parseInt(object.properties.direction),
                                 object.properties.color);
                         t.addEventListener(CircuitEvent.REACTIVATE,
                                 reactivate);
-						_terminals.add(t);
-					}
-					if (object.name == "circuit")
-					{
-						var route = new Array<Point> ();
-						var polylines:Array<Dynamic> = object.polyline;
-						
-						for (coordinate in polylines)
-						{
-							route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
-						}
+                        _terminals.add(t);
+                    }
+                    if (object.name == "circuit")
+                    {
+                        var route = new Array<Point> ();
+                        var polylines:Array<Dynamic> = object.polyline;
+
+                        for (coordinate in polylines)
+                        {
+                            route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
+                        }
                         var c:Circuit = new Circuit
                             (Std.parseInt(object.properties.id), route);
                         c.addEventListener(CircuitEvent.DEACTIVATE,
                                 deactivate);
                         _circuits.add (c);
-					}
-					if (object.name == "levelEnd")
-					{
-						_levelEnd = new LevelEnd(object.x,object.y);
-					}
-				}
-			}
+                    }
+                    if (object.name == "levelEnd")
+                    {
+                        _levelEnd = new LevelEnd(object.x,object.y);
+                    }
+                }
+            }
         }
 
-        addElement(_lowerLayer);
-		addElement(_shadeLayer);
+        addElement(_lowerLayer1);
+        addElement(_lowerLayer2);
+        addElement(_collideLayer);
+        addElement(_shadeLayer);
         _puddleLayer = new Element();
         addElement(_puddleLayer);
-		for (i in _lasers) addElement(i);
-		addElement(_collideLayer);
-		addElement(_player);
-		for (i in _guards) addElement(i);
-		for (i in _terminals) addElement(i);
-		addElement(_upperLayer);
-		for (i in _circuits) addElement(i);
-		for (i in _cameras) addElement(i);
+        for (i in _lasers) addElement(i);
+        addElement(_player);
+        for (i in _guards) addElement(i);
+        for (i in _terminals) addElement(i);
+        addElement(_upperLayer);
+        for (i in _circuits) addElement(i);
+        for (i in _cameras) addElement(i);
         _hud = new HUD();
         addElement(_hud);
     }
@@ -226,7 +227,7 @@ class StageState extends State
             }
 
             if(!_collideLayer.collidePoint(b.position.x + b.width/2,
-                    b.position.y + b.height/2))
+                        b.position.y + b.height/2))
             {
                 var p:Puddle = new Puddle(b.position.x, b.position.y);
                 _puddles.add(p);
@@ -283,7 +284,7 @@ class StageState extends State
             {
                 var playerDistance = Point.distance(g.eye, playerPoint);
 
-                if (playerDistance < PLAYER_DETECTION_RADUIS) 
+                if (playerDistance < PLAYER_DETECTION_RADIUS) 
                 {
                     var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
                             playerPoint.x - g.eye.x);
@@ -296,10 +297,32 @@ class StageState extends State
                         {
                             g.alert();
                             _hud.increase(2);
+                            if (playerDistance < 150)
+                            {
+                                _hud.increase(5);
+                            }
                         }
                     }
                 }
+                if (playerDistance < 50)
+                {
+                    g.alert();
+                    _hud.increase(4);
+                }
             }
+        }
+
+        for (l in _lasers)
+        {
+            if (_player.getBody().overlapBody(l.getBody())) 
+            {
+                _hud.increase(7);
+            }
+        }
+
+        if (_player.getBody().overlapBody(_levelEnd.getBody())) 
+        {
+            dispatchEvent(new Event("nextLevelEvent", true, false) );
         }
 
         if (_player.getBody().overlapBody(_levelEnd.getBody())) {
@@ -370,6 +393,7 @@ class StageState extends State
                 }
                 break;
             }
+
         }
     }
 }

@@ -12,6 +12,7 @@ class Laser extends Element
     public var id:Int;
 	private var _arSegments:Array<SpriteSheet>;
     private var _length:Int;
+	private var _body:Body;
 
     public static var BLUE:String = "blue";
     public static var GREEN:String = "green";
@@ -26,6 +27,8 @@ class Laser extends Element
         super();
 		
 		this.id = id;
+		
+		_body = new Body(length, 8);
 
         this.x = x;
         this.y = y;
@@ -92,5 +95,10 @@ class Laser extends Element
 
     public function activate():Void {
         visible = true;
+    }
+	
+	public function getBody():Body
+    {
+        return _body;
     }
 }
