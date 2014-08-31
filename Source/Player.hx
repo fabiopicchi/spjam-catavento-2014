@@ -12,7 +12,7 @@ class Player extends Element
 	private var _ss:SpriteSheet;
 	private var FRAME_WIDTH:Int = 72;
     private var FRAME_HEIGHT:Int = 60;
-    private var H_SQRT2:Float
+    private var H_SQRT2:Float;
 
     public function new(x:Float, y:Float)
     {
