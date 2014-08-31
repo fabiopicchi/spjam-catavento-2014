@@ -9,10 +9,10 @@ class Player extends Element
     private var SPEED:Float = 180;
     private var _body:Body;
     private var _facing:Int;
-	private var _spriteSheet:SpriteSheet;
+	private var _ss:SpriteSheet;
 	private var FRAME_WIDTH:Int = 72;
     private var FRAME_HEIGHT:Int = 60;
-    private var H_SQRT2:Float;
+    private var H_SQRT2:Float
 
     public function new(x:Float, y:Float)
     {
@@ -22,11 +22,13 @@ class Player extends Element
 		_body.position.x = x;
 		_body.position.y = y;
 		     
-		_spriteSheet = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
-		_spriteSheet.loadAnimationsFromJSON("assets/ss_bunny.json");
-		_spriteSheet.setAnimation("idle-right");
+		_ss = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
+		_ss.loadAnimationsFromJSON("assets/ss_bunny.json");
+		_ss.setAnimation("idle-right");
 		
-		addElement(_spriteSheet);
+		_ss.x = -10;
+		_ss.y = -50;
+		addElement(_ss);
 
         H_SQRT2 = Math.sqrt(2)/2;
         _facing = 0;
@@ -34,7 +36,7 @@ class Player extends Element
 
     public function move (hor:Int, ver:Int)
     {
-        if (_spriteSheet.isOver())
+        if (_ss.isOver())
         {
             _body.speed.x = hor * SPEED;
             _body.speed.y = ver * SPEED;
@@ -51,10 +53,10 @@ class Player extends Element
                 _facing = 1;
 
             if (hor != 0 || ver != 0)
-               _spriteSheet.setAnimation("walk-" + (_facing == 0 ? "right" :
+               _ss.setAnimation("walk-" + (_facing == 0 ? "right" :
                            "left"));
             else
-               _spriteSheet.setAnimation("idle-" + (_facing == 0 ? "right" :
+               _ss.setAnimation("idle-" + (_facing == 0 ? "right" :
                            "left")); 
         }
     }
@@ -63,7 +65,7 @@ class Player extends Element
     {
         _body.speed.x = 0;
         _body.speed.y = 0;
-       _spriteSheet.setAnimation("water-" + (_facing == 0 ? "right" : "left"));
+       _ss.setAnimation("water-" + (_facing == 0 ? "right" : "left"));
     }
 
     public function getFacing():Int

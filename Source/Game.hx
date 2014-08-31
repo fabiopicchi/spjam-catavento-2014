@@ -10,6 +10,7 @@ class Game extends Sprite
 {
     private var _lastFrame:Int;
     private var _state:StageState;
+	private var _currentLevel:Int = 1;
 
     private var _usedKeys:IntMap<Int>;
 
@@ -20,7 +21,7 @@ class Game extends Sprite
         super();
         
         _usedKeys = new IntMap<Int>();
-        _state = new StageState();
+        _state = new StageState(_currentLevel);
         _state.setInputActions(_usedKeys);
 
         addChild(_state);
@@ -28,6 +29,7 @@ class Game extends Sprite
         _keyboardRaw = 0;
         stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
         stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		addEventListener ("nextLevelEvent", onReachingLevelEnd);
 
         _lastFrame = Lib.getTimer();
         stage.addEventListener(Event.ENTER_FRAME, run);
@@ -59,4 +61,18 @@ class Game extends Sprite
 
         _lastFrame = Lib.getTimer();
     }
+
+	public function onReachingLevelEnd (event:Event):Void {
+		
+		if (_currentLevel < 3)
+		{
+			removeChild(_state);
+			_state = new StageState(++_currentLevel);
+			addChild(_state);
+		}
+		else {
+			//credits minigame goes here			
+		}
+		
+	}
 }
