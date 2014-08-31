@@ -134,9 +134,4 @@ class SpriteSheet extends Element {
 	{
 		return(_currentFrame);
 	}
-	
-	function setFrame(f:Int):Void
-	{
-		_currentFrame = f;
-	}
 }

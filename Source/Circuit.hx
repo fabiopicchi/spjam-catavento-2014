@@ -19,17 +19,15 @@ class Circuit extends Element {
 	public var target:Point;
 	
 	public var speed:Float = 400;
+	public var angle:Float = 0;
 	
 	public function new(id:Int, r:Array<Point>) {
 		super ();
 		
 		var s : Shape = new Shape();
         s.graphics.beginFill(0xFF0000);
-        s.graphics.drawRect(0, 0, 60, 60);
+        s.graphics.drawRect(0, 0, 10, 10);
         addChild(s);
-		
-		//exclamation = new Exclamation ();
-		//addChild (exclamation);
 		
 		route = r ;
 		
@@ -69,7 +67,7 @@ class Circuit extends Element {
 	{
 		currentTargetId ++;
 		if (currentTargetId == route.length-1) {
-			dispatchEvent(new CircuitEvent("shootEvent", id, 1) );
+			//dispatchEvent(new CircuitEvent("shootEvent", id, 1) );
 			active = false;
 		}
 		startWalkingTo(route[currentTargetId]);
@@ -77,10 +75,8 @@ class Circuit extends Element {
 	
 	public function startWalkingTo(t:Point):Void 
 	{
-		state = 1;
 		target = t;
 		angle = Math.atan2(x - target.x, y - target.y);
-		faceDirection = Math.floor((angle / (Math.PI / 2)) % 4);
 	}
 	
 	public function arrive():Void 

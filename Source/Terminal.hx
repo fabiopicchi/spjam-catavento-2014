@@ -20,7 +20,7 @@ class Terminal extends Element
     private var FRAME_WIDTH:Int = 60;
     private var FRAME_HEIGHT:Int = 60;
 
-    public function new(x:Float, y:Float, id:Int, direction:Int, colour:String)
+    public function new(x:Float, y:Float, id:Int, direction:Int, colour:String )
     {
         super();
         

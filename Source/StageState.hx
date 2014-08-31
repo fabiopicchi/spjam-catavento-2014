@@ -1,5 +1,6 @@
 import haxe.Json;
 import haxe.ds.IntMap;
+import openfl.events.Event;
 import openfl.geom.Point;
 
 import openfl.Assets;
@@ -19,26 +20,27 @@ class StageState extends State
     private var PLAYER_DETECTION_RADUIS:Float;
 
     private var _player:Player;
+	private var _levelEnd:LevelEnd;
     private var _hud:HUD;
 	private var _guards = new List <Guard> ();
 
     private var _lowerLayer:Tilemap;
+	private var _shadeLayer:Tilemap;
 	private var _collideLayer:Tilemap;
 	private var _upperLayer:Tilemap;
-	private var _shadeLayer:Tilemap;
 	
 	private var _lasers = new List <Laser> ();
 	private var _cameras = new List <Camera> ();
-	//private var _circuits = new List <Circuit> ();
-	//private var _terminals = new List <Terminal> ();
+	private var _circuits = new List <Circuit> ();
+	private var _terminals = new List <Terminal> ();
 
-    public function new()
+    public function new(levelNumber:Int)
     {
         super();
 
         PLAYER_DETECTION_RADUIS = Math.sqrt(800 * 800 + 600 * 600);
 
-        var obj:Dynamic = Json.parse(Assets.getText("assets/level1.json"));
+        var obj:Dynamic = Json.parse(Assets.getText("assets/level" + levelNumber + ".json"));
         var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
         var layers:Array<Dynamic> = obj.layers;
 
@@ -99,20 +101,26 @@ class StageState extends State
 					}
 					if (object.name == "camera")
 					{
-						_cameras.add (new Camera (object.x, object.y, Std.parseFloat(object.properties.direction),
-							object.properties.color, Std.parseInt(object.properties.id)));
+						_cameras.add (new Camera (object.x, object.y, object.properties.color, Std.parseInt(object.properties.id)));
 					}
 					if (object.name == "terminal")
 					{
-						//_terminals.add (new Terminal (object.x, object.y, Std.parseInt(object.properties.direction), Std.parseInt(object.properties.id)));
+						_terminals.add (new Terminal (object.x, object.y, Std.parseInt(object.properties.id), Std.parseInt(object.properties.direction), object.properties.color));
 					}
 					if (object.name == "circuit")
 					{
-						//_circuits.add (new Circuit (route, Std.parseInt(object.properties.id)));
+						var route = new Array<Point> ();
+						var polylines:Array<Dynamic> = object.polyline;
+						
+						for (coordinate in polylines)
+						{
+							route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
+						}
+						_circuits.add (new Circuit (Std.parseInt(object.properties.id), route));
 					}
 					if (object.name == "levelEnd")
 					{
-						//_levelEnd = new LevelEnd(object.x,object.y);
+						_levelEnd = new LevelEnd(object.x,object.y);
 					}
 				}
 			}
@@ -121,11 +129,13 @@ class StageState extends State
         addElement(_lowerLayer);
 		addElement(_collideLayer);
 		addElement(_shadeLayer);
+		for (i in _lasers) addElement(i);
 		addElement(_player);
 		for (i in _guards) addElement(i);
-		for (i in _lasers) addElement(i);
-		for (i in _cameras) addElement(i);
+		for (i in _terminals) addElement(i);
 		addElement(_upperLayer);
+		for (i in _circuits) addElement(i);
+		for (i in _cameras) addElement(i);
         _hud = new HUD();
         addElement(_hud);
     }
@@ -210,5 +220,10 @@ class StageState extends State
                 }
             }
         }
+		
+		if (_player.getBody().overlapBody(_levelEnd.getBody())) {
+			dispatchEvent(new Event("nextLevelEvent", true, false) );
+		}
+		
     }
 }

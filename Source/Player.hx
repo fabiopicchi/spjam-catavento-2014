@@ -9,7 +9,7 @@ class Player extends Element
     private var SPEED:Float = 180;
     private var _body:Body;
     private var _facing:Int;
-	private var _spriteSheet:SpriteSheet;
+	private var _ss:SpriteSheet;
 	private var FRAME_WIDTH:Int = 72;
     private var FRAME_HEIGHT:Int = 60;
     private var H_SQRT2:Float;
@@ -22,14 +22,14 @@ class Player extends Element
 		_body.position.x = x;
 		_body.position.y = y;
 		     
-		_spriteSheet = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
-		_spriteSheet.loadAnimationsFromJSON("assets/ss_bunny.json");
-		_spriteSheet.setAnimation("idle");
+		_ss = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
+		_ss.loadAnimationsFromJSON("assets/ss_bunny.json");
+		_ss.setAnimation("idle");
 		
-		_spriteSheet.x = -10;
-		_spriteSheet.y = -50;
+		_ss.x = -10;
+		_ss.y = -50;
 		
-		addElement(_spriteSheet);
+		addElement(_ss);
 
         H_SQRT2 = Math.sqrt(2)/2;
         _facing = 0;

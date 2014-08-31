@@ -1,9 +1,12 @@
 package  ;
 
 import core.Element;
+import core.SpriteSheet;
+import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 /**
  * ...
@@ -13,55 +16,59 @@ class Camera extends Element {
 	
 	public var circuitId:Int;
 	
+	public var deactivationTimer:Float = 0;
+	private var _ss:SpriteSheet;
+    private var _light:Bitmap;
+	
 	public static var BLUE:String = "blue";
     public static var GREEN:String = "green";
     public static var RED:String = "red";
 	
-	private var FRAME_WIDTH:Int = 30;
-    private var FRAME_HEIGHT:Int = 21;
+	private var FRAME_WIDTH:Int = 60;
+    private var FRAME_HEIGHT:Int = 60;
 	
 	public var initialAngle:Float;
+	public var angle:Float = 0;
 	public var deltaMax:Float = Math.PI / 6;
-	public var ANGULAR_SPEED:Float = 8;
+	public var ANGULAR_SPEED:Float = 0.5;
+	public var animPos:Int = 0;
 	public var goingBack:Bool;
 	public var waitTimer:Float;
 	
 	public var eye:Point;
-	public var angle:Float = 0;
-	public var visionWidth:Float = Math.PI / 6;
+	public var visionWidth:Float = 1* Math.PI / 6;
 	
-	public var deactivationTimer:Float = 0;
-	
-	//public var exclamation:Exclamation;
-	
-	public function new(x:Float, y:Float, initialAngle:Float, color:String, id:Int) {
+	public function new(x:Float, y:Float, color:String, id:Int) {
 		super ();
-		
-		var s : Shape = new Shape();
-        s.graphics.beginFill(0xFF0000);
-        s.graphics.drawRect(0, 0, 60, 60);
-        addChild(s);
 		
 		this.x = x;
 		this.y = y;
 		
 		eye = new Point();
-		this.initialAngle = initialAngle;
-		angle = initialAngle;
+		initialAngle = 1;
+		angle = 1;
 		goingBack = false;
 		
-		var s : Shape = new Shape();
-        s.graphics.beginFill(0xFF0000);
-        s.graphics.drawRect(0, 0, 60, 60);
-        addChild(s);
+		_ss = new SpriteSheet("assets/camera.png", FRAME_WIDTH, FRAME_HEIGHT) ;
+		
+		for (i in 0...7)
+		{
+			_ss.addAnimation("a"+i, [new Rectangle(i*FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT)], true, 1);
+		}
+		_ss.setAnimation("a0");
+		
+		_ss.x = 0;
+		_ss.y = 0;
+		
+		addElement(_ss);
 	}
 	
 	override public function update(dt:Float):Void 
     {
         super.update(dt);
 		
-		eye.x = x;
-		eye.y = y;
+		eye.x = x + 30;
+		eye.y = y + 25;
 		
 		if (waitTimer > 0) {
 			waitTimer -= dt;
@@ -77,20 +84,25 @@ class Camera extends Element {
 					if (angle > initialAngle + deltaMax) {
 						angle = initialAngle + deltaMax;
 						goingBack = true;
-						waitTimer = 300;
+						waitTimer = 1;
 					}
 				}
 				else {
 					angle -= dt * ANGULAR_SPEED;
 					if (angle < initialAngle - deltaMax) {
 						angle = initialAngle - deltaMax;
-						goingBack = true;
-						waitTimer = 300;
+						goingBack = false;
+						waitTimer = 1;
 					}
 				}
 				
 			}
 		}
+		
+		animPos = Math.floor( 0.5 + (angle / deltaMax) * 3 - 3);
+		trace (animPos);
+
+		_ss.setAnimation("a"+animPos);
     }
 	
 	override public function draw():Void 
