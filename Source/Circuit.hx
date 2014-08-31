@@ -22,14 +22,14 @@ class Circuit extends Element {
 	public var angle:Float = 0;
 	
 	public function new(id:Int, r:Array<Point>) {
+        this.id = id;
 		super ();
 		
-		var s : Shape = new Shape();
-        s.graphics.beginFill(0xFF0000);
-        s.graphics.drawRect(0, 0, 10, 10);
-        addChild(s);
+        graphics.beginFill(0xFF0000);
+        graphics.drawRect(0, 0, 10, 10);
+        visible = false;
 		
-		route = r ;
+		route = r;
 		
 		reset();
 	}
@@ -41,7 +41,9 @@ class Circuit extends Element {
 		if (active) {
 			x -= Math.sin(angle) * dt * speed;
 			y -= Math.cos(angle) * dt * speed;
-			if (Point.distance(new Point (x,y), target) < 2) {
+		    if ((x - target.x) * (x - target.x) +
+                (y - target.y) * (y - target.y) <= 50) 
+            {
 				x = target.x;
 				y = target.y;
 				arrive();
@@ -54,9 +56,12 @@ class Circuit extends Element {
 		reset();
 		active = true;
 		loadNextStep();
+        visible = true;
 	}
 	
-	public function reset():Void {
+	public function reset():Void 
+    {
+        visible = true;
 		x = route[0].x;
 		y = route[0].y;
 		currentTargetId = 0;
@@ -67,8 +72,9 @@ class Circuit extends Element {
 	{
 		currentTargetId ++;
 		if (currentTargetId == route.length-1) {
-			//dispatchEvent(new CircuitEvent("shootEvent", id, 1) );
+            visible = false;
 			active = false;
+            dispatchEvent(new CircuitEvent(CircuitEvent.DEACTIVATE, id));
 		}
 		startWalkingTo(route[currentTargetId]);
 	}

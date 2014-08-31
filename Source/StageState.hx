@@ -108,7 +108,13 @@ class StageState extends State
 					}
 					if (object.name == "terminal")
 					{
-						_terminals.add (new Terminal (object.x, object.y, Std.parseInt(object.properties.id), Std.parseInt(object.properties.direction), object.properties.color));
+                        var t:Terminal = new Terminal (object.x, object.y,
+                                Std.parseInt(object.properties.id),
+                                Std.parseInt(object.properties.direction),
+                                object.properties.color);
+                        t.addEventListener(CircuitEvent.REACTIVATE,
+                                reactivate);
+						_terminals.add(t);
 					}
 					if (object.name == "circuit")
 					{
@@ -119,7 +125,11 @@ class StageState extends State
 						{
 							route.push(new Point(coordinate.x + object.x, coordinate.y + object.y));
 						}
-						_circuits.add (new Circuit (Std.parseInt(object.properties.id), route));
+                        var c:Circuit = new Circuit
+                            (Std.parseInt(object.properties.id), route);
+                        c.addEventListener(CircuitEvent.DEACTIVATE,
+                                deactivate);
+                        _circuits.add (c);
 					}
 					if (object.name == "levelEnd")
 					{
@@ -198,13 +208,19 @@ class StageState extends State
                 b.position.x = _player.getBody().position.x - b.width;
             }
 
-            var bFoundTerminal:Bool = false;
             for(t in _terminals)
             {
                 if (t.getBody().overlapBody(b))
                 {
                     t.deactivate();
-                    bFoundTerminal = true;
+                    for (c in _circuits)
+                    {
+                        if (t.id == c.id)
+                        {
+                            c.activate();
+                            break;
+                        }
+                    }
                     break;
                 }
             }
@@ -290,5 +306,70 @@ class StageState extends State
             dispatchEvent(new Event("nextLevelEvent", true, false) );
         }
 
+    }
+
+    private function deactivate(e:CircuitEvent)
+    {
+        for(c in _circuits)
+        {
+            if (c.id == e.id)
+            {
+                for (cam in _cameras)
+                {
+                    if (c.id == cam.id)
+                    {
+                        cam.deactivate();
+                        break;
+                    }
+                }
+
+                for (l in _lasers)
+                {
+                    if (c.id == l.id)
+                    {
+                        l.deactivate();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    private function reactivate(e:CircuitEvent)
+    {
+        for(t in _terminals)
+        {
+            if (t.id == e.id)
+            {
+                for (c in _circuits)
+                {
+                    if (t.id == c.id)
+                    {
+                        c.reset();
+                        break;
+                    }
+                }
+
+                for (cam in _cameras)
+                {
+                    if (t.id == cam.id)
+                    {
+                        cam.activate();
+                        break;
+                    }
+                }
+
+                for (l in _lasers)
+                {
+                    if (t.id == l.id)
+                    {
+                        l.activate();
+                        break;
+                    }
+                }
+                break;
+            }
+        }
     }
 }

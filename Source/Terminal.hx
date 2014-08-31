@@ -7,23 +7,25 @@ import core.Element;
 
 class Terminal extends Element
 {
-    private var _id:Int;
-	private var _body:Body;
-	private var _deactivationTimer:Float;
+    public var id:Int;
+    private var _body:Body;
+    private var _direction:Int;
+    private var _deactivationTimer:Float;
     private var _ss:SpriteSheet;
     private var _light:Bitmap;
 
     public static var BLUE:String = "blue";
     public static var GREEN:String = "green";
     public static var RED:String = "red";
- 
+
     private var FRAME_WIDTH:Int = 60;
-    private var FRAME_HEIGHT:Int = 60;
+    private var FRAME_HEIGHT:Int = 120;
 
     public function new(x:Float, y:Float, id:Int, direction:Int, colour:String )
     {
+        this.id = id;
         super();
-        
+
         // The spritesheet represents only the upper part of the terminal
         y -= FRAME_HEIGHT;
 
@@ -42,7 +44,8 @@ class Terminal extends Element
                 [new Rectangle(3 * FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT)], 
                 false, 1);
 
-        switch(direction)
+        _direction = direction;
+        switch(_direction)
         {
             case 0:
                 _ss.setAnimation("lado-ligado");
@@ -64,8 +67,8 @@ class Terminal extends Element
         _ss.addChild(_light);
 
         _body = new Body(60, 60);
-		_body.position.x = x;
-		_body.position.y = y;
+        _body.position.x = x;
+        _body.position.y = y;
     }
 
     public function getBody():Body
@@ -77,11 +80,26 @@ class Terminal extends Element
     {
         if (_deactivationTimer > 0) 
         {
-		    _deactivationTimer -= dt;
-		}
+            _deactivationTimer -= dt;
+        }
         else 
         {
-            _deactivationTimer = 0;
+            if (!_light.visible)
+            {
+                _deactivationTimer = 0;
+                _light.visible = true;
+                switch(_direction)
+                {
+                    case 0:
+                        _ss.setAnimation("lado-ligado");
+                    case 1:
+                        _ss.setAnimation("frente-ligado");
+                    case 2:
+                        _ss.setAnimation("lado-ligado");
+                }
+                dispatchEvent(new CircuitEvent(CircuitEvent.REACTIVATE, id));
+            }
+
         }
     }
 
@@ -92,14 +110,23 @@ class Terminal extends Element
         super.draw();
     }
 
-	public function deactivate():Void 
+    public function deactivate():Void 
     {
-		dispatchEvent(new CircuitEvent(CircuitEvent.OFF, _id));
-		_deactivationTimer = 10;
-	}
+        switch(_direction)
+        {
+            case 0:
+                _ss.setAnimation("lado-desligado");
+            case 1:
+                _ss.setAnimation("frente-desligado");
+            case 2:
+                _ss.setAnimation("lado-desligado");
+        }
+        _light.visible = false;
+        _deactivationTimer = 10;
+    }
 
-	public function isActivated():Bool 
+    public function isActivated():Bool 
     {
-		return (_deactivationTimer <= 0);
-	}
+        return (_deactivationTimer <= 0);
+    }
 }
