@@ -95,7 +95,7 @@ class StageState extends State
 						var v:Float;
 						if (Point.distance(g.eye, playerPoint) > 500) v = 1;
 						else v = 5;
-						//hud.increase(v);						
+						//hud.increase(v);
 					}
 				}
 			}	
