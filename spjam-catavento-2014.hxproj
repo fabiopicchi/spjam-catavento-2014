@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="project.xml" />
     <movie fps="30" />
-    <movie width="320" />
-    <movie height="240" />
+    <movie width="800" />
+    <movie height="600" />
     <movie version="3" />
     <movie minorVersion="0" />
     <movie platform="NME" />
@@ -17,13 +17,14 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="C:\HaxeToolkit\haxe\lib\openfl\2,0,1" />
+    <class path="C:\HaxeToolkit\haxe\lib\actuate\1,7,5" />
     <class path="Source" />
     <class path="C:\HaxeToolkit\haxe\lib\openfl\2,0,1\backends\native" />
     <class path="Export\windows\neko\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="openfl=2.0.1&#xA;tools=1.5.7&#xA;lime_native&#xA;no-compilation&#xA;native&#xA;openfl-native&#xA;display&#xA;windows&#xA;desktop" />
+    <option directives="openfl=2.0.1&#xA;actuate=1.7.5&#xA;tools=1.5.7&#xA;lime_native&#xA;no-compilation&#xA;native&#xA;openfl-native&#xA;display&#xA;windows&#xA;desktop" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
