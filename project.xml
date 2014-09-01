@@ -2,7 +2,7 @@
 <project>
     <android target-sdk-version="8" />
 	<meta title="Coelhinho regador" package="com.example.coelhinhoregador" version="1.0.0" company="Company Name" />
-	<app main="Game" path="Export" file="StupidGame" />
+	<app main="CoelhinhoRegador" path="Export" file="CoelhinhoRegador" />
 
 	<window width="800" height="600" background="#666666" fps="30"/>
 	<window fullscreen="false" resizable="false"/>

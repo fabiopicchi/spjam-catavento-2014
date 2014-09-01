@@ -9,6 +9,8 @@ import openfl.display.BitmapData;
 
 import core.Element;
 import core.State;
+import core.GameSoundEvent;
+import core.SwitchStateEvent;
 
 class StageState extends State
 {
@@ -19,6 +21,9 @@ class StageState extends State
     private var WATER:Int = 1 << 4;
 
     private var PLAYER_DETECTION_RADIUS:Float = 400;
+
+    private var N_LEVELS:Int = 2;
+    private var _currentLevel:Int;
 
     private var _player:Player;
     private var _levelEnd:LevelEnd;
@@ -41,6 +46,7 @@ class StageState extends State
     public function new(levelNumber:Int)
     {
         super();
+        _currentLevel = levelNumber;
 
         var obj:Dynamic = Json.parse(Assets.getText("assets/level" + levelNumber + ".json"));
         var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
@@ -156,8 +162,15 @@ class StageState extends State
         addElement(_hud);
     }
 
-    override public function setInputActions(inputMap:IntMap<Int>)
+    override public function onEnter():Void
     {
+        dispatchEvent(new GameSoundEvent(GameSoundEvent.BG_MUSIC,
+                    "assets/sound/fase_1_reason.ogg"));
+    }
+
+    override public function getInputActions():IntMap<Int>
+    {
+        var inputMap:IntMap<Int> = new IntMap<Int>();
         inputMap.set(Keyboard.A, LEFT);
         inputMap.set(Keyboard.LEFT, LEFT);
         inputMap.set(Keyboard.S, DOWN);
@@ -167,6 +180,7 @@ class StageState extends State
         inputMap.set(Keyboard.W, UP);
         inputMap.set(Keyboard.UP, UP);
         inputMap.set(Keyboard.SPACE, WATER);
+        return inputMap;
     }
 
     override public function update (dt:Float)
@@ -322,7 +336,8 @@ class StageState extends State
 
         if (_player.getBody().overlapBody(_levelEnd.getBody())) 
         {
-            dispatchEvent(new Event("nextLevelEvent", true, false) );
+            dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
+                        new StageState(_currentLevel + 1)));
         }
 
         if (_hud.isFull() ) {

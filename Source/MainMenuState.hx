@@ -1,51 +1,62 @@
-package;
-
 import haxe.ds.IntMap;
+
+import openfl.Assets;
 import openfl.events.Event;
 import openfl.ui.Keyboard;
+import openfl.display.Bitmap;
+import openfl.media.Sound;
+import openfl.media.SoundChannel;
+
+import motion.Actuate;
+
 import core.Element;
 import core.State;
-import openfl.display.Bitmap;
-import openfl.display.BitmapData;
-import openfl.display.Sprite;
-import openfl.display.Shape;
-import motion.easing.Elastic;
-import motion.Actuate;
-import openfl.Assets;
-
+import core.GameSoundEvent;
+import core.SwitchStateEvent;
 
 class MainMenuState extends State {
 	
     private var START:Int = 1 << 0;
         
-	private var	timer:Int = 0;
-	private var timer2:Int = 0;
-	
-	public var frames = new Array ();
-	
-	public var bitmap1 = new Bitmap (Assets.getBitmapData ("assets/titlescreen1.jpg"));
-	public var bitmap2 = new Bitmap (Assets.getBitmapData ("assets/titlescreen2.jpg"));
-	public var bitmap3 = new Bitmap (Assets.getBitmapData ("assets/titlescreen3.jpg"));
-	public var bitmap4 = new Bitmap (Assets.getBitmapData ("assets/titlescreen4.jpg"));
-	public var bitmap5 = new Bitmap (Assets.getBitmapData ("assets/titlescreen5.jpg"));
-	public var bitmap6 = new Bitmap (Assets.getBitmapData ("assets/titlescreen6.jpg"));
-	public var bitmap7 = new Bitmap (Assets.getBitmapData ("assets/titlescreen7.jpg"));
-	public var bitmap8 = new Bitmap (Assets.getBitmapData ("assets/titlescreen8.jpg"));
-	
+	private var	timer:Int;
+	private var timer2:Int;
+	private var frames:Array<Bitmap>;
+
+    private var sound:Sound;
+    private var channel:SoundChannel;
+
 	public function new ()
 	{
 		super ();
-		
-		frames = [bitmap1, bitmap2, bitmap3, bitmap4, bitmap5, bitmap6, bitmap7, bitmap8];
-		
+
+        timer = 0;
+        timer2 = 0;
+        frames = [
+            new Bitmap (Assets.getBitmapData ("assets/titlescreen1.jpg")),
+            new Bitmap (Assets.getBitmapData ("assets/titlescreen2.jpg")),
+            new Bitmap (Assets.getBitmapData ("assets/titlescreen3.jpg")),
+            new Bitmap (Assets.getBitmapData ("assets/titlescreen4.jpg")),
+            new Bitmap (Assets.getBitmapData ("assets/titlescreen5.jpg")),
+            new Bitmap (Assets.getBitmapData ("assets/titlescreen6.jpg")),
+            new Bitmap (Assets.getBitmapData ("assets/titlescreen7.jpg")),
+            new Bitmap (Assets.getBitmapData ("assets/titlescreen8.jpg"))
+        ];
 		for(frame in frames){
 			addChild (frame);
 		}
 	}
 
-    override public function setInputActions(inputMap:IntMap<Int>)
+    override public function onEnter():Void
     {
+        dispatchEvent(new GameSoundEvent(GameSoundEvent.BG_MUSIC,
+                    "assets/sound/amigo_coelho.ogg"));
+    }
+
+    override public function getInputActions():IntMap<Int>
+    {
+        var inputMap:IntMap<Int> = new IntMap<Int>();
         inputMap.set(Keyboard.SPACE, START); 
+        return inputMap;
     }
 	
 	override public function update (dt:Float)
@@ -89,9 +100,9 @@ class MainMenuState extends State {
 
         if (justPressed(START))
         {
-            dispatchEvent(new Event("nextLevelEvent", true, false));
+            dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
+                        new StageState(1)));
         }
-		
 	}
 	
 	public function visibleOn (num:Int)

@@ -32,14 +32,24 @@ class State extends Element
         return (_keyboardState & buttonCode == buttonCode);
     }
 
-    public function setInputActions(inputMap:IntMap<Int>)
+    public function getInputActions():IntMap<Int>
     {
-
+        return new IntMap<Int>();
     }
 
     public function updateInput(keyboardState:Int)
     {
         _keyboardChanged = (keyboardState ^ _keyboardState);
         _keyboardState = keyboardState;
+    }
+
+    public function onEnter():Void
+    {
+
+    }
+
+    public function onLeave():Void
+    {
+
     }
 }
