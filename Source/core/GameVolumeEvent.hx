@@ -6,8 +6,8 @@ class GameVolumeEvent extends Event
 {
     public var volume:Float;
 
-    public static var BG_MUSIC:String = "bgmusic";
-    public static var SFX:String = "sfx";
+    public static var BG_MUSIC:String = "volumebgmusic";
+    public static var SFX:String = "volumesfx";
 
     public function new(name:String, volume:Float)
     {

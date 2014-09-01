@@ -101,14 +101,16 @@ class Game extends Sprite
 
     private function onAdjustBGMusic(e:GameVolumeEvent):Void
     {
-        _bgMusicChannel.soundTransform.volume = e.volume;
+        _musicVolume.volume = e.volume;
+        _bgMusicChannel.soundTransform = _musicVolume;
     }
 
     private function onAdjustSfx(e:GameVolumeEvent):Void
     {
+        _sfxVolume.volume = e.volume;
         for (sfx in _sfxChannelList)
         {
-            sfx.soundTransform.volume = e.volume;
+            sfx.soundTransform = _sfxVolume;
         }
     }
 
