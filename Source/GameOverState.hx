@@ -16,11 +16,11 @@ class GameOverState extends State {
 	private var	timer:Int = 0;
 	public var bitmap5 = new Bitmap (Assets.getBitmapData ("assets/missionfailed4.png"));
 	
-	public function new ()
+	public function new (gameScreenshot:BitmapData)
 	{
-		
 		super ();
-		
+
+        addChild(new Bitmap(gameScreenshot));
 		var rect1 : Shape = new Shape();
         rect1.graphics.beginFill(0x000000);
         rect1.graphics.drawRect(0, 197, 800, 200);

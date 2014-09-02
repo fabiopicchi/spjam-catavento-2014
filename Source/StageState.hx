@@ -336,12 +336,23 @@ class StageState extends State
 
         if (_player.getBody().overlapBody(_levelEnd.getBody())) 
         {
+            var bmp:BitmapData = new BitmapData(stage.stageWidth,
+                    stage.stageHeight, true);
+            bmp.draw(stage);
+
             dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
-                        new StageState(_currentLevel + 1)));
+                        new WinState(bmp)));
+            /*dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
+                        new StageState(_currentLevel + 1)));*/
         }
 
         if (_hud.isFull() ) {
-            dispatchEvent(new Event("gameOverEvent", true, false) );
+            var bmp:BitmapData = new BitmapData(stage.stageWidth,
+                    stage.stageHeight, true);
+            bmp.draw(stage);
+
+            dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
+                        new GameOverState(bmp)));
         }
 
     }
