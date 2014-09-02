@@ -1,3 +1,4 @@
+import openfl.display.Shape;
 import openfl.geom.Rectangle;
 
 import core.Element;
@@ -38,11 +39,11 @@ class Puddle extends Element
         addElement(_ss);
 
         _body = new Body(FRAME_WIDTH, FRAME_HEIGHT);
-        _body.position.x = x - FRAME_WIDTH/2;
-        _body.position.y = y - FRAME_HEIGHT/2;
+        _body.position.x = x;
+        _body.position.y = y;
 
-        this.x = x - FRAME_WIDTH/2;
-        this.y = y - FRAME_HEIGHT/2;
+        this.x = x;
+        this.y = y;
 
         _timer = DURATION;
     }
