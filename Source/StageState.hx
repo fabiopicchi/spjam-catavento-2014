@@ -211,12 +211,12 @@ class StageState extends State
             _player.water();
             var b:Body = new Body(_collideLayer.getTileWidth(),
                     _collideLayer.getTileHeight());
-            b.position.y = _player.getBody().position.y;
+            b.position.y = _player.getBody().position.y - b.height/2 + 10;
 
             if (_player.getFacing() == 0)
             {
                 b.position.x = _player.getBody().position.x +
-                    _player.getBody().width + 25; 
+                    _player.getBody().width; 
             }
             else
             {

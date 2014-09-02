@@ -37,8 +37,14 @@ class Guard extends Element {
     private var _eyeRef:Shape;
     private var interrupted:Bool;
 
-    private var FRAME_WIDTH:Int = 112;
+    private var anim_x:Float;
+    private var anim_y:Float;
+	private var FRAME_WIDTH:Int = 112;
     private var FRAME_HEIGHT:Int = 120;
+	
+	private var BODY_WIDTH:Int = 30;
+	private var BODY_HEIGHT:Int = 20;
+	
     private var _ss:SpriteSheet;
 	
 	public function new(b:Int, r:Array<Point>) {
@@ -49,21 +55,29 @@ class Guard extends Element {
         behaviorType = b;
 		route = r;
 
-        _body = new Body(60, 60);
+        _body = new Body(BODY_WIDTH, BODY_HEIGHT);
         _body.position.x = route[0].x;
         _body.position.y = route[0].y;
 		
 		//exclamation = new Exclamation ();
 		//addChild (exclamation);
+		
+		anim_x = (BODY_WIDTH - FRAME_WIDTH) / 2;
+		anim_y = BODY_HEIGHT - FRAME_HEIGHT;
 
         _ss = new SpriteSheet("assets/guard.png", FRAME_WIDTH, FRAME_HEIGHT);
         _ss.loadAnimationsFromJSON("assets/ss_guard.json");
+		_ss.x = anim_x;
+		_ss.y = anim_y;
         addElement(_ss);
 		
         _eyeRef = new Shape();
-        _eyeRef.graphics.beginFill(0x00FF00);
-        _eyeRef.graphics.drawRect(0, 0, 6, 6);
+        //_eyeRef.graphics.beginFill(0x00FF00);
+        //_eyeRef.graphics.drawRect(0, 0, 6, 6);
         addChild(_eyeRef);
+		
+		this.graphics.beginFill(0x000000);
+        this.graphics.drawRect(0, 0, _body.width, _body.height);
 		
 		eye = new Point();
 		
@@ -75,19 +89,19 @@ class Guard extends Element {
             case 0:
                 _ss.setAnimation("idle-side");
                 _ss.scaleX = -1;
-                _ss.x = _ss.width;
+                //_ss.x = -_ss.width;
             case 1:
                 _ss.setAnimation("idle-front");
                 _ss.scaleX = 1;
-                _ss.x = 0;
+                //_ss.x = 0;
             case 2:
                 _ss.setAnimation("idle-side");
                 _ss.scaleX = 1;
-                _ss.x = 0;
+                //_ss.x = 0;
             case 3:
                 _ss.setAnimation("idle-back");
                 _ss.scaleX = 1;
-                _ss.x = 0;
+                //_ss.x = 0;
         }
 	}
 
@@ -130,25 +144,7 @@ class Guard extends Element {
 			arrive();
 		}
 
-        switch(faceDirection)
-        {
-            case 0:
-                _ss.setAnimation("walk-side");
-                _ss.scaleX = -1;
-                _ss.x = _ss.width;
-            case 1:
-                _ss.setAnimation("walk-front");
-                _ss.scaleX = 1;
-                _ss.x = 0;
-            case 2:
-                _ss.setAnimation("walk-side");
-                _ss.scaleX = 1;
-                _ss.x = 0;
-            case 3:
-                _ss.setAnimation("walk-back");
-                _ss.scaleX = 1;
-                _ss.x = 0;
-        }
+        setGuardAnimation("walk");
     }
 	
 	public function arrive():Void 
@@ -196,25 +192,7 @@ class Guard extends Element {
             }
         }
 
-        switch(faceDirection)
-        {
-            case 0:
-                _ss.setAnimation("idle-side");
-                _ss.scaleX = -1;
-                _ss.x = _ss.width;
-            case 1:
-                _ss.setAnimation("idle-front");
-                _ss.scaleX = 1;
-                _ss.x = 0;
-            case 2:
-                _ss.setAnimation("idle-side");
-                _ss.scaleX = 1;
-                _ss.x = 0;
-            case 3:
-                _ss.setAnimation("idle-back");
-                _ss.scaleX = 1;
-                _ss.x = 0;
-        }
+        setGuardAnimation ("idle");
 
     }
 
@@ -265,7 +243,8 @@ class Guard extends Element {
 		
 		visionAngle = faceDirection * Math.PI / 2;
 
-        switch(faceDirection)
+        /*
+		switch(faceDirection)
         {
             case 0:
                 _eyeRef.x = 60;
@@ -280,6 +259,9 @@ class Guard extends Element {
                 _eyeRef.x = 27;
                 _eyeRef.y = -6;
         }
+		*/
+		_eyeRef.x = _body.width/2;
+        _eyeRef.y = _body.height/2;
         eye.x = _body.position.x + _eyeRef.x;
         eye.y = _body.position.y + _eyeRef.y;
     }
@@ -290,5 +272,54 @@ class Guard extends Element {
         y = _body.position.y;
         super.draw();
     }
+	
+	private function setGuardAnimation(animName:String):Void
+	{
+		
+		if (animName == "walk")
+		{
+			switch(faceDirection)
+			{
+				case 0:
+					_ss.setAnimation("walk-side");
+					_ss.scaleX = -1;
+					_ss.x = anim_x + _ss.width;
+				case 1:
+					_ss.setAnimation("walk-front");
+					_ss.scaleX = 1;
+					_ss.x = anim_x;
+				case 2:
+					_ss.setAnimation("walk-side");
+					_ss.scaleX = 1;
+					_ss.x = anim_x;
+				case 3:
+					_ss.setAnimation("walk-back");
+					_ss.scaleX = 1;
+					_ss.x = anim_x;
+			}
+		}
+		if (animName == "idle")
+		{
+			switch(faceDirection)
+			{
+				case 0:
+					_ss.setAnimation("idle-side");
+					_ss.scaleX = -1;
+					_ss.x = anim_x +_ss.width;
+				case 1:
+					_ss.setAnimation("idle-front");
+					_ss.scaleX = 1;
+					_ss.x = anim_x;
+				case 2:
+					_ss.setAnimation("idle-side");
+					_ss.scaleX = 1;
+					_ss.x = anim_x;
+				case 3:
+					_ss.setAnimation("idle-back");
+					_ss.scaleX = 1;
+					_ss.x = anim_x;
+			}
+		}
+	}
 
 }
