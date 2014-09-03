@@ -124,7 +124,7 @@ class StageState extends State
                     }
                     if (object.name == "laser")
                     {
-                        _lasers.add (new Laser (object.x, object.y, object.width , Std.parseInt(object.properties.direction),
+                        _lasers.add (new Laser (object.x, object.y + 30, object.width , Std.parseInt(object.properties.direction),
                                     object.properties.color, Std.parseInt(object.properties.id)));
                     }
                     if (object.name == "camera")
@@ -344,7 +344,7 @@ class StageState extends State
         {
             if (_player.getBody().overlapBody(l.getBody())) 
             {
-                _hud.increase(20);
+                if (l.visible) _hud.increase(20);
             }
         }
 

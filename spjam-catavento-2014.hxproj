@@ -29,7 +29,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="False" />
-    <option additional="--no-output&#xA;--remap flash:openfl&#xA;#--macro keep(&quot;Game&quot;)" />
+    <option additional="--no-output&#xA;--remap flash:openfl&#xA;#--macro keep(&quot;CoelhinhoRegador&quot;)" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

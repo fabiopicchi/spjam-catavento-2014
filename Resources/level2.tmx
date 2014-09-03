@@ -3,7 +3,7 @@
  <tileset firstgid="1" name="tileset" tilewidth="60" tileheight="60">
   <image source="tileset.png" width="720" height="660"/>
  </tileset>
- <layer name="lower1" width="56" height="38">
+ <layer name="lower1" width="56" height="38" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -2135,7 +2135,7 @@
    <tile gid="9"/>
   </data>
  </layer>
- <layer name="lower2" width="56" height="38">
+ <layer name="lower2" width="56" height="38" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -4267,7 +4267,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="shade" width="56" height="38">
+ <layer name="shade" width="56" height="38" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -6399,7 +6399,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="collide" width="56" height="38">
+ <layer name="collide" width="56" height="38" visible="0">
   <data>
    <tile gid="38"/>
    <tile gid="38"/>
@@ -8531,7 +8531,7 @@
    <tile gid="38"/>
   </data>
  </layer>
- <layer name="upper" width="56" height="38">
+ <layer name="upper" width="56" height="38" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
