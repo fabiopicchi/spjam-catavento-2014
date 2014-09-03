@@ -81,25 +81,7 @@ class Guard extends Element {
 		goingBack = false;
 		loadNextStep();
 
-        switch(faceDirection)
-        {
-            case 0:
-                _ss.setAnimation("idle-side");
-                _ss.scaleX = -1;
-                //_ss.x = -_ss.width;
-            case 1:
-                _ss.setAnimation("idle-front");
-                _ss.scaleX = 1;
-                //_ss.x = 0;
-            case 2:
-                _ss.setAnimation("idle-side");
-                _ss.scaleX = 1;
-                //_ss.x = 0;
-            case 3:
-                _ss.setAnimation("idle-back");
-                _ss.scaleX = 1;
-                //_ss.x = 0;
-        }
+        setGuardAnimation("idle");
 	}
 
 	public function loadNextStep():Void
@@ -227,7 +209,8 @@ class Guard extends Element {
         super.update(dt);
 		
 		if (attention > 0) {
-			attention -=(dt);
+			attention -= (dt);
+			setGuardAnimation("idle");
 		}
 		else {			
 			if (state == 0) {

@@ -27,7 +27,7 @@ class Terminal extends Element
         super();
 
         // The spritesheet represents only the upper part of the terminal
-        y -= FRAME_HEIGHT;
+        y = y + 60 - FRAME_HEIGHT;
 
         _ss = new SpriteSheet("assets/terminal.png", FRAME_WIDTH, FRAME_HEIGHT);
         addElement(_ss);

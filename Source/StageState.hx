@@ -171,9 +171,9 @@ class StageState extends State
         addElement(_lowerLayer2);
         addElement(_shadeLayer);
         for (i in _lasers) addElement(i);
+		for (i in _terminals) addElement(i);
         addElement(_player);
         for (i in _guards) addElement(i);
-        for (i in _terminals) addElement(i);
         addElement(_upperLayer);
         for (i in _circuits) addElement(i);
         for (i in _cameras) addElement(i);
