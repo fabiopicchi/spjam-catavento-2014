@@ -28,13 +28,17 @@ class EndState extends State
         addElement(_player);
     }
 
-    override public function setInputActions(inputMap:IntMap<Int>)
+    override public function getInputActions():IntMap<Int>
     {
+        var inputMap:IntMap<Int> = new IntMap<Int>();
+
         inputMap.set(Keyboard.A, LEFT);
         inputMap.set(Keyboard.LEFT, LEFT);
         inputMap.set(Keyboard.D, RIGHT);
         inputMap.set(Keyboard.RIGHT, RIGHT);
         inputMap.set(Keyboard.SPACE, SHOOT);
+
+        return inputMap;
     }
 
     override public function update (dt:Float)

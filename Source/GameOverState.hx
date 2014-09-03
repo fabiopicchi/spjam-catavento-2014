@@ -6,19 +6,27 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.display.Shape;
+import openfl.ui.Keyboard;
 import motion.easing.Elastic;
 import motion.Actuate;
 import openfl.Assets;
+import haxe.ds.IntMap;
 
+import core.SwitchStateEvent;
 
 class GameOverState extends State {
 	
 	private var	timer:Int = 0;
 	public var bitmap5 = new Bitmap (Assets.getBitmapData ("assets/missionfailed4.png"));
+
+    private var START:Int = 1 << 0;
+
+    private var _currentLevel:Int;
 	
-	public function new (gameScreenshot:BitmapData)
+	public function new (gameScreenshot:BitmapData, currentLevel:Int)
 	{
 		super ();
+        _currentLevel = currentLevel;
 
         addChild(new Bitmap(gameScreenshot));
 		var rect1 : Shape = new Shape();
@@ -90,32 +98,45 @@ class GameOverState extends State {
 		addChild (container4);
 		Actuate.tween (container4, 4, { x: 496 } );
 	}
-	
-	override public function update (dt:Float)
-	{
-		super.update(dt);
-		
-		timer++;
-		
-		if ( timer == 50 )
-		{
-			bitmap5.x = 0;
-			bitmap5.y = 278;
-			bitmap5.smoothing = true;			
-			
-			addChild (bitmap5);
-		}
-		else if( timer == 52)
-		{
-			bitmap5.visible = false;
-		}
-		else if( timer == 80)
-		{
-			bitmap5.visible = true;
-		}
-		else if( timer == 81)
-		{
-			bitmap5.visible = false;
-		}
-	}
+
+    override public function getInputActions():IntMap<Int>
+    {
+        var inputMap:IntMap<Int> = new IntMap<Int>();
+        inputMap.set(Keyboard.SPACE, START); 
+        return inputMap;
+    }
+
+    override public function update (dt:Float)
+    {
+        super.update(dt);
+
+        timer++;
+
+        if ( timer == 50 )
+        {
+            bitmap5.x = 0;
+            bitmap5.y = 278;
+            bitmap5.smoothing = true;			
+
+            addChild (bitmap5);
+        }
+        else if( timer == 52)
+        {
+            bitmap5.visible = false;
+        }
+        else if( timer == 80)
+        {
+            bitmap5.visible = true;
+        }
+        else if( timer == 81)
+        {
+            bitmap5.visible = false;
+        }
+
+        if(justPressed(START))
+        {
+            dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
+                        new StageState(_currentLevel)));
+        }
+    }
 }

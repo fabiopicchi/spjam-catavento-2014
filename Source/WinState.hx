@@ -6,17 +6,25 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.display.Shape;
+import openfl.ui.Keyboard;
 import motion.easing.Elastic;
 import motion.Actuate;
 import openfl.Assets;
+import haxe.ds.IntMap;
 
+import core.SwitchStateEvent;
 
 class WinState extends State {
 	
-	public function new (gameScreenshot:BitmapData)
+    private var _currentLevel:Int;
+
+    private var START:Int = 1 << 0;
+
+	public function new (gameScreenshot:BitmapData, currentLevel:Int)
 	{
 		super ();
-		
+        _currentLevel = currentLevel;
+
 		addChild(new Bitmap(gameScreenshot));
 
 		var rect1 : Shape = new Shape();
@@ -82,4 +90,22 @@ class WinState extends State {
 		addChild (container4);
 		Actuate.tween (container4, 4, { x: 413 } );
 	}
+
+    override public function getInputActions():IntMap<Int>
+    {
+        var inputMap:IntMap<Int> = new IntMap<Int>();
+        inputMap.set(Keyboard.SPACE, START); 
+        return inputMap;
+    }
+
+    override public function update(dt:Float):Void
+    {
+        super.update(dt);
+
+        if(justPressed(START))
+        {
+            dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
+                        new StageState(_currentLevel + 1)));
+        }
+    }
 }

@@ -22,7 +22,6 @@ class StageState extends State
 
     private var PLAYER_DETECTION_RADIUS:Float = 400;
 
-    private var N_LEVELS:Int = 2;
     private var _currentLevel:Int;
 
     private var _player:Player;
@@ -47,8 +46,28 @@ class StageState extends State
     {
         super();
         _currentLevel = levelNumber;
+    }
 
-        var obj:Dynamic = Json.parse(Assets.getText("assets/level" + levelNumber + ".json"));
+    override public function onEnter():Void
+    {
+        dispatchEvent(new GameSoundEvent(GameSoundEvent.BG_MUSIC,
+                    "assets/sound/fase_1_reason.ogg"));
+
+        var json:String = Assets.getText("assets/level" + _currentLevel + ".json");
+
+        if(json != null)
+        {
+            loadLevel(Json.parse(json));
+        }
+        else
+        {
+            dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
+                    new EndState()));
+        }
+    }
+
+    private function loadLevel(obj):Void
+    {
         var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
         var layers:Array<Dynamic> = obj.layers;
 
@@ -160,12 +179,8 @@ class StageState extends State
         for (i in _cameras) addElement(i);
         _hud = new HUD();
         addElement(_hud);
-    }
 
-    override public function onEnter():Void
-    {
-        dispatchEvent(new GameSoundEvent(GameSoundEvent.BG_MUSIC,
-                    "assets/sound/fase_1_reason.ogg"));
+
     }
 
     override public function getInputActions():IntMap<Int>
@@ -336,23 +351,13 @@ class StageState extends State
 
         if (_player.getBody().overlapBody(_levelEnd.getBody())) 
         {
-            var bmp:BitmapData = new BitmapData(stage.stageWidth,
-                    stage.stageHeight, true);
-            bmp.draw(stage);
-
             dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
-                        new WinState(bmp)));
-            /*dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
-                        new StageState(_currentLevel + 1)));*/
+                        new WinState(takeScreenshot(), _currentLevel)));
         }
 
         if (_hud.isFull() ) {
-            var bmp:BitmapData = new BitmapData(stage.stageWidth,
-                    stage.stageHeight, true);
-            bmp.draw(stage);
-
             dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
-                        new GameOverState(bmp)));
+                        new GameOverState(takeScreenshot(), _currentLevel)));
         }
 
     }
