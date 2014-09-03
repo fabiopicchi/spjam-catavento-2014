@@ -124,7 +124,7 @@ class StageState extends State
                     }
                     if (object.name == "laser")
                     {
-                        _lasers.add (new Laser (object.x, object.y, Math.floor((object.width / 30)), Std.parseInt(object.properties.direction),
+                        _lasers.add (new Laser (object.x, object.y, object.width , Std.parseInt(object.properties.direction),
                                     object.properties.color, Std.parseInt(object.properties.id)));
                     }
                     if (object.name == "camera")
@@ -224,18 +224,17 @@ class StageState extends State
         if(justPressed(WATER))
         {
             _player.water();
-            var b:Body = new Body(_collideLayer.getTileWidth(),
-                    _collideLayer.getTileHeight());
-            b.position.y = _player.getBody().position.y - b.height/2 + 10;
+            var b:Body = new Body(1,1);
+            b.position.y = _player.getBody().position.y + 10;
 
             if (_player.getFacing() == 0)
             {
                 b.position.x = _player.getBody().position.x +
-                    _player.getBody().width; 
+                    _player.getBody().width + 30; 
             }
             else
             {
-                b.position.x = _player.getBody().position.x - b.width  + 5;
+                b.position.x = _player.getBody().position.x - 30  + 5;
             }
 
             for(t in _terminals)
@@ -345,7 +344,7 @@ class StageState extends State
         {
             if (_player.getBody().overlapBody(l.getBody())) 
             {
-                _hud.increase(7);
+                _hud.increase(20);
             }
         }
 

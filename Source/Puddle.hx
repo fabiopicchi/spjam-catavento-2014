@@ -11,7 +11,9 @@ class Puddle extends Element
     private var _timer:Float = 0;
     private var _disappearing:Bool = false;
 
-    private var FRAME_WIDTH:Int = 60;
+    private var BODY_WIDTH:Int = 30;
+    private var BODY_HEIGHT:Int = 30;
+	private var FRAME_WIDTH:Int = 60;
     private var FRAME_HEIGHT:Int = 60;
     private var _ss:SpriteSheet;
 
@@ -35,12 +37,15 @@ class Puddle extends Element
         _ss.addAnimation("appear", arFrames, false, 12);
         _ss.addAnimation("disappear", rArFrames, false, 12);
         _ss.setAnimation("appear");
+		
+		_ss.x = -FRAME_WIDTH / 2;
+		_ss.y = -FRAME_HEIGHT / 2;
 
         addElement(_ss);
 
-        _body = new Body(FRAME_WIDTH, FRAME_HEIGHT);
-        _body.position.x = x;
-        _body.position.y = y;
+        _body = new Body(BODY_WIDTH, BODY_HEIGHT);
+        _body.position.x = x - BODY_WIDTH/2;
+        _body.position.y = y - BODY_HEIGHT/2;
 
         this.x = x;
         this.y = y;
