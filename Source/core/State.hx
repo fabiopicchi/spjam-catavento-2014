@@ -2,6 +2,8 @@ package core;
 
 import haxe.ds.IntMap;
 
+import openfl.display.BitmapData;
+
 class State extends Element
 {
     private var _keyboardState:Int;
@@ -13,6 +15,15 @@ class State extends Element
 
         _keyboardState = 0;
         _keyboardChanged = 0;
+    }
+
+    public function takeScreenshot():BitmapData
+    {
+        var bmp:BitmapData = new BitmapData(stage.stageWidth,
+            stage.stageHeight, true);
+        bmp.draw(stage);
+
+        return bmp;
     }
 
     private function justPressed(buttonCode:Int) 

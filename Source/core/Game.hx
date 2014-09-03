@@ -36,8 +36,8 @@ class Game extends Sprite
         _lastFrame = Lib.getTimer();
         stage.addEventListener(Event.ENTER_FRAME, run);
 
-        _musicVolume = new SoundTransform(1, 0);
-        _sfxVolume = new SoundTransform(1, 0);
+        _musicVolume = new SoundTransform(0, 0);
+        _sfxVolume = new SoundTransform(0, 0);
         _sfxChannelList = new List<SoundChannel>();
     }
 
