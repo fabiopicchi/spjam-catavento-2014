@@ -76,9 +76,6 @@ class Guard extends Element {
         //_eyeRef.graphics.drawRect(0, 0, 6, 6);
         addChild(_eyeRef);
 		
-		this.graphics.beginFill(0x000000);
-        this.graphics.drawRect(0, 0, _body.width, _body.height);
-		
 		eye = new Point();
 		
 		goingBack = false;

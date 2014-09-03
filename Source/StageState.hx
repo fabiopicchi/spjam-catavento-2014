@@ -220,7 +220,7 @@ class StageState extends State
             }
             else
             {
-                b.position.x = _player.getBody().position.x - b.width  + 25;
+                b.position.x = _player.getBody().position.x - b.width  + 5;
             }
 
             for(t in _terminals)
