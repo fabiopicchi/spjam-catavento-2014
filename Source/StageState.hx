@@ -62,7 +62,7 @@ class StageState extends State
         else
         {
             dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
-                    new EndState()));
+                    new MainMenuState()));
         }
     }
 
