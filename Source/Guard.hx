@@ -138,7 +138,9 @@ class Guard extends Element {
                     angle = Math.atan2(target.y - _body.position.y, 
                             target.x - _body.position.x);
                     if (angle < 0) angle += 2 * Math.PI;
-                    faceDirection = Math.floor( (angle + Math.PI/4) / (Math.PI / 2));
+                    faceDirection = Math.floor((angle + Math.PI / 4) / (Math.PI / 2));
+                    if (faceDirection > 3) faceDirection -= 4;
+                    else if (faceDirection < 0) faceDirection += 4;
                     _body.speed.x += Math.cos(angle) * speed;
                     _body.speed.y += Math.sin(angle) * speed;
                     setGuardAnimation("walk");
@@ -153,7 +155,9 @@ class Guard extends Element {
                     rotateTimer -= dt;
                     if (rotateTimer <= 0) {
                         faceDirection += (Math.random() > 0.5) ? -1 : 1;
-                        if (faceDirection < 0) faceDirection += 4;
+                        if (faceDirection > 3) faceDirection -= 4;
+                        else if (faceDirection < 0) faceDirection += 4;
+                        setGuardAnimation("idle");
                         rotateTimer = INSPECTING_TIME;
                     }
                 },
@@ -262,7 +266,7 @@ class Guard extends Element {
         _flagManager.update(dt);
         _body.update(dt);
         super.update(dt);
-		
+
         /*
 		switch(faceDirection)
         {

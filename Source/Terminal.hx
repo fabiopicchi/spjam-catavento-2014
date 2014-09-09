@@ -25,11 +25,9 @@ class Terminal extends Element
     {
         this.id = id;
         super();
-
-        // The spritesheet represents only the upper part of the terminal
-        y -= FRAME_HEIGHT;
-
+	
         _ss = new SpriteSheet("assets/terminal.png", FRAME_WIDTH, FRAME_HEIGHT);
+		_ss.y =  60 - FRAME_HEIGHT;
         addElement(_ss);
         _ss.addAnimation("frente-ligado", 
                 [new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)], 

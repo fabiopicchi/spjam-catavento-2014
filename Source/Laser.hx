@@ -1,3 +1,4 @@
+import openfl.display.Shape;
 import openfl.geom.Rectangle;
 
 import core.Element;
@@ -28,12 +29,14 @@ class Laser extends Element
 		
 		this.id = id;
 		
-		_body = new Body(length, 8);
+		_body = new Body(length, 12);
 
         this.x = x;
         this.y = y;
-        _length = length;
-
+        _length = Math.floor((length / 30));
+		_body.position.x = x;
+		_body.position.y = y;
+		
         var ss:SpriteSheet;
         ss = new SpriteSheet("assets/laser" + colour +
                     "_start01.png", FRAME_WIDTH, FRAME_HEIGHT) ;
