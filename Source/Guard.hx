@@ -113,6 +113,7 @@ class Guard extends Element {
                                 _flagManager.set("waiting");
                             case 2:
                                 _flagManager.reset("walking");
+                                _flagManager.set("waiting");
                                 _flagManager.set("inspecting");
 		                }               
                     }   
