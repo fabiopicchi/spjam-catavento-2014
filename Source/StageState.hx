@@ -344,7 +344,7 @@ class StageState extends State
         {
             if (_player.getBody().overlapBody(l.getBody()) && l.visible) 
             {
-                if (l.visible) _hud.increase(20);
+                _hud.increase(20);
             }
         }
 
