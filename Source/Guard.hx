@@ -13,51 +13,50 @@ class Guard extends Element {
 	
 	public var behaviorType:Int; // 0 = noWait, 1 = Wait, 2 = LookAround
 	public var route:Array<Point>;
-	public var currentTargetId:Int = 0;
+	public var currentTargetId:Int;
 	public var target:Point;
 	public var goingBack:Bool;
 	
-    public var state:Int; // 0 = waiting, 1 = walking
+    private var _flagManager:FlagManager;
 	public var speed:Float = 100;
 	public var angle:Float = 0;
 	
 	public var waitingTimer:Float;
 	public var rotateTimer:Float;
+	public var attentionTimer:Float = 0;
 	
-	public var attention:Float = 0;
 	public var faceDirection:Int = 0;
-	
-	public var eye:Point; //coordenadas do olho do guarda
-	public var visionAngle:Float = 0; //direção da visão do guarda
-	public var visionWidth:Float = Math.PI / 6;	//delta máximo para enxergar o herói
-    private var _body:Body;
 	
 	//public var exclamation:Exclamation;
 
+	public var eye:Point; //coordenadas do olho do guarda
     private var _eyeRef:Shape;
-    private var interrupted:Bool;
 
+    private var _ss:SpriteSheet;
     private var anim_x:Float;
     private var anim_y:Float;
 	private var FRAME_WIDTH:Int = 112;
     private var FRAME_HEIGHT:Int = 120;
-	
+
+    private var _body:Body;
 	private var BODY_WIDTH:Int = 30;
 	private var BODY_HEIGHT:Int = 20;
-	
-    private var _ss:SpriteSheet;
+
+    private var WAITING_TIME:Int = 2;
+    private var INSPECTING_TIME:Int = 1;
+    private var DIZZY_TIME:Int = 10;
+    private var ATTENTION_TIME:Int = 1;
 	
 	public function new(b:Int, r:Array<Point>) {
 		super ();
 
-        interrupted = false;
-		
         behaviorType = b;
 		route = r;
 
         _body = new Body(BODY_WIDTH, BODY_HEIGHT);
         _body.position.x = route[0].x;
         _body.position.y = route[0].y;
+        target = route[0];
 		
 		//exclamation = new Exclamation ();
 		//addChild (exclamation);
@@ -79,124 +78,185 @@ class Guard extends Element {
         addChild(_eyeRef);
 		
 		eye = new Point();
-		
+
 		goingBack = false;
-		loadNextStep();
-	}
 
-	public function loadNextStep():Void
-	{
-		if (!goingBack) {
-			currentTargetId++;
-			if (currentTargetId == route.length - 1) {
-				goingBack = true;
-			}
-		}
-		else {
-			currentTargetId--;
-			if (currentTargetId == 0) {
-				goingBack = false;
-			}
-		}
-		startWalkingTo(route[currentTargetId]);
-	}
-	
-	public function startWalkingTo(t:Point):Void 
-	{
-		state = 1;
-		target = t;
-		angle = Math.atan2(target.y - _body.position.y, 
-                target.x - _body.position.x);
-        if (angle < 0) angle += 2 * Math.PI;
-		faceDirection = Math.floor( (angle + Math.PI/4) / (Math.PI / 2));
-	}
-	
-	public function walk(dt:Float):Void 
-    {
-        _body.position.x += Math.cos(angle) * dt * speed;
-		_body.position.y += Math.sin(angle) * dt * speed;
-		if ((_body.position.x - target.x) * (_body.position.x - target.x) +
-            (_body.position.y - target.y) * (_body.position.y - target.y) <= 4) 
-        {
-			_body.position.x = target.x;
-			_body.position.y = target.y;
-			arrive();
-		}
+        currentTargetId = 0;
 
-        setGuardAnimation("walk");
-    }
-	
-	public function arrive():Void 
-	{
-		switch (behaviorType) {
-			case 0:
-				loadNextStep();
-			case 1, 2:
-				startWaiting(2);
-		}
-	}
-	
-	public function startWaiting(time:Float):Void 
-	{
-		state = 0;
-		waitingTimer = time;
-		rotateTimer = 1;
-	}
-	
-	public function wait(dt:Float):Void 
-	{
-		waitingTimer -= dt;
+        _flagManager = new FlagManager();
+        _flagManager.add("waiting",
+                function (dt) {
+		            waitingTimer -= dt;
+                    if (waitingTimer <= 0) {
+                        _flagManager.reset("waiting");
+                        _flagManager.reset("inspecting");
+                        _flagManager.set("walking");
+                    }
+                },
+                function () {
+                    setGuardAnimation("idle");
+                    waitingTimer = WAITING_TIME;
+                },
+                null
+        );
 
-        if (!interrupted)
-        {
-            rotateTimer -= dt;
-
-            if (behaviorType == 2) {
-                if (rotateTimer <= 0) {
-                    rotate();
-                    rotateTimer = 1;
+        _flagManager.add("walking",
+                function (dt) {
+                    if (_body.inRange(target.x + _body.width/2, target.y +
+                                _body.height/2, 10)) 
+                    {
+                        _body.position.x = target.x;
+                        _body.position.y = target.y;
+                		switch (behaviorType) {
+		                    case 0:
+                                _flagManager.reset("walking");
+                                _flagManager.set("walking");
+		                    case 1:
+                                _flagManager.reset("walking");
+                                _flagManager.set("waiting");
+                            case 2:
+                                _flagManager.reset("walking");
+                                _flagManager.set("inspecting");
+		                }               
+                    }   
+                },
+                function () {
+                    if (_body.inRange(target.x + _body.width/2, target.y +
+                                _body.height/2, 10))
+                    {
+                        if (!goingBack) {
+                            currentTargetId++;
+                            if (currentTargetId == route.length - 1) {
+                                goingBack = true;
+                            }
+                        }
+                        else {
+                            currentTargetId--;
+                            if (currentTargetId == 0) {
+                                goingBack = false;
+                            }
+                        }
+                        target = route[currentTargetId];
+                    }
+                    angle = Math.atan2(target.y - _body.position.y, 
+                            target.x - _body.position.x);
+                    if (angle < 0) angle += 2 * Math.PI;
+                    faceDirection = Math.floor((angle + Math.PI / 4) / (Math.PI / 2));
+                    if (faceDirection > 3) faceDirection -= 4;
+                    else if (faceDirection < 0) faceDirection += 4;
+                    _body.speed.x += Math.cos(angle) * speed;
+                    _body.speed.y += Math.sin(angle) * speed;
+                    setGuardAnimation("walk");
+                },
+                function () {
+                    _body.speed.x = _body.speed.y = 0;
                 }
-            }
+        );
 
-            if (waitingTimer <= 0) {
-                loadNextStep();
-            }
-        }
-        else
-        {
-            if (waitingTimer <= 0)
-            {
-                interrupted = false;
-                loadNextStep();
-            }
-        }
+        _flagManager.add("inspecting",
+                function (dt) {
+                    rotateTimer -= dt;
+                    if (rotateTimer <= 0) {
+                        faceDirection += (Math.random() > 0.5) ? -1 : 1;
+                        if (faceDirection > 3) faceDirection -= 4;
+                        else if (faceDirection < 0) faceDirection += 4;
+                        setGuardAnimation("idle");
+                        rotateTimer = INSPECTING_TIME;
+                    }
+                },
+                function () {
+                    rotateTimer = INSPECTING_TIME;
+                    setGuardAnimation("idle");
+                }
+        );
 
-        setGuardAnimation ("idle");
+        _flagManager.add("falling",
+                function (dt) {
+                    if (_ss.isOver())
+                    {
+                        _flagManager.reset("falling");
+                        _flagManager.set("dizzy");
+                    }
+                },
+                function () {
+                    setGuardAnimation("fall");
+                }
+        );
 
-    }
+        _flagManager.add("dizzy", 
+                function (dt)
+                {
+                    waitingTimer -= dt;
+                    if (waitingTimer <= 0)
+                    {
+                        _flagManager.reset("dizzy");
+                        _flagManager.set("gettingUp");
+                        
+                    }
+                },
+                function ()
+                {
+                    waitingTimer = DIZZY_TIME;
+                }
+        );
+
+        _flagManager.add("gettingUp", 
+                function (dt)
+                {
+                    if(_ss.isOver())
+                    {
+                        _flagManager.reset("gettingUp");
+                        _flagManager.set("walking");
+                    }
+                },
+                function () 
+                {
+                    setGuardAnimation("getup");
+                }
+        );
+
+        _flagManager.add("alert",
+                function (dt)
+                {
+                    attentionTimer -=dt;
+                    if (attentionTimer <= 0)
+                    {
+                        _flagManager.reset("alert");
+                        _flagManager.set("walking");
+                    }
+                },
+                function ()
+                {
+                    setGuardAnimation("idle");
+                    attentionTimer = ATTENTION_TIME;
+                }
+        );
+
+        _flagManager.set("walking");
+	}
 
     public function interrupt():Void
     {
-        waitingTimer = 10;
-        interrupted = true;
-        state = 0;
+        if (_flagManager.isFlagSet("walking")) {
+            _flagManager.reset("walking");
+            _flagManager.set("falling");
+        }
     }
 
     public function isInterrupted():Bool
     {
-        return interrupted;
-    }
-
-    public function rotate():Void 
-    {
-        faceDirection += (Math.random() > 0.5) ? -1 : 1;
-        if (faceDirection < 0) faceDirection += 4;
-        faceDirection = faceDirection % 4;
+        return (_flagManager.isFlagSet("falling") ||
+            _flagManager.isFlagSet("dizzy") ||
+            _flagManager.isFlagSet("gettingUp"));
     }
 
     public function alert():Void 
     {
-		attention = 1;
+        _flagManager.reset("waiting");
+        _flagManager.reset("walking");
+        _flagManager.reset("inspecting");
+        _flagManager.reset("alert");
+        _flagManager.set("alert");
 	}
 
     public function getBody():Body
@@ -206,22 +266,9 @@ class Guard extends Element {
 
     override public function update(dt:Float):Void 
     {
+        _flagManager.update(dt);
+        _body.update(dt);
         super.update(dt);
-		
-		if (attention > 0) {
-			attention -= (dt);
-			setGuardAnimation("idle");
-		}
-		else {			
-			if (state == 0) {
-				wait(dt);
-			}
-			else if (state == 1) {
-				walk(dt);
-			}
-		}
-		
-		visionAngle = faceDirection * Math.PI / 2;
 
         /*
 		switch(faceDirection)
@@ -240,6 +287,7 @@ class Guard extends Element {
                 _eyeRef.y = -6;
         }
 		*/
+
 		_eyeRef.x = _body.width/2;
         _eyeRef.y = _body.height/2;
         eye.x = _body.position.x + _eyeRef.x;
@@ -255,51 +303,41 @@ class Guard extends Element {
 	
 	private function setGuardAnimation(animName:String):Void
 	{
-		
-		if (animName == "walk")
+		if (animName == "walk" || animName == "idle")
 		{
 			switch(faceDirection)
 			{
 				case 0:
-					_ss.setAnimation("walk-side");
+					_ss.setAnimation(animName + "-side");
 					_ss.scaleX = -1;
 					_ss.x = anim_x + _ss.width;
 				case 1:
-					_ss.setAnimation("walk-front");
+					_ss.setAnimation(animName + "-front");
 					_ss.scaleX = 1;
 					_ss.x = anim_x;
 				case 2:
-					_ss.setAnimation("walk-side");
+					_ss.setAnimation(animName + "-side");
 					_ss.scaleX = 1;
 					_ss.x = anim_x;
 				case 3:
-					_ss.setAnimation("walk-back");
+					_ss.setAnimation(animName + "-back");
 					_ss.scaleX = 1;
 					_ss.x = anim_x;
 			}
 		}
-		if (animName == "idle")
-		{
-			switch(faceDirection)
+
+        else if (animName == "fall" || animName == "getup")
+        {
+		    _ss.setAnimation(animName);
+            switch(faceDirection)
 			{
-				case 0:
-					_ss.setAnimation("idle-side");
+				case 0, 1:
 					_ss.scaleX = -1;
 					_ss.x = anim_x +_ss.width;
-				case 1:
-					_ss.setAnimation("idle-front");
-					_ss.scaleX = 1;
-					_ss.x = anim_x;
-				case 2:
-					_ss.setAnimation("idle-side");
-					_ss.scaleX = 1;
-					_ss.x = anim_x;
-				case 3:
-					_ss.setAnimation("idle-back");
+				case 2, 3:
 					_ss.scaleX = 1;
 					_ss.x = anim_x;
 			}
-		}
+        }
 	}
-
 }

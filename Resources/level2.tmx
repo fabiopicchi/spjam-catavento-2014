@@ -3,7 +3,7 @@
  <tileset firstgid="1" name="tileset" tilewidth="60" tileheight="60">
   <image source="tileset.png" width="720" height="660"/>
  </tileset>
- <layer name="lower1" width="56" height="38" visible="0">
+ <layer name="lower1" width="56" height="38">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -2135,7 +2135,7 @@
    <tile gid="9"/>
   </data>
  </layer>
- <layer name="lower2" width="56" height="38" visible="0">
+ <layer name="lower2" width="56" height="38">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -4267,7 +4267,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="shade" width="56" height="38" visible="0">
+ <layer name="shade" width="56" height="38">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -6399,7 +6399,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="collide" width="56" height="38" visible="0">
+ <layer name="collide" width="56" height="38">
   <data>
    <tile gid="38"/>
    <tile gid="38"/>
@@ -7170,11 +7170,11 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="47"/>
    <tile gid="0"/>
-   <tile gid="0"/>
    <tile gid="47"/>
    <tile gid="47"/>
-   <tile gid="47"/>
+   <tile gid="23"/>
    <tile gid="0"/>
    <tile gid="38"/>
    <tile gid="38"/>
@@ -7397,7 +7397,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="47"/>
+   <tile gid="23"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="38"/>
@@ -8531,7 +8531,7 @@
    <tile gid="38"/>
   </data>
  </layer>
- <layer name="upper" width="56" height="38" visible="0">
+ <layer name="upper" width="56" height="38">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -9192,6 +9192,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="35"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -9245,12 +9246,11 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="35"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
+   <tile gid="11"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -9412,7 +9412,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="35"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -9473,7 +9473,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="11"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -9637,11 +9637,11 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
+   <tile gid="35"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -9693,11 +9693,11 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="35"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="35"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -10663,7 +10663,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <objectgroup name="objects" width="56" height="38" visible="0">
+ <objectgroup name="objects" width="56" height="38">
   <object name="terminal" type="terminal" x="2100" y="1800" width="60" height="60">
    <properties>
     <property name="color" value="red"/>
@@ -10705,12 +10705,6 @@
   <object name="levelEnd" type="levelEnd" x="1380" y="356" width="60" height="43"/>
  </objectgroup>
  <objectgroup name="guards" width="56" height="38">
-  <object x="2602" y="976">
-   <properties>
-    <property name="bhv" value="2"/>
-   </properties>
-   <polyline points="0,0 183,0"/>
-  </object>
   <object x="2316" y="1319">
    <properties>
     <property name="bhv" value="2"/>
@@ -10735,35 +10729,17 @@
    </properties>
    <polyline points="0,0 0,-410 300,-410 302,-4 0,-2"/>
   </object>
-  <object x="728" y="1124">
+  <object x="665" y="1433">
    <properties>
     <property name="bhv" value="2"/>
    </properties>
-   <polyline points="0,0 167,-1"/>
+   <polyline points="0,0 594,4"/>
   </object>
-  <object x="957" y="880">
+  <object x="664" y="831">
    <properties>
     <property name="bhv" value="2"/>
    </properties>
-   <polyline points="0,0 1,236 235,233"/>
-  </object>
-  <object x="1048" y="821">
-   <properties>
-    <property name="bhv" value="1"/>
-   </properties>
-   <polyline points="0,0 -317,1"/>
-  </object>
-  <object x="664" y="821">
-   <properties>
-    <property name="bhv" value="1"/>
-   </properties>
-   <polyline points="0,0 -1,611"/>
-  </object>
-  <object x="955" y="1281">
-   <properties>
-    <property name="bhv" value="2"/>
-   </properties>
-   <polyline points="0,0 -1,160 308,160"/>
+   <polyline points="0,0 -1,289 296,289 297,-7"/>
   </object>
  </objectgroup>
 </map>

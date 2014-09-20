@@ -62,7 +62,7 @@ class StageState extends State
         else
         {
             dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
-                    new EndState()));
+                    new MainMenuState()));
         }
     }
 
@@ -325,14 +325,14 @@ class StageState extends State
                         {
                             g.alert();
                             _hud.increase(2);
-                            if (playerDistance < 150)
+                            if (playerDistance < 130)
                             {
                                 _hud.increase(5);
                             }
                         }
                     }
                 }
-                if (playerDistance < 50)
+                if (playerDistance < 30)
                 {
                     g.alert();
                     _hud.increase(4);
