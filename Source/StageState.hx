@@ -342,7 +342,7 @@ class StageState extends State
 
         for (l in _lasers)
         {
-            if (_player.getBody().overlapBody(l.getBody())) 
+            if (_player.getBody().overlapBody(l.getBody()) && l.visible) 
             {
                 if (l.visible) _hud.increase(20);
             }
