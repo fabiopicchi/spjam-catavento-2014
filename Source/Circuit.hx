@@ -14,10 +14,10 @@ class Circuit extends Element {
 	public var id:Int;
 	
 	public var active:Bool;
-	public var route:Array<Point>;
 	public var currentTargetId:Int = 0;
 	public var target:Point;
 	
+    private var _path:Path;
 	public var speed:Float = 400;
 	public var angle:Float = 0;
 	
@@ -29,7 +29,16 @@ class Circuit extends Element {
         graphics.drawRect(0, 0, 10, 10);
         visible = false;
 		
-		route = r;
+        _path = new Path(r, speed);
+        _path.setBackForth(false);
+        _path.setWalkOnNode(true);
+        _path.addEventListener(PathEvent.PATH_ENDED, function (e)
+        {
+            dispatchEvent(new CircuitEvent(CircuitEvent.DEACTIVATE, id));
+            active = false;
+            visible = false;
+        });
+
 		
 		reset();
 	}
@@ -37,65 +46,27 @@ class Circuit extends Element {
 	override public function update(dt:Float):Void 
     {
         super.update(dt);
-		
-		if (active) {
-			x -= Math.sin(angle) * dt * speed;
-			y -= Math.cos(angle) * dt * speed;
-		    if ((x - target.x) * (x - target.x) +
-                (y - target.y) * (y - target.y) <= 50) 
-            {
-				x = target.x;
-				y = target.y;
-				arrive();
-			}
-		}
+        if (active)
+        {
+            _path.update(dt);
+            x = _path.getX();
+            y = _path.getY();
+        }
     }
 	
 	public function activate():Void 
 	{
-		reset();
+        reset();
 		active = true;
-		loadNextStep();
         visible = true;
 	}
 	
 	public function reset():Void 
     {
+        _path.reset();
+        x = _path.getX();
+        y = _path.getY();
         visible = true;
-		x = route[0].x;
-		y = route[0].y;
-		currentTargetId = 0;
 		active = false;
-	}
-	
-	public function loadNextStep():Void
-	{
-		currentTargetId ++;
-		if (currentTargetId == route.length-1) {
-            visible = false;
-			active = false;
-            dispatchEvent(new CircuitEvent(CircuitEvent.DEACTIVATE, id));
-		}
-		startWalkingTo(route[currentTargetId]);
-	}
-	
-	public function startWalkingTo(t:Point):Void 
-	{
-		target = t;
-		angle = Math.atan2(x - target.x, y - target.y);
-	}
-	
-	public function arrive():Void 
-	{
-		loadNextStep();
-	}
-	
-	override public function draw():Void 
-    {
-        super.draw();
-    }
-	
-	public function alert():Void {
-		
 	}
 }
