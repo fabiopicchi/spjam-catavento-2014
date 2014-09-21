@@ -339,6 +339,33 @@ class StageState extends State
                 }
             }
         }
+		
+		for (c in _cameras)
+        {
+
+			var playerDistance = Point.distance(c.eye, playerPoint);
+
+			if (playerDistance < PLAYER_DETECTION_RADIUS) 
+			{
+				var angle:Float = Math.atan2(playerPoint.y - c.eye.y, 
+						playerPoint.x - c.eye.x);
+				if (angle < 0) angle += 2 * Math.PI;
+
+				if (angle >= c.angle * Math.PI / 2 - Math.PI / 4 &&
+						angle <= c.angle * Math.PI / 2 + Math.PI / 4)
+				{
+					if (_collideLayer.isPointVisible(c.eye, playerPoint)) 
+					{
+						c.alert();
+						_hud.increase(2);
+						if (playerDistance < 130)
+						{
+							_hud.increase(5);
+						}
+					}
+				}
+			}
+        }
 
         for (l in _lasers)
         {
