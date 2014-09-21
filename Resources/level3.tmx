@@ -4267,7 +4267,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="shade" width="56" height="38">
+ <layer name="shade" width="56" height="38" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -10713,8 +10713,9 @@
    </properties>
    <polyline points="0,0 30,0 30,122 -208,121 -209,-178 -630,-179 -630,-121 -931,-119 -931,-241 -962,-240"/>
   </object>
+  <object name="flower" x="2220" y="1620" width="60" height="60"/>
  </objectgroup>
- <objectgroup name="guards" width="56" height="38">
+ <objectgroup name="guards" width="56" height="38" visible="0">
   <object x="2152" y="1728">
    <properties>
     <property name="bhv" value="2"/>
@@ -10727,6 +10728,5 @@
    </properties>
    <polyline points="0,0 2,588 298,586 298,418"/>
   </object>
-  <object name="flower" x="2220" y="1620" width="60" height="60"/>
  </objectgroup>
 </map>
