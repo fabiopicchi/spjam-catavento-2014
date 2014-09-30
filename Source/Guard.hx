@@ -70,6 +70,8 @@ class Guard extends Element {
 		_ss.y = anim_y;
         addElement(_ss);
 		
+		setGuardAnimation("idle");
+		
         _eyeRef = new Shape();
         //_eyeRef.graphics.beginFill(0x00FF00);
         //_eyeRef.graphics.drawRect(0, 0, 6, 6);
@@ -78,6 +80,7 @@ class Guard extends Element {
 		eye = new Point();
 
 		goingBack = false;
+
         currentTargetId = 0;
 
         _flagManager = new FlagManager();

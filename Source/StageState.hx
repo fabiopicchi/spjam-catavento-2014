@@ -20,7 +20,7 @@ class StageState extends State
     private var DOWN:Int = 1 << 3;
     private var WATER:Int = 1 << 4;
 
-    private var PLAYER_DETECTION_RADIUS:Float = 400;
+    private var PLAYER_DETECTION_RADIUS:Float = 300;
 
     private var _currentLevel:Int;
 
@@ -124,7 +124,7 @@ class StageState extends State
                     }
                     if (object.name == "laser")
                     {
-                        _lasers.add (new Laser (object.x, object.y, object.width , Std.parseInt(object.properties.direction),
+                        _lasers.add (new Laser (object.x, object.y + 30, object.width , Std.parseInt(object.properties.direction),
                                     object.properties.color, Std.parseInt(object.properties.id)));
                     }
                     if (object.name == "camera")
@@ -281,16 +281,16 @@ class StageState extends State
 
         _collideLayer.collideTilemap(_player.getBody());
 
-        var playerPoint = new Point (_player.getBody().position.x +
-                _player.getBody().width / 2, _player.getBody().position.y +
+        var playerPoint = new Point (_player.getBody().position.x - 30 +
+                _player.getBody().width / 2, _player.getBody().position.y - 60 +
                 _player.getBody().height / 2);
 
-        x = - (_player.x - stage.stageWidth/2 + _player.width/2);
+        x = - (playerPoint.x - stage.stageWidth/2 + _player.width/2);
         if (x > 0) x = 0;
         if (x < -_collideLayer.width + stage.stageWidth) 
             x = -_collideLayer.width + stage.stageWidth;
 
-        y = - (_player.y - stage.stageHeight/2 + _player.height/2);
+        y = - (playerPoint.y - stage.stageHeight/2 + _player.height/2);
         if (y > 0) y = 0;
         if (y < -_collideLayer.height + stage.stageHeight) 
             y = -_collideLayer.height + stage.stageHeight;
@@ -325,19 +325,46 @@ class StageState extends State
                         {
                             g.alert();
                             _hud.increase(2);
-                            if (playerDistance < 150)
+                            if (playerDistance < 130)
                             {
                                 _hud.increase(5);
                             }
                         }
                     }
                 }
-                if (playerDistance < 50)
+                if (playerDistance < 30)
                 {
                     g.alert();
                     _hud.increase(4);
                 }
             }
+        }
+		
+		for (c in _cameras)
+        {
+
+			var playerDistance = Point.distance(c.eye, playerPoint);
+
+			if (playerDistance < PLAYER_DETECTION_RADIUS) 
+			{
+				var angle:Float = Math.atan2(playerPoint.y - c.eye.y, 
+						playerPoint.x - c.eye.x);
+				if (angle < 0) angle += 2 * Math.PI;
+
+				if (angle >= c.angle * Math.PI / 2 - Math.PI / 4 &&
+						angle <= c.angle * Math.PI / 2 + Math.PI / 4)
+				{
+					if (_collideLayer.isPointVisible(c.eye, playerPoint)) 
+					{
+						c.alert();
+						_hud.increase(2);
+						if (playerDistance < 140)
+						{
+							_hud.increase(5);
+						}
+					}
+				}
+			}
         }
 
         for (l in _lasers)

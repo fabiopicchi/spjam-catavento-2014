@@ -33,6 +33,7 @@ class Camera extends Element {
 	public var animPos:Int = 0;
 	public var goingBack:Bool;
 	public var waitTimer:Float;
+	public var attentionTimer:Float = 0;
 	
 	public var eye:Point;
 	public var visionWidth:Float = 1* Math.PI / 6;
@@ -68,7 +69,7 @@ class Camera extends Element {
         super.update(dt);
 		
 		eye.x = x + 30;
-		eye.y = y + 25;
+		eye.y = y + 40*2 + 3;
 		
 		if (waitTimer > 0) {
 			waitTimer -= dt;
@@ -113,4 +114,8 @@ class Camera extends Element {
     public function deactivate():Void {
 
     }
+	public function alert():Void 
+    {
+		
+	}
 }
