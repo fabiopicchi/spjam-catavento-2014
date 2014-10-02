@@ -24,7 +24,6 @@ class Path extends EventDispatcher {
         _ascending = true;
         _stop = false;
         _nodes = r;
-        trace(r.length);
         _speed = speed;
         _x = _nodes[0].x;
         _y = _nodes[0].y;
@@ -38,7 +37,6 @@ class Path extends EventDispatcher {
         if (_ascending)
         {
             _currentNodeIndex++;
-            trace(_currentNodeIndex);
             if (_currentNodeIndex == (_nodes.length - 1))
             {
                 if (_backForth)
@@ -83,6 +81,7 @@ class Path extends EventDispatcher {
         var nextNode:Point = _nodes[_nextNodeIndex];
         _angle = Math.atan2(nextNode.y - currentNode.y, 
                     nextNode.x - currentNode.x);
+        if (_angle < 0) _angle += 2 * Math.PI;
         _vx = Math.cos(_angle) * _speed;
         _vy = Math.sin(_angle) * _speed;
     }
@@ -95,8 +94,6 @@ class Path extends EventDispatcher {
 
             var distX = _nodes[_nextNodeIndex].x - _x;
             var distY = _nodes[_nextNodeIndex].y - _y;
-
-            trace("debug: " + dx + "," + distX + "," + dy + "," + distY);
 
             if (Math.abs(distX) <= Math.abs(dx) && 
                     Math.abs(distY) <= Math.abs(dy))
@@ -119,9 +116,12 @@ class Path extends EventDispatcher {
     }
 
     public function resume () {
-        setNextNode();
-        setDirection();
-        _stop = false;
+        if (_stop)
+        {
+            setNextNode();
+            setDirection();
+            _stop = false;
+        }
     }
 
     public function reset () {
@@ -143,6 +143,10 @@ class Path extends EventDispatcher {
 
     public function getSpeed():Float {
         return _speed;
+    }
+
+    public function getAngle():Float {
+        return _angle;
     }
 
     public function setSpeed(s:Float) {

@@ -1,4 +1,4 @@
-package  ;
+package;
 
 import core.Element;
 import openfl.display.Shape;
@@ -12,14 +12,10 @@ import openfl.geom.Point;
 class Circuit extends Element {
 	
 	public var id:Int;
-	
 	public var active:Bool;
-	public var currentTargetId:Int = 0;
-	public var target:Point;
 	
     private var _path:Path;
 	public var speed:Float = 400;
-	public var angle:Float = 0;
 	
 	public function new(id:Int, r:Array<Point>) {
         this.id = id;
