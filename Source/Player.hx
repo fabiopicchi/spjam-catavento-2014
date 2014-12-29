@@ -91,6 +91,17 @@ class Player extends Element
     {
         x = _body.position.x;
         y = _body.position.y;
+
         super.draw();
+        
+        #if debug
+        graphics.clear();
+        graphics.beginFill(0xFF0000);
+        graphics.drawRect(0, 0, _body.width, _body.height);
+        graphics.endFill();
+
+        graphics.lineStyle(1, 0xFF0000);
+        graphics.drawRect(_ss.x, _ss.y, _ss.width, _ss.height);
+        #end
     }
 }

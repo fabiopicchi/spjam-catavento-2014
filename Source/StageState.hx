@@ -179,8 +179,6 @@ class StageState extends State
         for (i in _cameras) addElement(i);
         _hud = new HUD();
         addElement(_hud);
-
-
     }
 
     override public function getInputActions():IntMap<Int>
@@ -281,23 +279,26 @@ class StageState extends State
 
         _collideLayer.collideTilemap(_player.getBody());
 
-        var playerPoint = new Point (_player.getBody().position.x - 30 +
-                _player.getBody().width / 2, _player.getBody().position.y - 60 +
+        var playerPoint = new Point (_player.getBody().position.x +
+                _player.getBody().width / 2, _player.getBody().position.y +
                 _player.getBody().height / 2);
 
-        x = - (playerPoint.x - stage.stageWidth/2 + _player.width/2);
+        x = - (playerPoint.x - stage.stageWidth/2 + _player.getBody().width/2);
         if (x > 0) x = 0;
         if (x < -_collideLayer.width + stage.stageWidth) 
             x = -_collideLayer.width + stage.stageWidth;
 
-        y = - (playerPoint.y - stage.stageHeight/2 + _player.height/2);
+        y = - (playerPoint.y - stage.stageHeight/2 + _player.getBody().height/2);
         if (y > 0) y = 0;
         if (y < -_collideLayer.height + stage.stageHeight) 
             y = -_collideLayer.height + stage.stageHeight;
 
         _hud.x = -x + 20;
         _hud.y = -y + 20; 
-
+        
+        #if debug
+        _upperLayer.graphics.clear();
+        #end
         for (g in _guards)
         {
             for (p in _puddles)
@@ -317,6 +318,14 @@ class StageState extends State
                     var angle:Float = Math.atan2(playerPoint.y - g.eye.y, 
                             playerPoint.x - g.eye.x);
                     if (angle < 0) angle += 2 * Math.PI;
+
+                    #if debug
+                    _upperLayer.graphics.lineStyle(1, 0xFF0000);
+                    _upperLayer.graphics.moveTo(g.eye.x, g.eye.y);
+                    _upperLayer.graphics.lineTo(
+                        g.eye.x + playerDistance * Math.cos(angle),
+                        g.eye.y + playerDistance * Math.sin(angle));
+                    #end
 
                     if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
                             angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
@@ -350,6 +359,14 @@ class StageState extends State
 				var angle:Float = Math.atan2(playerPoint.y - c.eye.y, 
 						playerPoint.x - c.eye.x);
 				if (angle < 0) angle += 2 * Math.PI;
+
+                #if debug
+                _upperLayer.graphics.lineStyle(1, 0xFF0000);
+                _upperLayer.graphics.moveTo(c.eye.x, c.eye.y);
+                _upperLayer.graphics.lineTo(
+                    c.eye.x + playerDistance * Math.cos(angle),
+                    c.eye.y + playerDistance * Math.sin(angle));
+                #end
 
 				if (angle >= c.angle * Math.PI / 2 - Math.PI / 4 &&
 						angle <= c.angle * Math.PI / 2 + Math.PI / 4)
@@ -385,7 +402,11 @@ class StageState extends State
             dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
                         new GameOverState(takeScreenshot(), _currentLevel)));
         }
+    }
 
+    override public function draw():Void
+    {
+        super.draw();
     }
 
     private function deactivate(e:CircuitEvent)
