@@ -81,9 +81,6 @@ class Guard extends Element {
         _body.position.x = _path.getX();
         _body.position.y = _path.getY();
 
-        //exclamation = new Exclamation ();
-        //addChild (exclamation);
-
         anim_x = (BODY_WIDTH - FRAME_WIDTH) / 2;
         anim_y = BODY_HEIGHT - FRAME_HEIGHT;
 
@@ -211,13 +208,21 @@ class Guard extends Element {
                 function (dt)
                 {
                     attentionTimer -= dt;
-					setAlertAnimation("question");
+					
                     if (attentionTimer <= 0)
                     {
                         _flagManager.reset("alert");
                         _flagManager.set("walking");
 						setAlertAnimation("none");
                     }
+					else if (attentionTimer <= ATTENTION_TIME - 0.5)
+					{
+						setAlertAnimation("question");
+					}
+					else
+					{
+						setAlertAnimation("none");
+					}
                 },
                 function ()
                 {
