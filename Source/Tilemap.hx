@@ -100,6 +100,9 @@ class Tilemap extends Element
         var stepX:Int = Std.int(relVector.x / Math.abs(relVector.x));
         var stepY:Int = Std.int(relVector.y / Math.abs(relVector.y));
 
+        // workaround for point a inside collision area
+        var insideWall:Bool = (_tiles[_x + _y * _widthInTiles] != 0);
+
         while (tMaxY < 1 || tMaxX < 1)
         {
             if (tMaxX < tMaxY)
@@ -107,40 +110,25 @@ class Tilemap extends Element
                 tMaxX = tMaxX + tDeltaX;
                 _x = _x + stepX;
 
-                if(_x + _y * _widthInTiles >= _tiles.length)
-                {
-                    //return (tMaxX - tDeltaX) * len;
-                    return false;
-                }
-                else
-                {
-                    var nextTile:Int = _tiles[_x + _y * _widthInTiles];
-                    if (nextTile != 0)
-                    {
-                        //return (tMaxX - tDeltaX) * len;
-                        return false;
-                    }
-                }
             }
             else
             {
                 tMaxY = tMaxY + tDeltaY;
                 _y = _y + stepY;
+            }
 
-                if(_x + _y * _widthInTiles >= _tiles.length)
-                {
-                    //return (tMaxY - tDeltaY) * len;
+            if(_x + _y * _widthInTiles >= _tiles.length)
+            {
+                return false;
+            }
+            else
+            {
+                var nextTile:Int = _tiles[_x + _y * _widthInTiles];
+                if (!insideWall && nextTile != 0)
                     return false;
-                }
-                else
-                {
-                    var nextTile:Int = _tiles[_x + _y * _widthInTiles];
-                    if (nextTile != 0)
-                    {
-                        //return (tMaxY - tDeltaY) * len;
-                        return false;
-                    }
-                }
+
+                if(insideWall && nextTile == 0)
+                    insideWall = false;
             }
         }
         return true;
@@ -216,5 +204,4 @@ class Tilemap extends Element
     {
         return _tileHeight;
     }
-
 }

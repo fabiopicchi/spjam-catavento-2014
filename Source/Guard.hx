@@ -27,7 +27,6 @@ class Guard extends Element {
     //public var exclamation:Exclamation;
 
     public var eye:Point; //coordenadas do olho do guarda
-    private var _eyeRef:Shape;
 
     private var _ss:SpriteSheet;
     private var anim_x:Float;
@@ -75,9 +74,6 @@ class Guard extends Element {
         _body.position.x = _path.getX();
         _body.position.y = _path.getY();
 
-        //exclamation = new Exclamation ();
-        //addChild (exclamation);
-
         anim_x = (BODY_WIDTH - FRAME_WIDTH) / 2;
         anim_y = BODY_HEIGHT - FRAME_HEIGHT;
 
@@ -88,11 +84,6 @@ class Guard extends Element {
         addElement(_ss);
 
         setGuardAnimation("idle");
-
-        _eyeRef = new Shape();
-        //_eyeRef.graphics.beginFill(0x00FF00);
-        //_eyeRef.graphics.drawRect(0, 0, 6, 6);
-        addChild(_eyeRef);
 
         eye = new Point();
 
@@ -247,36 +238,36 @@ class Guard extends Element {
         _flagManager.update(dt);
         _body.update(dt);
         super.update(dt);
-
-        /*
-           switch(faceDirection)
-           {
-           case 0:
-           _eyeRef.x = 60;
-           _eyeRef.y = 27;
-           case 1:
-           _eyeRef.x = 27;
-           _eyeRef.y = 60;
-           case 2:
-           _eyeRef.x = -6;
-           _eyeRef.y = 27;
-           case 3:
-           _eyeRef.x = 27;
-           _eyeRef.y = -6;
-           }
-         */
-
-        _eyeRef.x = _body.width/2;
-        _eyeRef.y = _body.height/2;
-        eye.x = _body.position.x + _eyeRef.x;
-        eye.y = _body.position.y + _eyeRef.y;
+        eye.x = _body.position.x;
+        eye.y = _body.position.y;
     }
 
     override public function draw():Void 
     {
         x = _body.position.x;
         y = _body.position.y;
+
         super.draw();
+
+        #if debug
+        graphics.clear();
+        graphics.beginFill(0xFF0000);
+        graphics.drawCircle(eye.x - x, eye.y - y, 5);
+        graphics.endFill();
+        graphics.lineStyle(1, 0x00FF00);
+        graphics.moveTo(eye.x - x, eye.y - y);
+        graphics.lineTo(eye.x - x + 300 * Math.cos(faceDirection * Math.PI / 2),
+                            eye.y - y + 300 * Math.sin(faceDirection * Math.PI / 2));
+        graphics.moveTo(eye.x - x, eye.y - y);
+        graphics.lineTo(
+                eye.x - x + 300 * Math.cos(faceDirection * Math.PI / 2 - Math.PI / 4),
+                eye.y - y + 300 * Math.sin(faceDirection * Math.PI / 2 - Math.PI / 4));
+        graphics.moveTo(eye.x - x, eye.y - y);
+        graphics.lineTo(
+                eye.x - x + 300 * Math.cos(faceDirection * Math.PI / 2 + Math.PI / 4),
+                eye.y - y + 300 * Math.sin(faceDirection * Math.PI / 2 + Math.PI / 4));
+        graphics.drawCircle(eye.x - x, eye.y - y, 300);
+        #end
     }
 
     private function setGuardAnimation(animName:String):Void

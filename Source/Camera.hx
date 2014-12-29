@@ -28,15 +28,14 @@ class Camera extends Element {
 	
 	public var initialAngle:Float;
 	public var angle:Float = 0;
-	public var deltaMax:Float = Math.PI / 6;
+	public var deltaMax:Float = 0.3;
 	public var ANGULAR_SPEED:Float = 0.5;
-	public var animPos:Int = 0;
+	public var animPos:Float = 0;
 	public var goingBack:Bool;
 	public var waitTimer:Float;
 	public var attentionTimer:Float = 0;
 	
 	public var eye:Point;
-	public var visionWidth:Float = 1* Math.PI / 6;
 	
 	public function new(x:Float, y:Float, color:String, id:Int) {
         this.id = id;
@@ -60,6 +59,9 @@ class Camera extends Element {
 		
 		_ss.x = 0;
 		_ss.y = 0;
+
+		eye.x = x + 30;
+		eye.y = y + 40 * 2 + 3;
 		
 		addElement(_ss);
 	}
@@ -68,39 +70,54 @@ class Camera extends Element {
     {
         super.update(dt);
 		
-		eye.x = x + 30;
-		eye.y = y + 40*2 + 3;
-		
 		if (waitTimer > 0) {
 			waitTimer -= dt;
 		}
         else {
-            if (!goingBack) {
+            if (goingBack) {
                 angle += dt * ANGULAR_SPEED;
                 if (angle > initialAngle + deltaMax) {
                     angle = initialAngle + deltaMax;
-                    goingBack = true;
+                    goingBack = false;
                     waitTimer = 1;
                 }
             }
-            else {
-                angle -= dt * ANGULAR_SPEED;
+            else { angle -= dt * ANGULAR_SPEED;
                 if (angle < initialAngle - deltaMax) {
                     angle = initialAngle - deltaMax;
-                    goingBack = false;
+                    goingBack = true;
                     waitTimer = 1;
                 }
             }
         }
 
-        animPos = Math.floor( 0.5 + (angle / deltaMax) * 3 - 3);
-
+        animPos = Math.abs(Math.floor((angle - 0.7) / (2 * deltaMax) * 6.99) - 6);
         _ss.setAnimation("a"+animPos);
     }
 
     override public function draw():Void 
     {
         super.draw();
+
+        #if debug
+        graphics.clear();
+        graphics.beginFill(0xFF0000);
+        graphics.drawCircle(eye.x - x, eye.y - y, 5);
+        graphics.endFill();
+        graphics.lineStyle(1, 0x00FF00);
+        graphics.moveTo(eye.x - x, eye.y - y);
+        graphics.lineTo(eye.x - x + 300 * Math.cos(angle * Math.PI / 2),
+                            eye.y - y + 300 * Math.sin(angle * Math.PI / 2));
+        graphics.moveTo(eye.x - x, eye.y - y);
+        graphics.lineTo(
+                eye.x - x + 300 * Math.cos(angle * Math.PI / 2 - Math.PI / 4),
+                eye.y - y + 300 * Math.sin(angle * Math.PI / 2 - Math.PI / 4));
+        graphics.moveTo(eye.x - x, eye.y - y);
+        graphics.lineTo(
+                eye.x - x + 300 * Math.cos(angle * Math.PI / 2 + Math.PI / 4),
+                eye.y - y + 300 * Math.sin(angle * Math.PI / 2 + Math.PI / 4));
+        graphics.drawCircle(eye.x - x, eye.y - y, 300);
+        #end
     }
 
     public function focusOnHero(p:Point):Void {
@@ -114,6 +131,7 @@ class Camera extends Element {
     public function deactivate():Void {
 
     }
+
 	public function alert():Void 
     {
 		
