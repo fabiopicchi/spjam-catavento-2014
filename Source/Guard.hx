@@ -30,10 +30,13 @@ class Guard extends Element {
     private var _eyeRef:Shape;
 
     private var _ss:SpriteSheet;
+	private var _ssAlert:SpriteSheet;
     private var anim_x:Float;
     private var anim_y:Float;
     private var FRAME_WIDTH:Int = 112;
     private var FRAME_HEIGHT:Int = 120;
+	private var ALERT_WIDTH:Int = 17;
+	private var ALERT_HEIGHT:Int = 35;
 
     private var _body:Body;
     private var BODY_WIDTH:Int = 30;
@@ -42,7 +45,7 @@ class Guard extends Element {
     private var WAITING_TIME:Int = 2;
     private var INSPECTING_TIME:Int = 1;
     private var DIZZY_TIME:Int = 10;
-    private var ATTENTION_TIME:Int = 1;
+    private var ATTENTION_TIME:Int = 2;
 
     public function new(b:Int, r:Array<Point>) {
         super ();
@@ -60,6 +63,9 @@ class Guard extends Element {
             _path.addEventListener(PathEvent.NODE_ARRIVED, function (e)
                     {
                         switch (behaviorType) {
+							case 0:
+								_flagManager.reset("walking");
+								_flagManager.set("walking");
                             case 1:
                                 _flagManager.reset("walking");
                                 _flagManager.set("waiting");
@@ -86,8 +92,16 @@ class Guard extends Element {
         _ss.x = anim_x;
         _ss.y = anim_y;
         addElement(_ss);
+	
+		_ssAlert = new SpriteSheet("assets/guardalert.png", ALERT_WIDTH, ALERT_HEIGHT);
+		_ssAlert.loadAnimationsFromJSON("assets/ss_guardalert.json");
+		_ssAlert.x = (BODY_WIDTH - ALERT_WIDTH) / 2;
+        _ssAlert.y = y - 130;
+		_ssAlert.visible = false;
+        addElement(_ssAlert);
 
         setGuardAnimation("idle");
+		setAlertAnimation("none");
 
         _eyeRef = new Shape();
         //_eyeRef.graphics.beginFill(0x00FF00);
@@ -196,17 +210,20 @@ class Guard extends Element {
         _flagManager.add("alert",
                 function (dt)
                 {
-                    attentionTimer -=dt;
+                    attentionTimer -= dt;
+					setAlertAnimation("question");
                     if (attentionTimer <= 0)
                     {
                         _flagManager.reset("alert");
                         _flagManager.set("walking");
+						setAlertAnimation("none");
                     }
                 },
                 function ()
                 {
                     setGuardAnimation("idle");
                     attentionTimer = ATTENTION_TIME;
+					setAlertAnimation("exclamation");
                 }
                 );
 
@@ -317,5 +334,17 @@ class Guard extends Element {
                     _ss.x = anim_x;
             }
         }
+    }
+	private function setAlertAnimation(animName:String):Void
+    {
+        if (animName == "none")
+        {
+	        _ssAlert.setAnimation("question");
+			_ssAlert.visible = false;
+        }
+		else {
+			_ssAlert.visible = true;
+			_ssAlert.setAnimation(animName);
+		}
     }
 }

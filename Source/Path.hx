@@ -102,12 +102,12 @@ class Path extends EventDispatcher {
                 dy = distY;
                 if (!_walkOnNode) {
                     _stop = true;
-                    dispatchEvent(new PathEvent(PathEvent.NODE_ARRIVED));
                 }
                 else {
                     setNextNode();
                     setDirection();
                 }
+				dispatchEvent(new PathEvent(PathEvent.NODE_ARRIVED));
             }
 
             _x += dx;
