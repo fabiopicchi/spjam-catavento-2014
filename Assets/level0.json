@@ -249,88 +249,6 @@
                          "y":0
                         }, 
                         {
-                         "x":-1,
-                         "y":177
-                        }, 
-                        {
-                         "x":199,
-                         "y":175
-                        }, 
-                        {
-                         "x":199,
-                         "y":-24
-                        }, 
-                        {
-                         "x":27,
-                         "y":-25
-                        }],
-                 "properties":
-                    {
-                     "bhv":"1"
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1136,
-                 "y":1379
-                }, 
-                {
-                 "height":0,
-                 "name":"",
-                 "polyline":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
-                         "x":2,
-                         "y":-242
-                        }, 
-                        {
-                         "x":-144,
-                         "y":-242
-                        }],
-                 "properties":
-                    {
-                     "bhv":"1"
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1004,
-                 "y":596
-                }, 
-                {
-                 "height":0,
-                 "name":"",
-                 "polyline":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
-                         "x":0,
-                         "y":200
-                        }],
-                 "properties":
-                    {
-                     "bhv":"2"
-                    },
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":692,
-                 "y":412
-                }, 
-                {
-                 "height":0,
-                 "name":"",
-                 "polyline":[
-                        {
-                         "x":0,
-                         "y":0
-                        }, 
-                        {
                          "x":5,
                          "y":-180
                         }, 
@@ -340,7 +258,7 @@
                         }],
                  "properties":
                     {
-                     "bhv":"1"
+                     "bhv":"0"
                     },
                  "type":"",
                  "visible":true,
@@ -350,7 +268,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":27,
          "x":0,
          "y":0
@@ -365,7 +283,7 @@
         {
          "firstgid":1,
          "image":"tileset.png",
-         "imageheight":660,
+         "imageheight":720,
          "imagewidth":720,
          "margin":0,
          "name":"tileset",
