@@ -5,14 +5,14 @@ class Body {
     public var position:Point;
     public var lastPosition:Point;
     public var speed:Point;
-    public var width:Float;
-    public var height:Float;
+    public var width:Int;
+    public var height:Int;
     
     private var _delta:Point;
     private var _entry:Point;
     private var _entryDistance:Point;
 
-    public function new(width:Float, height:Float)
+    public function new(width:Int, height:Int)
     {
         this.width = width;
         this.height = height;
@@ -125,9 +125,9 @@ class Body {
 
     public function inRange(x:Float, y:Float, range:Float):Bool
     {
-        return ((this.position.x + this.width / 2 - x) * 
-                (this.position.x + this.width / 2 - x) + 
-                (this.position.y + this.height / 2 - y) * 
-                (this.position.y + this.height / 2 - y) <= range * range);
+        return ((this.position.x + (this.width >> 1) - x) * 
+                (this.position.x + (this.width >> 1) - x) + 
+                (this.position.y + (this.height >> 1) - y) * 
+                (this.position.y + (this.height >> 1) - y) <= range * range);
     }
 }

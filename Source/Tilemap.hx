@@ -170,13 +170,9 @@ class Tilemap extends Element
         var ret:Bool = false;
         for (b in _bodies)
         {
-            if (b.inRange(body.position.x + body.width/2,
-                    body.position.y + body.height/2, 2 * body.width))
+            if (b.overlapBody(body))
             {
-                if (b.overlapBody(body))
-                {
-                    _collisionArray.push(b);
-                }
+                _collisionArray.push(b);
             }
         }
 
