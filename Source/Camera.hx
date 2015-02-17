@@ -17,6 +17,7 @@ class Camera extends Element {
 	public var id:Int;
 	
 	private var _ss:SpriteSheet;
+	private var _ssSpark:SpriteSheet;
     private var _light:Bitmap;
 	
 	public static var BLUE:String = "blue";
@@ -26,6 +27,7 @@ class Camera extends Element {
 	private var FRAME_WIDTH:Int = 60;
     private var FRAME_HEIGHT:Int = 60;
 	
+	public var active:Bool;
 	public var initialAngle:Float;
 	public var angle:Float = 0;
 	public var deltaMax:Float = 0.3;
@@ -63,7 +65,17 @@ class Camera extends Element {
 		eye.x = x + 30;
 		eye.y = y + 40 * 2 + 3;
 		
+		_ssSpark = new SpriteSheet("assets/spark.png", FRAME_WIDTH, FRAME_HEIGHT);
+        _ssSpark.loadAnimationsFromJSON("assets/ss_spark.json");
+		_ssSpark.setAnimation("idle");
+		_ssSpark.x += 2;
+		_ssSpark.y -= 6;
+		_ssSpark.visible = false;
+		
 		addElement(_ss);
+		addElement(_ssSpark);
+		
+		active = true;
 	}
 	
 	override public function update(dt:Float):Void 
@@ -73,7 +85,7 @@ class Camera extends Element {
 		if (waitTimer > 0) {
 			waitTimer -= dt;
 		}
-        else {
+        else if (active) {
             if (goingBack) {
                 angle += dt * ANGULAR_SPEED;
                 if (angle > initialAngle + deltaMax) {
@@ -125,11 +137,13 @@ class Camera extends Element {
     }
 
     public function activate():Void {
-
+		active = true;
+		_ssSpark.visible = false;
     }
 
     public function deactivate():Void {
-
+		active = false;
+		_ssSpark.visible = true;
     }
 
 	public function alert():Void 

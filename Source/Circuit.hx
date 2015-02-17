@@ -1,6 +1,7 @@
 package;
 
 import core.Element;
+import core.SpriteSheet;
 import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.geom.Point;
@@ -14,6 +15,10 @@ class Circuit extends Element {
 	public var id:Int;
 	public var active:Bool;
 	
+	private var _ss:SpriteSheet;
+	private var FRAME_WIDTH:Int = 90;
+    private var FRAME_HEIGHT:Int = 90;
+	
     private var _path:Path;
 	public var speed:Float = 400;
 	
@@ -21,9 +26,15 @@ class Circuit extends Element {
         this.id = id;
 		super ();
 		
-        graphics.beginFill(0xFF0000);
-        graphics.drawRect(0, 0, 10, 10);
-        visible = false;
+		_ss = new SpriteSheet("assets/spark.png", FRAME_WIDTH, FRAME_HEIGHT);
+        _ss.loadAnimationsFromJSON("assets/ss_spark.json");
+		_ss.setAnimation("idle");
+		//_ss.x = - FRAME_WIDTH / 2;
+		//_ss.y = - FRAME_HEIGHT / 2;
+		_ss.scaleX = 0.3;
+		_ss.scaleY = 0.3;
+		_ss.visible = false;
+		addElement(_ss);
 		
         _path = new Path(r, speed);
         _path.setBackForth(false);
@@ -32,7 +43,7 @@ class Circuit extends Element {
         {
             dispatchEvent(new CircuitEvent(CircuitEvent.DEACTIVATE, id));
             active = false;
-            visible = false;
+            _ss.visible = false;
         });
 
 		
@@ -54,7 +65,7 @@ class Circuit extends Element {
 	{
         reset();
 		active = true;
-        visible = true;
+        _ss.visible = true;
 	}
 	
 	public function reset():Void 
@@ -62,7 +73,7 @@ class Circuit extends Element {
         _path.reset();
         x = _path.getX();
         y = _path.getY();
-        visible = true;
 		active = false;
+		_ss.visible = false;
 	}
 }

@@ -354,7 +354,7 @@ class StageState extends State
 
 			var playerDistance = Point.distance(c.eye, playerPoint);
 
-			if (playerDistance < PLAYER_DETECTION_RADIUS) 
+			if (playerDistance < PLAYER_DETECTION_RADIUS && c.active) 
 			{
 				var angle:Float = Math.atan2(playerPoint.y - c.eye.y, 
 						playerPoint.x - c.eye.x);
