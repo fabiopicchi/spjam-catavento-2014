@@ -101,7 +101,7 @@ class MainMenuState extends State {
         if (justPressed(START))
         {
             dispatchEvent(new SwitchStateEvent(SwitchStateEvent.SWITCH_STATE,
-                        new StageState(0)));
+                        new StageState(3)));
         }
 	}
 	

@@ -17,15 +17,14 @@ class Camera extends Element {
 	public var id:Int;
 	
 	private var _anim:AnimatedSprite;
+	private var _animSpark:AnimatedSprite;
     private var _light:Bitmap;
 	
 	public static var BLUE:String = "blue";
     public static var GREEN:String = "green";
     public static var RED:String = "red";
 	
-	private var FRAME_WIDTH:Int = 60;
-    private var FRAME_HEIGHT:Int = 60;
-	
+	public var active:Bool;
 	public var initialAngle:Float;
 	public var angle:Float = 0;
 	public var deltaMax:Float = 0.3;
@@ -50,10 +49,17 @@ class Camera extends Element {
 		goingBack = false;
 		
 		_anim = new AnimatedSprite("assets/animations.json", "camera") ;
+		addElement(_anim);
+
+		_animSpark = new AnimatedSprite("assets/animations.json", "spark");
+		_animSpark.setAnimation("idle");
+		_animSpark.visible = false;
+		addElement(_animSpark);
 
 		eye.x = x + 30;
 		eye.y = y + 40 * 2 + 3;
-		addElement(_anim);
+
+		active = true;
 	}
 	
 	override public function update(dt:Float):Void 
@@ -63,7 +69,7 @@ class Camera extends Element {
 		if (waitTimer > 0) {
 			waitTimer -= dt;
 		}
-        else {
+        else if (active) {
             if (goingBack) {
                 angle += dt * ANGULAR_SPEED;
                 if (angle > initialAngle + deltaMax) {
@@ -115,11 +121,13 @@ class Camera extends Element {
     }
 
     public function activate():Void {
-
+		active = true;
+		_animSpark.visible = false;
     }
 
     public function deactivate():Void {
-
+		active = false;
+		_animSpark.visible = true;
     }
 
 	public function alert():Void 

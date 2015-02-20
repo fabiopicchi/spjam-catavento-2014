@@ -109,7 +109,7 @@ class Guard extends Element {
                     _body.position.x = _path.getX();
                     _body.position.y = _path.getY();
 
-                    var dir:Int = Math.floor((_path.getAngle() + Math.PI / 4) / (Math.PI / 2)) % 4;
+                    var dir:Int = (Math.floor((_path.getAngle() + Math.PI / 4) / (Math.PI / 2)) + 4) % 4;
                     if(dir != faceDirection)
                     {
                         faceDirection = dir;
@@ -130,7 +130,7 @@ class Guard extends Element {
                     rotateTimer -= dt;
                     if (rotateTimer <= 0) 
                     {
-                        faceDirection = (faceDirection + ((Math.random() > 0.5) ? -1 : 1)) % 4;
+                        faceDirection = (4 + faceDirection + ((Math.random() > 0.5) ? -1 : 1)) % 4;
                         _anim.setAnimation("idle-" + animationDirection);
                         rotateTimer = INSPECTING_TIME;
                     }
@@ -190,7 +190,6 @@ class Guard extends Element {
                 function (dt)
                 {
                     attentionTimer -= dt;
-
                     if (attentionTimer <= 0)
                     {
                         _flagManager.reset("alert");

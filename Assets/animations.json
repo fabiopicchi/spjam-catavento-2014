@@ -318,6 +318,30 @@
         "height": 60,
         "src": "images/agua.png"
     },
+    "spark":
+    {
+        "animations":
+        [
+            {
+                "name": "idle",
+                "offset": {"x": 2, "y": -6},
+                "frames": [0,1,2,0,1],
+                "numLoops": -1,
+                "framerate": 20
+            },
+            {
+                "name": "idle-wire",
+                "offset": {"x": -9, "y": -9},
+                "frames": [0,1,2,0,1],
+                "numLoops": -1,
+                "framerate": 20
+            }
+        ],
+        "startAnimation": "idle",
+        "width": 60,
+        "height": 60,
+        "src": "images/spark.png"
+    },
     "laser-start-red":
     {
         "animations":
