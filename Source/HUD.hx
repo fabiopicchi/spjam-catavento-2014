@@ -34,7 +34,7 @@ class HUD extends Element
 		barra.x = 52;
 		barra.y = 23;
 		
-		var b:Bitmap = new Bitmap(Assets.getBitmapData ("assets/hud.png"));
+		var b:Bitmap = new Bitmap(Assets.getBitmapData ("images/hud.png"));
 		addChild (b);
 		
 		this.x = 5;

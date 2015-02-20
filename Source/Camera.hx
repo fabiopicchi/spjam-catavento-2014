@@ -1,7 +1,7 @@
 package  ;
 
 import core.Element;
-import core.SpriteSheet;
+import core.AnimatedSprite;
 import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.events.Event;
@@ -16,7 +16,7 @@ class Camera extends Element {
 	
 	public var id:Int;
 	
-	private var _ss:SpriteSheet;
+	private var _anim:AnimatedSprite;
     private var _light:Bitmap;
 	
 	public static var BLUE:String = "blue";
@@ -49,21 +49,11 @@ class Camera extends Element {
 		angle = 1;
 		goingBack = false;
 		
-		_ss = new SpriteSheet("assets/camera.png", FRAME_WIDTH, FRAME_HEIGHT) ;
-		
-		for (i in 0...7)
-		{
-			_ss.addAnimation("a"+i, [new Rectangle(i*FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT)], true, 1);
-		}
-		_ss.setAnimation("a0");
-		
-		_ss.x = 0;
-		_ss.y = 0;
+		_anim = new AnimatedSprite("assets/animations.json", "camera") ;
 
 		eye.x = x + 30;
 		eye.y = y + 40 * 2 + 3;
-		
-		addElement(_ss);
+		addElement(_anim);
 	}
 	
 	override public function update(dt:Float):Void 
@@ -92,7 +82,7 @@ class Camera extends Element {
         }
 
         animPos = Math.abs(Math.floor((angle - 0.7) / (2 * deltaMax) * 6.99) - 6);
-        _ss.setAnimation("a"+animPos);
+        _anim.setAnimation("a" + animPos);
     }
 
     override public function draw():Void 

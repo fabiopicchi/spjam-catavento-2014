@@ -1,0 +1,465 @@
+{
+    "bunny": 
+    {
+        "animations": [
+            {
+                "name": "idle-right",
+                "frames" : [0],
+                "numLoops" : -1,
+                "framerate" : 12
+            },
+            {
+                "name": "walk-right",
+                "frames" : [0,1,2,3,2,1],
+                "numLoops" : -1,
+                "framerate" : 12
+            },
+            {
+                "name": "water-right",
+                "frames" : [8,9,10,11,10,11,12,13],
+                "numLoops" : 1,
+                "framerate" : 12
+            },
+            {
+                "name": "idle-left",
+                "frames" : [4],
+                "numLoops" : -1,
+                "framerate" : 12
+            },
+            {
+                "name": "walk-left",
+                "frames" : [4,5,6,7,6,5],
+                "numLoops" : -1,
+                "framerate" : 12
+            },
+            {
+                "name": "water-left",
+                "frames" : [14,15,16,17,16,17,18,19],
+                "numLoops" : 1,
+                "framerate" : 12
+            }
+        ],
+        "offset": {"x": -10, "y": -50},
+        "startAnimation": "idle-right",
+        "width": 72,
+        "height": 60,
+        "offset": {"x": -10, "y": -50},
+        "src": "images/coelho.png"
+    },
+    "camera":
+    {
+        "animations": [
+            {
+                "name": "a0",
+                "frames": [0],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "a1",
+                "frames": [1],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "a2",
+                "frames": [2],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "a3",
+                "frames": [3],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "a4",
+                "frames": [4],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "a5",
+                "frames": [5],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "a6",
+                "frames": [6],
+                "numLoops": -1,
+                "framerate": 12
+            }
+        ],
+        "startAnimation": "a0",
+        "width": 60,
+        "height": 60,
+        "src": "images/camera.png"
+    },
+    "guard":
+    {
+        "animations":[
+            {
+                "name": "fall-left",
+                "frames" : [0,8],
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "fall-right",
+                "frames" : [0,8],
+                "mirrorX": true,
+                "offset": {"x": 71, "y": -100},
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "fall-down",
+                "frames" : [0,8],
+                "mirrorX": true,
+                "offset": {"x": 71, "y": -100},
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "fall-up",
+                "frames" : [0,8],
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "getup-left",
+                "frames" : [9,14],
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "getup-right",
+                "frames" : [9,14],
+                "mirrorX": true,
+                "offset": {"x": 71, "y": -100},
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "getup-down",
+                "frames" : [9,14],
+                "mirrorX": true,
+                "offset": {"x": 71, "y": -100},
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "getup-up",
+                "frames" : [9,14],
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "walk-left",
+                "frames" : [15,22],
+                "numLoops": -1,
+                "framerate" : 12
+            },
+            {
+                "name": "walk-right",
+                "frames" : [15,22],
+                "mirrorX": true,
+                "offset": {"x": 71, "y": -100},
+                "numLoops": 11,
+                "framerate" : 12
+            },
+            {
+                "name": "walk-down",
+                "frames" : [23,30],
+                "numLoops": -1,
+                "framerate" : 12
+            },
+            {
+                "name": "walk-up",
+                "frames" : [31,38],
+                "numLoops": -1,
+                "framerate" : 12
+            },
+            {
+                "name": "idle-left",
+                "frames" : [39],
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "idle-right",
+                "frames" : [39],
+                "mirrorX": true,
+                "offset": {"x": 71, "y": -100},
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "idle-down",
+                "frames" : [40],
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "idle-up",
+                "frames" : [41],
+                "numLoops": 1,
+                "framerate" : 12
+            }
+        ],
+        "startAnimation": "fall-left",
+        "offset": {"x": -41, "y": -100},
+        "width": 112,
+        "height": 120,
+        "src": "images/guard.png"
+    },
+    "alert":
+    {
+        "animations":
+        [
+            {
+                "name": "question",
+                "frames" : [0],
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "exclamation",
+                "frames" : [1],
+                "numLoops": 1,
+                "framerate" : 12
+            }
+        ],
+        "startAnimation": "question",
+        "offset": {"x": 6.5, "y": -130},
+        "width": 17,
+        "height": 35,
+        "src": "images/guardalert.png"
+    },
+    "terminal":
+    {
+        "animations":
+        [
+            {
+                "name": "on-down",
+                "frames": [0],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "off-down",
+                "frames": [1],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "on-right",
+                "frames": [2],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "off-right",
+                "frames": [3],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "on-left",
+                "frames": [2],
+                "mirrorX": true,
+                "offset": {"x": 183, "y": -100},
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "off-left",
+                "frames": [3],
+                "mirrorX": true,
+                "offset": {"x": 183, "y": -100},
+                "numLoops": -1,
+                "framerate": 12
+            }
+        ],
+        "startAnimation": "on-down",
+        "offset": {"x": 0, "y": -60},
+        "width": 60,
+        "height": 120,
+        "src": "images/terminal.png"
+    },
+    "puddle":
+    {
+        "animations":
+        [
+            {
+                "name": "idle",
+                "frames": [3],
+                "numLoops": -1,
+                "framerate": 12
+            },
+            {
+                "name": "appear",
+                "frames": [0,3],
+                "numLoops": 1,
+                "framerate": 12
+            },
+            {
+                "name": "disappear",
+                "frames": [3,0],
+                "numLoops": 1,
+                "framerate": 12
+            }
+        ],
+        "startAnimation": "idle",
+        "offset": {"x": -30, "y": -30},
+        "width": 60,
+        "height": 60,
+        "src": "images/agua.png"
+    },
+    "laser-start-red":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/laserred_start01.png"
+    },
+    "laser-middle-red":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/laserred_middle01.png"
+    },
+    "laser-end-red":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/laserred_end01.png"
+    },
+    "laser-start-green":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/lasergreen_start01.png"
+    },
+    "laser-middle-green":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/lasergreen_middle01.png"
+    },
+    "laser-end-green":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/lasergreen_end01.png"
+    },
+    "laser-start-blue":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/laserblue_start01.png"
+    },
+    "laser-middle-blue":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/laserblue_middle01.png"
+    },
+    "laser-end-blue":
+    {
+        "animations":
+        [
+            {
+                "name": "on",
+                "frames": [0,1],
+                "numLoops": -1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "on",
+        "width": 30,
+        "height": 21,
+        "src": "images/laserblue_end01.png"
+    }
+}

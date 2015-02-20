@@ -17,7 +17,7 @@ import core.SwitchStateEvent;
 class GameOverState extends State {
 	
 	private var	timer:Int = 0;
-	public var bitmap5 = new Bitmap (Assets.getBitmapData ("assets/missionfailed4.png"));
+	public var bitmap5 = new Bitmap (Assets.getBitmapData ("images/missionfailed4.png"));
 
     private var START:Int = 1 << 0;
 
@@ -34,19 +34,19 @@ class GameOverState extends State {
         rect1.graphics.drawRect(0, 197, 800, 200);
         addChild (rect1);
 		
-		var bitmap0 = new Bitmap (Assets.getBitmapData ("assets/missionfailed2.png"));
+		var bitmap0 = new Bitmap (Assets.getBitmapData ("images/missionfailed2.png"));
 		bitmap0.x = 76;
 		bitmap0.y = 245;
 		bitmap0.smoothing = true;
 		addChild (bitmap0);
 		
-		var bitmap6 = new Bitmap (Assets.getBitmapData ("assets/missionfailed5.png"));
+		var bitmap6 = new Bitmap (Assets.getBitmapData ("images/missionfailed5.png"));
 		bitmap6.x = 0;
 		bitmap6.y = 452;
 		bitmap6.smoothing = true;
 		addChild (bitmap6);
 		
-		var bitmap1 = new Bitmap (Assets.getBitmapData ("assets/missionfailed1.png"));
+		var bitmap1 = new Bitmap (Assets.getBitmapData ("images/missionfailed1.png"));
 		bitmap1.x = 0;
 		bitmap1.y = 0;
 		bitmap1.smoothing = true;
@@ -59,7 +59,7 @@ class GameOverState extends State {
 		addChild (container1);
 		Actuate.tween (container1, 3, { x: 0 } );
 		
-		var bitmap2 = new Bitmap (Assets.getBitmapData ("assets/missionfailed1.png"));
+		var bitmap2 = new Bitmap (Assets.getBitmapData ("images/missionfailed1.png"));
 		bitmap2.x = 0;
 		bitmap2.y = 0;
 		bitmap2.smoothing = true;
@@ -72,7 +72,7 @@ class GameOverState extends State {
 		addChild (container2);
 		Actuate.tween (container2, 4, { x: -35 } );
 		
-		var bitmap3 = new Bitmap (Assets.getBitmapData ("assets/missionfailed3.png"));
+		var bitmap3 = new Bitmap (Assets.getBitmapData ("images/missionfailed3.png"));
 		bitmap3.x = 0;
 		bitmap3.y = 0;
 		bitmap3.smoothing = true;
@@ -85,7 +85,7 @@ class GameOverState extends State {
 		addChild (container3);
 		Actuate.tween (container3, 3, { x: 466 } );
 		
-		var bitmap4 = new Bitmap (Assets.getBitmapData ("assets/missionfailed3.png"));
+		var bitmap4 = new Bitmap (Assets.getBitmapData ("images/missionfailed3.png"));
 		bitmap4.x = 0;
 		bitmap4.y = 0;
 		bitmap4.smoothing = true;

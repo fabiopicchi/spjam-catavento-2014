@@ -53,7 +53,7 @@ class StageState extends State
         dispatchEvent(new GameSoundEvent(GameSoundEvent.BG_MUSIC,
                     "assets/sound/fase_1_reason.ogg"));
 
-        var json:String = Assets.getText("assets/level" + _currentLevel + ".json");
+        var json:String = Assets.getText("stages/level" + _currentLevel + ".json");
 
         if(json != null)
         {
@@ -68,7 +68,7 @@ class StageState extends State
 
     private function loadLevel(obj):Void
     {
-        var tileset:BitmapData = Assets.getBitmapData("assets/tileset.png");
+        var tileset:BitmapData = Assets.getBitmapData("images/tileset.png");
         var layers:Array<Dynamic> = obj.layers;
 
         for (layer in layers)
@@ -327,8 +327,7 @@ class StageState extends State
                         g.eye.y + playerDistance * Math.sin(angle));
                     #end
 
-                    if (angle >= g.faceDirection * Math.PI / 2 - Math.PI / 4 &&
-                            angle <= g.faceDirection * Math.PI / 2 + Math.PI / 4)
+                    if (g.isFacing(angle))
                     {
                         if (_collideLayer.isPointVisible(g.eye, playerPoint)) 
                         {

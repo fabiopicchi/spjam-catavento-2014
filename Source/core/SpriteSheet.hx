@@ -1,136 +1,59 @@
 package core;
 
-import haxe.Json;
-import haxe.ds.StringMap;
-
 import openfl.Assets;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
-import openfl.geom.Rectangle;
-import openfl.geom.Point;
 
-private class Animation {
-    public var arFrames:Array<BitmapData>;
-    public var looped:Bool;
-    public var fps:Int;
-
-    public function new (arFrames:Array<BitmapData>, looped:Bool, fps:Int)
-    {
-        this.arFrames = arFrames;
-        this.looped = looped;
-        this.fps = fps;
-    }
-}
-
-class SpriteSheet extends Element {
-
-    private var _animationData:StringMap<Animation>;
-    private var _currentFrame:Int;
-    private var _currentAnimation:Animation;
-    private var _currentAnimationName:String;
-    private var _timeAcc:Float;
-    private var _framePeriod:Float;
+class SpriteSheet 
+{
     private var _frameWidth:Int;
     private var _frameHeight:Int;
-
-    private var _bitmap:Bitmap;
+    private var _ssColumns:Int;
+    private var _ssRows:Int;
+    private var _numFrames:Int;
+    public var numFrames(get,null):Int;
+    private var _arFrames:Array<Bitmap>;
     private var _sourceImage:BitmapData;
-    
-    public function new(path:String, width:Int, height:Int)
-    {
-        super();
+    public var frameWidth(get,null):Int;
+    public function get_frameWidth():Int{return _frameWidth;}
+    public var frameHeight(get,null):Int;
+    public function get_frameHeight():Int{return _frameHeight;}
 
-        _frameWidth = width;
-        _frameHeight = height;
+    public function new (path:String, frameWidth:Int, frameHeight:Int, ?numFrames:Int)
+    {
         _sourceImage = Assets.getBitmapData(path);
-        _bitmap = new Bitmap();
-        addChild(_bitmap);
+        _frameWidth = frameWidth;
+        _frameHeight = frameHeight;
+        _ssColumns = Math.floor(_sourceImage.width / _frameWidth);
+        _ssRows = Math.floor(_sourceImage.height / _frameHeight);
+        _numFrames = (numFrames == null ? _ssColumns * _ssRows : numFrames);
+        _arFrames = new Array<Bitmap>();
 
-        _currentFrame = 0;
-        _timeAcc = 0;
-        _animationData = new StringMap<Animation>();
-    }
-
-    public function addAnimation(name:String, frameData:Array<Rectangle>,
-            looped:Bool, fps:Int):Void
-    {
-        var arFrames:Array<BitmapData> = new Array<BitmapData>();
-        var point:Point = new Point();
-
-        for (r in frameData)
+        var p:Point = new Point();
+        for(f in 0..._numFrames)
         {
+            var r:Rectangle = new Rectangle(
+                (f % _ssColumns) * _frameWidth,
+                Math.floor(f / _ssColumns) * _frameHeight,
+                _frameWidth,
+                _frameHeight
+            );
+
             var bmp:BitmapData = new BitmapData(_frameWidth, _frameHeight, true);
-            bmp.copyPixels(_sourceImage, r, point);
-            arFrames.push(bmp);
-        }
-        _animationData.set(name, new Animation(arFrames, looped, fps));
-    }
-
-    public function loadAnimationsFromJSON(path:String):Void
-    {
-        var obj:Dynamic = Json.parse(Assets.getText(path));
-
-        for (a in Reflect.fields(obj))
-        {
-            var arRect:Array<Rectangle> = new Array<Rectangle>();
-            var objAnimation:Dynamic = Reflect.field(obj, a);
-            var arFrames:Array<Dynamic> = objAnimation.frames;
-
-            for (o in arFrames)
-            {
-                arRect.push(new Rectangle(o.x, o.y, _frameWidth, _frameHeight));
-            }
-            addAnimation(a, arRect, objAnimation.looped, objAnimation.fps);
+            bmp.copyPixels(_sourceImage, r, p);
+            _arFrames.push(new Bitmap(bmp));
         }
     }
 
-    public function setAnimation(name:String):Void
+    public function getFramedata (index:Int):Bitmap
     {
-        if (name != _currentAnimationName)
-        {
-            _currentAnimationName = name;
-            _currentAnimation = _animationData.get(name);
-            _framePeriod = 1 / _currentAnimation.fps;
-            _currentFrame = 0;
-            _timeAcc = 0;
-            _bitmap.bitmapData = _currentAnimation.arFrames[_currentFrame];
-        }
+        return _arFrames[index % _numFrames];
     }
 
-    public function isOver():Bool
+    public function get_numFrames():Int
     {
-        return (_currentAnimation.looped ||
-                _currentFrame >= _currentAnimation.arFrames.length - 1);
+        return _numFrames;
     }
-
-    override public function update(dt:Float):Void
-    {
-        _timeAcc += dt;
-        if (_timeAcc >= _framePeriod)
-        {
-            if (_currentAnimation.looped)
-            {
-                _currentFrame = (_currentFrame + 1) % 
-                    _currentAnimation.arFrames.length; 
-            }
-            else if (_currentFrame < _currentAnimation.arFrames.length - 1)
-            {
-                _currentFrame++;
-            }
-            _timeAcc = 0;
-        }
-
-        super.update(dt);
-    }
-
-    override public function draw():Void
-    {
-        _bitmap.bitmapData = _currentAnimation.arFrames[_currentFrame];
-        super.draw();
-    }
-	
-	function getCurrentFrame():Int
-	{
-		return(_currentFrame);
-	}
 }

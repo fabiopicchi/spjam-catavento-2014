@@ -32,14 +32,14 @@ class MainMenuState extends State {
         timer = 0;
         timer2 = 0;
         frames = [
-            new Bitmap (Assets.getBitmapData ("assets/titlescreen1.jpg")),
-            new Bitmap (Assets.getBitmapData ("assets/titlescreen2.jpg")),
-            new Bitmap (Assets.getBitmapData ("assets/titlescreen3.jpg")),
-            new Bitmap (Assets.getBitmapData ("assets/titlescreen4.jpg")),
-            new Bitmap (Assets.getBitmapData ("assets/titlescreen5.jpg")),
-            new Bitmap (Assets.getBitmapData ("assets/titlescreen6.jpg")),
-            new Bitmap (Assets.getBitmapData ("assets/titlescreen7.jpg")),
-            new Bitmap (Assets.getBitmapData ("assets/titlescreen8.jpg"))
+            new Bitmap (Assets.getBitmapData ("images/titlescreen1.jpg")),
+            new Bitmap (Assets.getBitmapData ("images/titlescreen2.jpg")),
+            new Bitmap (Assets.getBitmapData ("images/titlescreen3.jpg")),
+            new Bitmap (Assets.getBitmapData ("images/titlescreen4.jpg")),
+            new Bitmap (Assets.getBitmapData ("images/titlescreen5.jpg")),
+            new Bitmap (Assets.getBitmapData ("images/titlescreen6.jpg")),
+            new Bitmap (Assets.getBitmapData ("images/titlescreen7.jpg")),
+            new Bitmap (Assets.getBitmapData ("images/titlescreen8.jpg"))
         ];
 		for(frame in frames){
 			addChild (frame);

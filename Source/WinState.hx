@@ -32,13 +32,13 @@ class WinState extends State {
         rect1.graphics.drawRect(0, 200, 800, 200);
         addChild (rect1);
 		
-		var bitmap0 = new Bitmap (Assets.getBitmapData ("assets/missioncomplete2.png"));
+		var bitmap0 = new Bitmap (Assets.getBitmapData ("images/missioncomplete2.png"));
 		bitmap0.x = 45;
 		bitmap0.y = 258;
 		bitmap0.smoothing = true;
 		addChild (bitmap0);
 		
-		var bitmap1 = new Bitmap (Assets.getBitmapData ("assets/missioncomplete1.png"));
+		var bitmap1 = new Bitmap (Assets.getBitmapData ("images/missioncomplete1.png"));
 		bitmap1.x = 0;
 		bitmap1.y = 0;
 		bitmap1.smoothing = true;
@@ -51,7 +51,7 @@ class WinState extends State {
 		addChild (container1);
 		Actuate.tween (container1, 3, { x: 0 } );
 		
-		var bitmap2 = new Bitmap (Assets.getBitmapData ("assets/missioncomplete1.png"));
+		var bitmap2 = new Bitmap (Assets.getBitmapData ("images/missioncomplete1.png"));
 		bitmap2.x = 0;
 		bitmap2.y = 0;
 		bitmap2.smoothing = true;
@@ -64,7 +64,7 @@ class WinState extends State {
 		addChild (container2);
 		Actuate.tween (container2, 4, { x: -35 } );
 		
-		var bitmap3 = new Bitmap (Assets.getBitmapData ("assets/missioncomplete3.png"));
+		var bitmap3 = new Bitmap (Assets.getBitmapData ("images/missioncomplete3.png"));
 		bitmap3.x = 0;
 		bitmap3.y = 0;
 		bitmap3.smoothing = true;
@@ -77,7 +77,7 @@ class WinState extends State {
 		addChild (container3);
 		Actuate.tween (container3, 3, { x: 384 } );
 		
-		var bitmap4 = new Bitmap (Assets.getBitmapData ("assets/missioncomplete3.png"));
+		var bitmap4 = new Bitmap (Assets.getBitmapData ("images/missioncomplete3.png"));
 		bitmap4.x = 0;
 		bitmap4.y = 0;
 		bitmap4.smoothing = true;

@@ -2,7 +2,7 @@ import openfl.display.Shape;
 import openfl.geom.Rectangle;
 
 import core.Element;
-import core.SpriteSheet;
+import core.AnimatedSprite;
 
 class Puddle extends Element
 {
@@ -15,33 +15,15 @@ class Puddle extends Element
     private var BODY_HEIGHT:Int = 30;
 	private var FRAME_WIDTH:Int = 60;
     private var FRAME_HEIGHT:Int = 60;
-    private var _ss:SpriteSheet;
+    private var _anim:AnimatedSprite;
 
     public function new(x : Float, y : Float)
     {
         super();
         
-        _ss = new SpriteSheet("assets/agua.png", FRAME_WIDTH, FRAME_HEIGHT);
-        
-        var arFrames = new Array<Rectangle>();
-        var rArFrames = new Array<Rectangle>();
-        for (i in 0...4)
-        {
-            arFrames.push(new Rectangle(i * FRAME_WIDTH, 0,
-                        FRAME_WIDTH, FRAME_HEIGHT));
-            rArFrames.push(new Rectangle((3 - i) * FRAME_WIDTH, 0, 
-                        FRAME_WIDTH, FRAME_HEIGHT));
-        }
-        _ss.addAnimation("idle", [new Rectangle(3 * FRAME_WIDTH, 0, FRAME_WIDTH,
-                    FRAME_HEIGHT)], false, 1);
-        _ss.addAnimation("appear", arFrames, false, 12);
-        _ss.addAnimation("disappear", rArFrames, false, 12);
-        _ss.setAnimation("appear");
-		
-		_ss.x = -FRAME_WIDTH / 2;
-		_ss.y = -FRAME_HEIGHT / 2;
-
-        addElement(_ss);
+        _anim = new AnimatedSprite("assets/animations.json", "puddle");
+        _anim.setAnimation("appear");
+        addElement(_anim);
 
         _body = new Body(BODY_WIDTH, BODY_HEIGHT);
         _body.position.x = x - BODY_WIDTH/2;
@@ -66,16 +48,16 @@ class Puddle extends Element
             {
                 startDisappearing();
             }
-            else if(_ss.isOver())
+            else if(_anim.isOver())
             {
                 visible = false;
             }
         }
         else
         {
-            if (_ss.isOver())
+            if (_anim.isOver())
             {
-                _ss.setAnimation("idle");
+                _anim.setAnimation("idle");
                 _timer -= dt;
             }
         }
@@ -86,6 +68,6 @@ class Puddle extends Element
     {
         _disappearing = true;
         _timer = 0;
-        _ss.setAnimation("disappear");
+        _anim.setAnimation("disappear");
     }
 }

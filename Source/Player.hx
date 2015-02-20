@@ -1,4 +1,4 @@
-import core.SpriteSheet;
+import core.AnimatedSprite;
 import openfl.display.Shape;
 import openfl.geom.Rectangle;
 
@@ -9,7 +9,7 @@ class Player extends Element
     private var SPEED:Float = 180;
     private var _body:Body;
     private var _facing:Int;
-	private var _ss:SpriteSheet;
+	private var _anim:AnimatedSprite;
 	private var FRAME_WIDTH:Int = 72;
     private var FRAME_HEIGHT:Int = 60;
     private var H_SQRT2:Float;
@@ -22,13 +22,9 @@ class Player extends Element
 		_body.position.x = x;
 		_body.position.y = y;
 		     
-		_ss = new SpriteSheet("assets/coelho.png", FRAME_WIDTH, FRAME_HEIGHT) ;
-		_ss.loadAnimationsFromJSON("assets/ss_bunny.json");
-		_ss.setAnimation("idle-right");
-		
-		_ss.x = -10;
-		_ss.y = -50;
-		addElement(_ss);
+		_anim = new AnimatedSprite("assets/animations.json", "bunny") ;
+		_anim.setAnimation("idle-right");
+		addElement(_anim);
 
         H_SQRT2 = Math.sqrt(2)/2;
         _facing = 0;
@@ -36,7 +32,7 @@ class Player extends Element
 
     public function move (hor:Int, ver:Int)
     {
-        if (_ss.isOver())
+        if (_anim.isOver())
         {
             _body.speed.x = hor * SPEED;
             _body.speed.y = ver * SPEED;
@@ -53,21 +49,21 @@ class Player extends Element
                 _facing = 1;
 
             if (hor != 0 || ver != 0)
-               _ss.setAnimation("walk-" + (_facing == 0 ? "right" :
+               _anim.setAnimation("walk-" + (_facing == 0 ? "right" :
                            "left"));
             else
-               _ss.setAnimation("idle-" + (_facing == 0 ? "right" :
+               _anim.setAnimation("idle-" + (_facing == 0 ? "right" :
                            "left")); 
         }
     }
 
     public function water()
     {
-        if (_ss.isOver())
+        if (_anim.isOver())
         {
             _body.speed.x = 0;
             _body.speed.y = 0;
-            _ss.setAnimation("water-" + (_facing == 0 ? "right" : "left"));
+            _anim.setAnimation("water-" + (_facing == 0 ? "right" : "left"));
         }
     }
 
@@ -101,7 +97,7 @@ class Player extends Element
         graphics.endFill();
 
         graphics.lineStyle(1, 0xFF0000);
-        graphics.drawRect(_ss.x, _ss.y, _ss.width, _ss.height);
+        graphics.drawRect(_anim.x, _anim.y, _anim.width, _anim.height);
         #end
     }
 }

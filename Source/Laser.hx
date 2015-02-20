@@ -2,7 +2,7 @@ import openfl.display.Shape;
 import openfl.geom.Rectangle;
 
 import core.Element;
-import core.SpriteSheet;
+import core.AnimatedSprite;
 
 /**
  * ...
@@ -11,7 +11,7 @@ import core.SpriteSheet;
 class Laser extends Element
 {
     public var id:Int;
-	private var _arSegments:Array<SpriteSheet>;
+	private var _arSegments:Array<AnimatedSprite>;
     private var _length:Int;
 	private var _body:Body;
 
@@ -19,9 +19,6 @@ class Laser extends Element
     public static var GREEN:String = "green";
     public static var RED:String = "red";
     
-    private var FRAME_WIDTH:Int = 30;
-    private var FRAME_HEIGHT:Int = 21;
-	
     public function new (x:Float, y:Float, length:Int, direction:Int,
             colour:String, id:Int) 
     {
@@ -37,47 +34,26 @@ class Laser extends Element
 		_body.position.x = x;
 		_body.position.y = y;
 		
-        var ss:SpriteSheet;
-        ss = new SpriteSheet("assets/laser" + colour +
-                    "_start01.png", FRAME_WIDTH, FRAME_HEIGHT) ;
-
-        var animFramedata:Array<Rectangle> = new Array<Rectangle>();
-        animFramedata.push(new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT));
-        animFramedata.push(new Rectangle(FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT));
-
-        _arSegments = new Array<SpriteSheet>();
-        _arSegments.push(ss);
-
+        _arSegments = new Array<AnimatedSprite>();
+        _arSegments.push(new AnimatedSprite("assets/animations.json", "laser-start-" + colour));
         for (i in 0...(_length - 2))
-        {
-            ss = new SpriteSheet("assets/laser" + colour +
-                    "_middle01.png", FRAME_WIDTH, FRAME_HEIGHT);            
-            if (direction % 2 == 0)
-                ss.x = (i + 1) * FRAME_WIDTH ;
-            else 
-                ss.y = (i + 1) * FRAME_WIDTH ;
-            _arSegments.push(ss);
-        }
+            _arSegments.push(new AnimatedSprite("assets/animations.json", "laser-middle-" + colour));
+        _arSegments.push(new AnimatedSprite("assets/animations.json", "laser-end-" + colour));
 
-        ss = new SpriteSheet("assets/laser" + colour +
-                "_end01.png", FRAME_WIDTH, FRAME_HEIGHT);            
-        if (direction % 2 == 0)
-            ss.x = (_length - 1) * FRAME_WIDTH;
-        else 
-            ss.y = (_length - 1) * FRAME_WIDTH;
-        _arSegments.push(ss);
-
+        var i:Int = 0;
         for (seg in _arSegments) 
         {
-            seg.addAnimation("on", animFramedata, true, 10);
             seg.setAnimation("on");
-            switch(direction)
+            if (direction % 2 == 0)
+                seg.x = i * seg.width;
+            else
             {
-                case 1,3:
-                    seg.rotation = 90;
-                    seg.x = FRAME_HEIGHT;
+                seg.x = seg.width;
+                seg.y = i * seg.width;
+                seg.rotation = 90;
             }
             addElement(seg);
+            i++;
         }
 
         switch(direction)

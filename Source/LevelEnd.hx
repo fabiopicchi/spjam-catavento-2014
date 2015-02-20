@@ -1,4 +1,3 @@
-import core.SpriteSheet;
 import openfl.display.Shape;
 import openfl.geom.Rectangle;
 

@@ -2,7 +2,7 @@ import openfl.display.Bitmap;
 import openfl.geom.Rectangle;
 import openfl.Assets;
 
-import core.SpriteSheet;
+import core.AnimatedSprite;
 import core.Element;
 
 class Terminal extends Element
@@ -11,7 +11,7 @@ class Terminal extends Element
     private var _body:Body;
     private var _direction:Int;
     private var _deactivationTimer:Float;
-    private var _ss:SpriteSheet;
+    private var _anim:AnimatedSprite;
     private var _light:Bitmap;
 
     public static var BLUE:String = "blue";
@@ -21,52 +21,28 @@ class Terminal extends Element
     private var FRAME_WIDTH:Int = 60;
     private var FRAME_HEIGHT:Int = 120;
 
-    public function new(x:Float, y:Float, id:Int, direction:Int, colour:String )
+    public function new(x:Float, y:Float, id:Int, direction:Int, colour:String)
     {
-        this.id = id;
         super();
-	
-        _ss = new SpriteSheet("assets/terminal.png", FRAME_WIDTH, FRAME_HEIGHT);
-		_ss.y =  60 - FRAME_HEIGHT;
-        addElement(_ss);
-        _ss.addAnimation("frente-ligado", 
-                [new Rectangle(0, 0, FRAME_WIDTH, FRAME_HEIGHT)], 
-                false, 1);
-        _ss.addAnimation("frente-desligado", 
-                [new Rectangle(FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT)], 
-                false, 1);
-        _ss.addAnimation("lado-ligado", 
-                [new Rectangle(2 * FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT)], 
-                false, 1);
-        _ss.addAnimation("lado-desligado", 
-                [new Rectangle(3 * FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT)], 
-                false, 1);
-
-        _direction = direction;
-        switch(_direction)
-        {
-            case 0:
-                _ss.setAnimation("lado-ligado");
-            case 1:
-                _ss.setAnimation("frente-ligado");
-            case 2:
-                _ss.setAnimation("lado-ligado");
-                scaleX = -1;
-                x += width;
-        }
-
-        _light = new Bitmap(Assets.getBitmapData("assets/" +
-                    (direction % 2 == 0 ? "w42h20_" : "w42h45_") + 
-                    colour + "_" + 
-                    (direction % 2 == 0 ? "lado" : "frente") +
-                    ".png"));
-        _light.x = 42;
-        _light.y = 40;
-        _ss.addChild(_light);
 
         _body = new Body(60, 60);
         _body.position.x = x;
         _body.position.y = y;
+
+        this.id = id;
+        _direction = direction;
+	
+        _anim = new AnimatedSprite("assets/animations.json", "terminal");
+        _anim.setAnimation("on-" + animationDirection);
+
+        _light = new Bitmap(Assets.getBitmapData("images/" +
+            (direction % 2 == 0 ? "w42h20_" : "w42h45_") + colour + "_" + 
+            (direction % 2 == 0 ? "lado" : "frente") + ".png"));
+        _light.x = 42;
+        _light.y = 40;
+        _anim.addChild(_light);
+
+        addElement(_anim);
     }
 
     public function getBody():Body
@@ -86,15 +62,7 @@ class Terminal extends Element
             {
                 _deactivationTimer = 0;
                 _light.visible = true;
-                switch(_direction)
-                {
-                    case 0:
-                        _ss.setAnimation("lado-ligado");
-                    case 1:
-                        _ss.setAnimation("frente-ligado");
-                    case 2:
-                        _ss.setAnimation("lado-ligado");
-                }
+                _anim.setAnimation("on-" + animationDirection);
                 dispatchEvent(new CircuitEvent(CircuitEvent.REACTIVATE, id));
             }
 
@@ -110,15 +78,7 @@ class Terminal extends Element
 
     public function deactivate():Void 
     {
-        switch(_direction)
-        {
-            case 0:
-                _ss.setAnimation("lado-desligado");
-            case 1:
-                _ss.setAnimation("frente-desligado");
-            case 2:
-                _ss.setAnimation("lado-desligado");
-        }
+        _anim.setAnimation("off-" + animationDirection);
         _light.visible = false;
         _deactivationTimer = 10;
     }
@@ -126,5 +86,22 @@ class Terminal extends Element
     public function isActivated():Bool 
     {
         return (_deactivationTimer <= 0);
+    }
+
+    private var animationDirection(get,null):String;
+    private function get_animationDirection():String
+    {
+        switch(_direction)
+        {
+            case 0:
+                return "right";
+            case 1:
+                return "down";
+            case 2:
+                return "left";
+            default:
+                trace("INVALID DIRECTION");
+                return "none";
+        }
     }
 }

@@ -3,7 +3,7 @@ import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.geom.Point;
 
-import core.SpriteSheet;
+import core.AnimatedSprite;
 
 /**
  * ...
@@ -28,14 +28,8 @@ class Guard extends Element {
 
     public var eye:Point; //coordenadas do olho do guarda
 
-    private var _ss:SpriteSheet;
-	private var _ssAlert:SpriteSheet;
-    private var anim_x:Float;
-    private var anim_y:Float;
-    private var FRAME_WIDTH:Int = 112;
-    private var FRAME_HEIGHT:Int = 120;
-	private var ALERT_WIDTH:Int = 17;
-	private var ALERT_HEIGHT:Int = 35;
+    private var _anim:AnimatedSprite;
+	private var _animAlert:AnimatedSprite;
 
     private var _body:Body;
     private var BODY_WIDTH:Int = 30;
@@ -60,44 +54,35 @@ class Guard extends Element {
         {
             _path.setWalkOnNode(false);
             _path.addEventListener(PathEvent.NODE_ARRIVED, function (e)
-                    {
-                        switch (behaviorType) {
-							case 0:
-								_flagManager.reset("walking");
-								_flagManager.set("walking");
-                            case 1:
-                                _flagManager.reset("walking");
-                                _flagManager.set("waiting");
-                            case 2:
-                                _flagManager.reset("walking");
-                                _flagManager.set("waiting");
-                                _flagManager.set("inspecting");
-                        }
-                    });
+            {
+                switch (behaviorType) {
+                    case 0:
+                        _flagManager.reset("walking");
+                        _flagManager.set("walking");
+                    case 1:
+                        _flagManager.reset("walking");
+                        _flagManager.set("waiting");
+                    case 2:
+                        _flagManager.reset("walking");
+                        _flagManager.set("waiting");
+                        _flagManager.set("inspecting");
+                }
+            });
         }
 
         _body = new Body(BODY_WIDTH, BODY_HEIGHT);
         _body.position.x = _path.getX();
         _body.position.y = _path.getY();
 
-        anim_x = (BODY_WIDTH - FRAME_WIDTH) / 2;
-        anim_y = BODY_HEIGHT - FRAME_HEIGHT;
-
-        _ss = new SpriteSheet("assets/guard.png", FRAME_WIDTH, FRAME_HEIGHT);
-        _ss.loadAnimationsFromJSON("assets/ss_guard.json");
-        _ss.x = anim_x;
-        _ss.y = anim_y;
-        addElement(_ss);
+        _anim = new AnimatedSprite("assets/animations.json", "guard");
+        _anim.setAnimation("idle-" + animationDirection);
+        addElement(_anim);
 	
-		_ssAlert = new SpriteSheet("assets/guardalert.png", ALERT_WIDTH, ALERT_HEIGHT);
-		_ssAlert.loadAnimationsFromJSON("assets/ss_guardalert.json");
-		_ssAlert.x = (BODY_WIDTH - ALERT_WIDTH) / 2;
-        _ssAlert.y = y - 130;
-		_ssAlert.visible = false;
-        addElement(_ssAlert);
+		_animAlert = new AnimatedSprite("assets/animations.json", "alert");
+		_animAlert.visible = false;
+        _animAlert.setAnimation("question");
+        addElement(_animAlert);
 
-        setGuardAnimation("idle");
-		setAlertAnimation("none");
 
         eye = new Point();
 
@@ -112,7 +97,7 @@ class Guard extends Element {
                     }
                 },
                 function () {
-                    setGuardAnimation("idle");
+                    _anim.setAnimation("idle-" + animationDirection);
                     waitingTimer = WAITING_TIME;
                 },
                 null
@@ -123,13 +108,17 @@ class Guard extends Element {
                     _path.update(dt);
                     _body.position.x = _path.getX();
                     _body.position.y = _path.getY();
+
+                    var dir:Int = Math.floor((_path.getAngle() + Math.PI / 4) / (Math.PI / 2)) % 4;
+                    if(dir != faceDirection)
+                    {
+                        faceDirection = dir;
+                        _anim.setAnimation("walk-" + animationDirection);
+                    }
                 },
                 function () {
                     _path.resume();
-                    faceDirection = Math.floor((_path.getAngle() + Math.PI / 4) / (Math.PI / 2));
-                    if (faceDirection > 3) faceDirection -= 4;
-                    else if (faceDirection < 0) faceDirection += 4;
-                    setGuardAnimation("walk");
+                    _anim.setAnimation("walk-" + animationDirection);
                 },
                 function () {
                     _body.speed.x = _body.speed.y = 0;
@@ -139,30 +128,29 @@ class Guard extends Element {
         _flagManager.add("inspecting",
                 function (dt) {
                     rotateTimer -= dt;
-                    if (rotateTimer <= 0) {
-                        faceDirection += (Math.random() > 0.5) ? -1 : 1;
-                        if (faceDirection > 3) faceDirection -= 4;
-                        else if (faceDirection < 0) faceDirection += 4;
-                        setGuardAnimation("idle");
+                    if (rotateTimer <= 0) 
+                    {
+                        faceDirection = (faceDirection + ((Math.random() > 0.5) ? -1 : 1)) % 4;
+                        _anim.setAnimation("idle-" + animationDirection);
                         rotateTimer = INSPECTING_TIME;
                     }
                 },
                 function () {
                     rotateTimer = INSPECTING_TIME;
-                    setGuardAnimation("idle");
+                    _anim.setAnimation("idle-" + animationDirection);
                 }
                 );
 
         _flagManager.add("falling",
                 function (dt) {
-                    if (_ss.isOver())
+                    if (_anim.isOver())
                     {
                         _flagManager.reset("falling");
                         _flagManager.set("dizzy");
                     }
                 },
                 function () {
-                    setGuardAnimation("fall");
+                    _anim.setAnimation("fall-" + animationDirection);
                 }
                 );
 
@@ -186,7 +174,7 @@ class Guard extends Element {
         _flagManager.add("gettingUp", 
                 function (dt)
                 {
-                    if(_ss.isOver())
+                    if(_anim.isOver())
                     {
                         _flagManager.reset("gettingUp");
                         _flagManager.set("walking");
@@ -194,7 +182,7 @@ class Guard extends Element {
                 },
                 function () 
                 {
-                    setGuardAnimation("getup");
+                    _anim.setAnimation("getup-" + animationDirection);
                 }
                 );
 
@@ -202,19 +190,29 @@ class Guard extends Element {
                 function (dt)
                 {
                     attentionTimer -= dt;
-					setAlertAnimation("question");
+
                     if (attentionTimer <= 0)
                     {
                         _flagManager.reset("alert");
                         _flagManager.set("walking");
-						setAlertAnimation("none");
+			            _animAlert.visible = false;
+                    }
+                    else if (attentionTimer <= ATTENTION_TIME - 0.5)
+                    {
+                        _animAlert.setAnimation("question");
+                    }
+                    else
+                    {
+                        _animAlert.visible = false;
                     }
                 },
                 function ()
                 {
-                    setGuardAnimation("idle");
+                    _anim.setAnimation("idle-" + animationDirection);
+
+			        _animAlert.visible = true;
+			        _animAlert.setAnimation("exclamation");
                     attentionTimer = ATTENTION_TIME;
-					setAlertAnimation("exclamation");
                 }
                 );
 
@@ -250,6 +248,12 @@ class Guard extends Element {
         return _body;
     }
 
+    public function isFacing(direction:Float):Bool
+    {
+        return (direction >= faceDirection * Math.PI / 2 - Math.PI / 4 && 
+                direction <= faceDirection * Math.PI / 2 + Math.PI / 4);
+    }
+
     override public function update(dt:Float):Void 
     {
         _flagManager.update(dt);
@@ -268,9 +272,15 @@ class Guard extends Element {
 
         #if debug
         graphics.clear();
+        //Body
         graphics.beginFill(0xFF0000);
+        graphics.drawRect(0, 0, _body.width, _body.height);
+        graphics.endFill();
+        //Eye
+        graphics.beginFill(0xFFFF00);
         graphics.drawCircle(eye.x - x, eye.y - y, 5);
         graphics.endFill();
+        //Range
         graphics.lineStyle(1, 0x00FF00);
         graphics.moveTo(eye.x - x, eye.y - y);
         graphics.lineTo(eye.x - x + 300 * Math.cos(faceDirection * Math.PI / 2),
@@ -287,55 +297,22 @@ class Guard extends Element {
         #end
     }
 
-    private function setGuardAnimation(animName:String):Void
+    private var animationDirection(get,null):String;
+    private function get_animationDirection():String
     {
-        if (animName == "walk" || animName == "idle")
+        switch(faceDirection)
         {
-            switch(faceDirection)
-            {
-                case 0:
-                    _ss.setAnimation(animName + "-side");
-                    _ss.scaleX = -1;
-                    _ss.x = anim_x + _ss.width;
-                case 1:
-                    _ss.setAnimation(animName + "-front");
-                    _ss.scaleX = 1;
-                    _ss.x = anim_x;
-                case 2:
-                    _ss.setAnimation(animName + "-side");
-                    _ss.scaleX = 1;
-                    _ss.x = anim_x;
-                case 3:
-                    _ss.setAnimation(animName + "-back");
-                    _ss.scaleX = 1;
-                    _ss.x = anim_x;
-            }
+            case 0:
+                return "right";
+            case 1:
+                return "down";
+            case 2:
+                return "left";
+            case 3:
+                return "up";
+            default:
+                trace("INVALID FACING DIRECTION");
+                return "none";
         }
-
-        else if (animName == "fall" || animName == "getup")
-        {
-            _ss.setAnimation(animName);
-            switch(faceDirection)
-            {
-                case 0, 1:
-                    _ss.scaleX = -1;
-                    _ss.x = anim_x +_ss.width;
-                case 2, 3:
-                    _ss.scaleX = 1;
-                    _ss.x = anim_x;
-            }
-        }
-    }
-	private function setAlertAnimation(animName:String):Void
-    {
-        if (animName == "none")
-        {
-	        _ssAlert.setAnimation("question");
-			_ssAlert.visible = false;
-        }
-		else {
-			_ssAlert.visible = true;
-			_ssAlert.setAnimation(animName);
-		}
-    }
+    } 
 }
