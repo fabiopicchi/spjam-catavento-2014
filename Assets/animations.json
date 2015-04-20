@@ -43,7 +43,6 @@
         "startAnimation": "idle-right",
         "width": 72,
         "height": 60,
-        "offset": {"x": -10, "y": -50},
         "src": "images/coelho.png"
     },
     "camera":
@@ -485,5 +484,28 @@
         "width": 30,
         "height": 21,
         "src": "images/laserblue_end01.png"
+    },
+    "plant":
+    {
+        "animations":
+        [
+            {
+                "name": "seed",
+                "frames": [0],
+                "numLoops": -1,
+                "framerate": 10
+            },
+            {
+                "name": "grow",
+                "frames": [0,7],
+                "numLoops": 1,
+                "framerate": 10
+            }
+        ],
+        "startAnimation": "seed",
+        "width": 60,
+        "height": 60,
+        "src": "images/flor.png"
+   
     }
 }

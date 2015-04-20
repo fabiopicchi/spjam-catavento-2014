@@ -56,16 +56,19 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":30,
          "name":"objects",
          "objects":[
                 {
                  "height":32,
+                 "id":1,
                  "name":"levelEnd",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"levelEnd",
                  "visible":true,
                  "width":47,
@@ -74,11 +77,13 @@
                 }, 
                 {
                  "height":60,
+                 "id":2,
                  "name":"player",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":60,
@@ -87,11 +92,13 @@
                 }, 
                 {
                  "height":60,
+                 "id":3,
                  "name":"flower",
                  "properties":
                     {
 
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":60,
@@ -100,13 +107,15 @@
                 }, 
                 {
                  "height":60,
+                 "id":4,
                  "name":"terminal",
                  "properties":
                     {
                      "color":"red",
-                     "direction":"0",
-                     "id":"1"
+                     "id":"1",
+                     "side":"0"
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":60,
@@ -115,6 +124,7 @@
                 }, 
                 {
                  "height":0,
+                 "id":5,
                  "name":"circuit",
                  "polyline":[
                         {
@@ -137,6 +147,7 @@
                     {
                      "id":"1"
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
@@ -145,6 +156,7 @@
                 }, 
                 {
                  "height":60,
+                 "id":6,
                  "name":"laser",
                  "properties":
                     {
@@ -152,6 +164,7 @@
                      "direction":"0",
                      "id":"1"
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":120,
@@ -160,6 +173,7 @@
                 }, 
                 {
                  "height":60,
+                 "id":7,
                  "name":"laser",
                  "properties":
                     {
@@ -167,6 +181,7 @@
                      "direction":"0",
                      "id":"1"
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":120,
@@ -175,13 +190,15 @@
                 }, 
                 {
                  "height":60,
+                 "id":8,
                  "name":"terminal",
                  "properties":
                     {
                      "color":"red",
-                     "direction":"1",
-                     "id":"2"
+                     "id":"2",
+                     "side":"1"
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":60,
@@ -190,6 +207,7 @@
                 }, 
                 {
                  "height":60,
+                 "id":9,
                  "name":"camera",
                  "properties":
                     {
@@ -197,6 +215,7 @@
                      "direction":"1",
                      "id":"2"
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":60,
@@ -205,6 +224,7 @@
                 }, 
                 {
                  "height":0,
+                 "id":10,
                  "name":"circuit",
                  "polyline":[
                         {
@@ -223,11 +243,27 @@
                     {
                      "id":"2"
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
                  "x":1196,
                  "y":688
+                }, 
+                {
+                 "height":60,
+                 "id":15,
+                 "name":"plant",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":60,
+                 "x":180,
+                 "y":1500
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -237,11 +273,101 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
          "height":30,
          "name":"guards",
          "objects":[
                 {
                  "height":0,
+                 "id":11,
+                 "name":"",
+                 "polyline":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-1,
+                         "y":177
+                        }, 
+                        {
+                         "x":199,
+                         "y":175
+                        }, 
+                        {
+                         "x":199,
+                         "y":-24
+                        }, 
+                        {
+                         "x":27,
+                         "y":-25
+                        }],
+                 "properties":
+                    {
+                     "bhv":"1"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1136,
+                 "y":1379
+                }, 
+                {
+                 "height":0,
+                 "id":12,
+                 "name":"",
+                 "polyline":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":2,
+                         "y":-242
+                        }, 
+                        {
+                         "x":-144,
+                         "y":-242
+                        }],
+                 "properties":
+                    {
+                     "bhv":"1"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1004,
+                 "y":596
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"",
+                 "polyline":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":0,
+                         "y":200
+                        }],
+                 "properties":
+                    {
+                     "bhv":"2"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":692,
+                 "y":412
+                }, 
+                {
+                 "height":0,
+                 "id":14,
                  "name":"",
                  "polyline":[
                         {
@@ -258,8 +384,9 @@
                         }],
                  "properties":
                     {
-                     "bhv":"0"
+                     "bhv":"1"
                     },
+                 "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
@@ -268,22 +395,24 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":27,
          "x":0,
          "y":0
         }],
+ "nextobjectid":16,
  "orientation":"orthogonal",
  "properties":
     {
 
     },
+ "renderorder":"right-down",
  "tileheight":60,
  "tilesets":[
         {
          "firstgid":1,
-         "image":"tileset.png",
-         "imageheight":720,
+         "image":"..\/..\/Resources\/tileset.png",
+         "imageheight":780,
          "imagewidth":720,
          "margin":0,
          "name":"tileset",

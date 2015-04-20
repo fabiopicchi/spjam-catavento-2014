@@ -41,6 +41,7 @@ class StageState extends State
     private var _cameras = new List <Camera> ();
     private var _circuits = new List <Circuit> ();
     private var _terminals = new List <Terminal> ();
+    private var _plants = new List <Plant> ();
 
     public function new(levelNumber:Int)
     {
@@ -160,6 +161,11 @@ class StageState extends State
                     {
                         _levelEnd = new LevelEnd(object.x,object.y);
                     }
+                    if (object.name == "plant")
+                    {
+                        var p:Plant = new Plant(object.x, object.y);
+                        _plants.add(p);
+                    }
                 }
             }
         }
@@ -172,6 +178,7 @@ class StageState extends State
         addElement(_shadeLayer);
         for (i in _lasers) addElement(i);
 		for (i in _terminals) addElement(i);
+		for (i in _plants) addElement(i);
         addElement(_player);
         for (i in _guards) addElement(i);
         addElement(_upperLayer);
@@ -222,6 +229,7 @@ class StageState extends State
         if(justPressed(WATER))
         {
             _player.water();
+
             var b:Body = new Body(1,1);
             b.position.y = _player.getBody().position.y + 10;
 
@@ -248,6 +256,15 @@ class StageState extends State
                             break;
                         }
                     }
+                    break;
+                }
+            }
+
+            for(p in _plants)
+            {
+                if (p.getBody().overlapBody(b))
+                {
+                    p.water();
                     break;
                 }
             }
