@@ -22,7 +22,7 @@ class Player extends Element
 		_body.position.x = x;
 		_body.position.y = y;
 		     
-		_anim = new AnimatedSprite("assets/animations.json", "bunny") ;
+		_anim = new AnimatedSprite("assets/animations.json", "bunny");
 		_anim.setAnimation("idle-right");
 		addElement(_anim);
 
