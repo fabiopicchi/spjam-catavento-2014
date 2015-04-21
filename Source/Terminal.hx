@@ -11,6 +11,7 @@ class Terminal extends Element
     private var _body:Body;
     private var _direction:Int;
     private var _deactivationTimer:Float;
+	private var _deactivationTime:Float;
     private var _anim:AnimatedSprite;
     private var _light:Bitmap;
 
@@ -21,7 +22,7 @@ class Terminal extends Element
     private var FRAME_WIDTH:Int = 60;
     private var FRAME_HEIGHT:Int = 120;
 
-    public function new(x:Float, y:Float, id:Int, direction:Int, colour:String)
+    public function new(x:Float, y:Float, id:Int, direction:Int, deactivationTime:Float, colour:String)
     {
         super();
 
@@ -30,6 +31,7 @@ class Terminal extends Element
         _body.position.y = y;
 
         this.id = id;
+		_deactivationTime = deactivationTime;
         _direction = direction;
 	
         _anim = new AnimatedSprite("assets/animations.json", "terminal");
@@ -65,7 +67,6 @@ class Terminal extends Element
                 _anim.setAnimation("on-" + animationDirection);
                 dispatchEvent(new CircuitEvent(CircuitEvent.REACTIVATE, id));
             }
-
         }
     }
 
@@ -80,7 +81,7 @@ class Terminal extends Element
     {
         _anim.setAnimation("off-" + animationDirection);
         _light.visible = false;
-        _deactivationTimer = 10;
+        _deactivationTimer = _deactivationTime;
     }
 
     public function isActivated():Bool 

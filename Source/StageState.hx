@@ -137,6 +137,7 @@ class StageState extends State
                         var t:Terminal = new Terminal (object.x, object.y,
                                 Std.parseInt(object.properties.id),
                                 Std.parseInt(object.properties.direction),
+								Std.parseInt(object.properties.time),
                                 object.properties.color);
                         t.addEventListener(CircuitEvent.REACTIVATE,
                                 reactivate);

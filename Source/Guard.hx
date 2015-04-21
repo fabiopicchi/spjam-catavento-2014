@@ -25,6 +25,7 @@ class Guard extends Element {
     public var faceDirection:Int = 0;
 
     public var eye:Point; //coordenadas do olho do guarda
+	private var _star:DizzyStar;
 
     private var _anim:AnimatedSprite;
 	private var _animAlert:AnimatedSprite;
@@ -80,6 +81,10 @@ class Guard extends Element {
 		_animAlert.visible = false;
         _animAlert.setAnimation("question");
         addElement(_animAlert);
+		
+		_star = new DizzyStar(0, -50);
+		_star.visible = false;
+		addElement(_star);
 
         eye = new Point();
 
@@ -144,6 +149,9 @@ class Guard extends Element {
                     {
                         _flagManager.reset("falling");
                         _flagManager.set("dizzy");
+						_star.set_visible(true);
+						_star.x = (animationDirection == "right" || animationDirection == "down") ? -5 : 30;
+						trace(animationDirection);
                     }
                 },
                 function () {
@@ -180,6 +188,7 @@ class Guard extends Element {
                 function () 
                 {
                     _anim.setAnimation("getup-" + animationDirection);
+					_star.set_visible(false);
                 }
                 );
 
