@@ -24,8 +24,6 @@ class Guard extends Element {
 
     public var faceDirection:Int = 0;
 
-    //public var exclamation:Exclamation;
-
     public var eye:Point; //coordenadas do olho do guarda
 
     private var _anim:AnimatedSprite;
@@ -82,7 +80,6 @@ class Guard extends Element {
 		_animAlert.visible = false;
         _animAlert.setAnimation("question");
         addElement(_animAlert);
-
 
         eye = new Point();
 
@@ -196,13 +193,9 @@ class Guard extends Element {
                         _flagManager.set("walking");
 			            _animAlert.visible = false;
                     }
-                    else if (attentionTimer <= ATTENTION_TIME - 0.5)
+                    else if (attentionTimer <= 0.75 * ATTENTION_TIME)
                     {
                         _animAlert.setAnimation("question");
-                    }
-                    else
-                    {
-                        _animAlert.visible = false;
                     }
                 },
                 function ()
