@@ -237,6 +237,29 @@
         "height": 35,
         "src": "images/guardalert.png"
     },
+    "camera-alert":
+    {
+        "animations":
+        [
+            {
+                "name": "question",
+                "frames" : [0],
+                "numLoops": 1,
+                "framerate" : 12
+            },
+            {
+                "name": "exclamation",
+                "frames" : [1],
+                "numLoops": 1,
+                "framerate" : 12
+            }
+        ],
+        "startAnimation": "question",
+        "offset": {"x": 25, "y": -30},
+        "width": 17,
+        "height": 35,
+        "src": "images/guardalert.png"
+    },
     "terminal":
     {
         "animations":
